@@ -120,27 +120,22 @@
         justify-content: flex-start;
       {% endif %}
     }
-    
-    /* Hide inline menu in main header when positioned at top */
-    .header .header__inline-menu {
-      display: none;
-    }
   {% else %}
     .header__top-menu {
       display: none;
     }
-    
-    /* Show inline menu in main header when positioned inline */
-    .header .header__inline-menu {
-      {% if section.settings.menu_alignment == 'center' %}
-        justify-content: center;
-      {% elsif section.settings.menu_alignment == 'right' %}
-        justify-content: flex-end;
-      {% else %}
-        justify-content: flex-start;
-      {% endif %}
-    }
   {% endif %}
+
+  /* Navigation Menu Styling for Inline Position */
+  .header .header__inline-menu {
+    {% if section.settings.menu_alignment == 'center' %}
+      justify-content: center;
+    {% elsif section.settings.menu_alignment == 'right' %}
+      justify-content: flex-end;
+    {% else %}
+      justify-content: flex-start;
+    {% endif %}
+  }
 
   .list-menu__item--link {
     color: {{ section.settings.menu_text_color }};
