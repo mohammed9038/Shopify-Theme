@@ -1991,6 +1991,7 @@ input[type='checkbox'] {
 
 .quantity__input[type='number'] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .quantity__rules {
@@ -2589,6 +2590,37 @@ details[open] .header__icon-close {
 
 account-icon {
   display: flex;
+}
+
+/* Header Customizations - Inline Menu */
+.header__inline-menu .list-menu {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.header__inline-menu .list-menu__item {
+  margin: 0;
+}
+
+.header__inline-menu .list-menu__item--link {
+  padding: 1rem;
+  text-decoration: none;
+  font-size: var(--font-body-scale);
+  color: var(--color-foreground);
+  transition: color 0.2s ease;
+}
+
+.header__inline-menu .list-menu__item--link:hover {
+  color: var(--color-base-accent-1);
+}
+
+@media screen and (max-width: 749px) {
+  .header__inline-menu {
+    display: none;
+  }
 }
 
 /* Header Customizations - Search Bar */
