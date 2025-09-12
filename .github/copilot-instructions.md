@@ -27,6 +27,8 @@
 
 ## Code Standards & Best Practices
 - **ALWAYS create backups:** Before making any changes, create a backup copy of the original file (e.g., `file.liquid.backup`) to enable rollback if issues occur.
+- **Read Before Editing:** Always read and understand the full code structure, dependencies, and context before making any changes. Analyze related files, imports, and component relationships to avoid breaking functionality.
+- **Shopify Theme Compatibility:** This is a Shopify theme - every change or edit must be functional with Shopify theme settings, customizer, and platform requirements. Ensure compatibility with theme editor and merchant customization options.
 - **Shopify Best Practices:** Follow Shopify's coding standards and performance guidelines. Use semantic HTML, optimize for Core Web Vitals, and ensure accessibility.
 - **Code Quality:** Write clean, maintainable code with proper indentation, meaningful variable names, and inline comments for complex logic.
 - **Performance:** Minimize HTTP requests, optimize images, use lazy loading, and avoid blocking JavaScript. Test on mobile devices.
