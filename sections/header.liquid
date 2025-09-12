@@ -87,15 +87,58 @@
   }
 
   /* Navigation Menu Customizations */
-  .header__inline-menu {
-    {% if section.settings.menu_alignment == 'center' %}
-      justify-content: center;
-    {% elsif section.settings.menu_alignment == 'right' %}
-      justify-content: flex-end;
-    {% else %}
-      justify-content: flex-start;
-    {% endif %}
-  }
+  {% if section.settings.menu_position == 'top' %}
+    .header-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header__top-menu {
+      order: -1;
+      background: rgba(var(--color-background), 0.98);
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+      padding: 0.8rem 3rem;
+      {% if section.settings.menu_alignment == 'center' %}
+        text-align: center;
+      {% elsif section.settings.menu_alignment == 'right' %}
+        text-align: right;
+      {% else %}
+        text-align: left;
+      {% endif %}
+    }
+    
+    .header__top-menu .list-menu {
+      display: inline-flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      {% if section.settings.menu_alignment == 'center' %}
+        justify-content: center;
+      {% elsif section.settings.menu_alignment == 'right' %}
+        justify-content: flex-end;
+      {% else %}
+        justify-content: flex-start;
+      {% endif %}
+    }
+    
+    .header__inline-menu {
+      display: none;
+    }
+  {% else %}
+    .header__top-menu {
+      display: none;
+    }
+    
+    .header__inline-menu {
+      {% if section.settings.menu_alignment == 'center' %}
+        justify-content: center;
+      {% elsif section.settings.menu_alignment == 'right' %}
+        justify-content: flex-end;
+      {% else %}
+        justify-content: flex-start;
+      {% endif %}
+    }
+  {% endif %}
 
   .list-menu__item--link {
     color: {{ section.settings.menu_text_color }};
@@ -201,6 +244,32 @@
   {% endif %}
   class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
 >
+  {%- if section.settings.menu_position == 'top' and section.settings.menu != blank -%}
+    <div class="header__top-menu page-width">
+      {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+        {% render 'header-dropdown-menu' %}
+      {%- elsif section.settings.menu_type_desktop == 'mega' -%}
+        {% render 'header-mega-menu' %}
+      {%- else -%}
+        <nav class="header__inline-menu">
+          <ul class="list-menu list-menu--inline" role="list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="list-menu__item">
+                <a
+                  href="{{ link.url }}"
+                  class="list-menu__item--link link link--text focus-inset"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{ link.title | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  
   {%- liquid
     assign social_links = false
     assign localization_forms = false
@@ -258,7 +327,7 @@
     {%- endif -%}
 
     {%- liquid
-      if section.settings.menu != blank
+      if section.settings.menu != blank and section.settings.menu_position != 'top'
         if section.settings.menu_type_desktop == 'dropdown'
           render 'header-dropdown-menu'
         elsif section.settings.menu_type_desktop != 'drawer'
@@ -661,6 +730,22 @@
     {
       "type": "header",
       "content": "Navigation Menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_position",
+      "options": [
+        {
+          "value": "inline",
+          "label": "Inline with logo and icons"
+        },
+        {
+          "value": "top",
+          "label": "Above header (top row)"
+        }
+      ],
+      "default": "inline",
+      "label": "Menu position"
     },
     {
       "type": "select",
