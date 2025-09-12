@@ -326,17 +326,29 @@
       {%- endif -%}
     {%- endif -%}
 
-    {%- liquid
-      if section.settings.menu != blank and section.settings.menu_position != 'top'
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop == 'mega'
-          render 'header-mega-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
+    {%- if section.settings.menu != blank and section.settings.menu_position != 'top' -%}
+      {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+        {% render 'header-dropdown-menu' %}
+      {%- elsif section.settings.menu_type_desktop == 'mega' -%}
+        {% render 'header-mega-menu' %}
+      {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
+        <nav class="header__inline-menu">
+          <ul class="list-menu list-menu--inline" role="list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="list-menu__item">
+                <a
+                  href="{{ link.url }}"
+                  class="list-menu__item--link link link--text focus-inset"
+                  {% if link.current %}aria-current="page"{% endif %}
+                >
+                  {{ link.title | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endif -%}
 
     {%- if section.settings.logo_position == 'middle-center' -%}
       {%- if request.page_type == 'index' -%}
@@ -369,24 +381,6 @@
       {%- if request.page_type == 'index' -%}
         </h1>
       {%- endif -%}
-    {%- endif -%}
-
-    {%- if section.settings.menu != blank and section.settings.menu_position != 'top' and section.settings.menu_type_desktop != 'dropdown' and section.settings.menu_type_desktop != 'mega' and section.settings.menu_type_desktop != 'drawer' -%}
-      <nav class="header__inline-menu">
-        <ul class="list-menu list-menu--inline" role="list">
-          {%- for link in section.settings.menu.links -%}
-            <li class="list-menu__item">
-              <a
-                href="{{ link.url }}"
-                class="list-menu__item--link link link--text focus-inset"
-                {% if link.current %}aria-current="page"{% endif %}
-              >
-                {{ link.title | escape }}
-              </a>
-            </li>
-          {%- endfor -%}
-        </ul>
-      </nav>
     {%- endif -%}
 
     <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
