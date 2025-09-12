@@ -121,7 +121,8 @@
       {% endif %}
     }
     
-    .header__inline-menu {
+    /* Hide inline menu in main header when positioned at top */
+    .header .header__inline-menu {
       display: none;
     }
   {% else %}
@@ -129,7 +130,8 @@
       display: none;
     }
     
-    .header__inline-menu {
+    /* Show inline menu in main header when positioned inline */
+    .header .header__inline-menu {
       {% if section.settings.menu_alignment == 'center' %}
         justify-content: center;
       {% elsif section.settings.menu_alignment == 'right' %}
