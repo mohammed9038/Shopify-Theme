@@ -326,27 +326,14 @@
       {%- endif -%}
     {%- endif -%}
 
+    {%- comment -%} Navigation Menu - only render here if NOT positioned at top {%- endcomment -%}
     {%- if section.settings.menu != blank and section.settings.menu_position != 'top' -%}
       {%- if section.settings.menu_type_desktop == 'dropdown' -%}
         {% render 'header-dropdown-menu' %}
       {%- elsif section.settings.menu_type_desktop == 'mega' -%}
         {% render 'header-mega-menu' %}
       {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
-        <nav class="header__inline-menu">
-          <ul class="list-menu list-menu--inline" role="list">
-            {%- for link in section.settings.menu.links -%}
-              <li class="list-menu__item">
-                <a
-                  href="{{ link.url }}"
-                  class="list-menu__item--link link link--text focus-inset"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
-                  {{ link.title | escape }}
-                </a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        </nav>
+        {% render 'header-mega-menu' %}
       {%- endif -%}
     {%- endif -%}
 
