@@ -6,6 +6,22 @@ SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
 
 /* Hide redundant elements in mobile header since they're in the bottom navigation */
 @media screen and (max-width: 749px) {
+  /* Ensure header always stays visible on mobile */
+  .section-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Prevent any scrolling behavior that might hide the header */
+  .scrolled-past-header .header-wrapper {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  
   /* Hide cart icon in header */
   .header__item--cart,
   a[href="/cart"],
