@@ -235,12 +235,27 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
 </style>
 
 <div class="mobile-bottom-nav" data-sticky="{% if section.settings.is_sticky %}true{% else %}false{% endif %}">
+  {% comment %}
+    Debug information - Item settings:
+    nav_item1: {{ section.settings.nav_item1 }}
+    nav_item2: {{ section.settings.nav_item2 }}
+    nav_item3: {{ section.settings.nav_item3 }}
+    nav_item4: {{ section.settings.nav_item4 }}
+    nav_item5: {{ section.settings.nav_item5 }}
+    navigation_item1: {{ section.settings.navigation_item1 }}
+    navigation_item2: {{ section.settings.navigation_item2 }}
+    navigation_item3: {{ section.settings.navigation_item3 }}
+    navigation_item4: {{ section.settings.navigation_item4 }}
+    navigation_item5: {{ section.settings.navigation_item5 }}
+    collection: {{ section.settings.collection }}
+  {% endcomment %}
   <nav>
     <ul class="mobile-bottom-nav__items">
       {% for i in (1..5) %}
         {% assign item_setting = 'navigation_item' | append: i %}
         {% assign nav_setting = 'nav_item' | append: i %}
         {% assign item_type = section.settings[item_setting] | default: section.settings[nav_setting] %}
+        {% comment %}Item {{ i }}: {{ item_type }}{% endcomment %}
         {% if item_type != blank %}
           <li class="mobile-bottom-nav__item mobile-bottom-nav__item--{{ item_type }}">
             {% case item_type %}
@@ -324,7 +339,11 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
                 {% comment %}Debug collection value: {{ section.settings.collection }}{% endcomment %}
                 {% assign collection_handle = section.settings.collection %}
                 {% if collection_handle != blank %}
-                  <a href="{{ routes.collections_url }}/{{ collection_handle }}" class="mobile-bottom-nav__link{% if request.page_type == 'collection' and request.object.handle == collection_handle %} mobile-bottom-nav__link--active{% endif %}">
+                  {% assign collection_url = routes.all_products_collection_url %}
+                  {% if collection_handle != "all" %}
+                    {% assign collection_url = routes.collections_url | append: '/' | append: collection_handle %}
+                  {% endif %}
+                  <a href="{{ collection_url }}" class="mobile-bottom-nav__link{% if request.page_type == 'collection' and request.object.handle == collection_handle %} mobile-bottom-nav__link--active{% endif %}">
                     <span class="mobile-bottom-nav__icon">
                       <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -578,6 +597,34 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
     },
     {
       "type": "select",
+      "id": "nav_item1",
+      "label": "First item (alias)",
+      "options": [
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "collection",
+          "label": "Collection"
+        }
+      ],
+      "default": "home"
+    },
+    {
+      "type": "select",
       "id": "navigation_item2",
       "label": "Second item",
       "options": [
@@ -607,6 +654,70 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         }
       ],
       "default": "search"
+    },
+    {
+      "type": "select",
+      "id": "nav_item2",
+      "label": "Second item (alias)",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "collection",
+          "label": "Collection"
+        }
+      ],
+      "default": "search"
+    },
+    {
+      "type": "select",
+      "id": "nav_item3",
+      "label": "Third item (alias)",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "collection",
+          "label": "Collection"
+        }
+      ],
+      "default": "cart"
     },
     {
       "type": "select",
@@ -674,8 +785,72 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
     },
     {
       "type": "select",
+      "id": "nav_item4",
+      "label": "Fourth item (alias)",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "collection",
+          "label": "Collection"
+        }
+      ],
+      "default": "account"
+    },
+    {
+      "type": "select",
       "id": "navigation_item5",
       "label": "Fifth item",
+      "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
+        {
+          "value": "home",
+          "label": "Home"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "collection",
+          "label": "Collection"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "nav_item5",
+      "label": "Fifth item (alias)",
       "options": [
         {
           "value": "",
