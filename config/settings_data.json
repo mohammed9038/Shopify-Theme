@@ -143,20 +143,7 @@
       "mobile-bottom-navigation": {
         "type": "mobile-bottom-navigation",
         "settings": {
-          "is_sticky": true,
-          "show_border": true,
-          "item_spacing": 25,
-          "home_label": "Home",
-          "search_label": "Search",
-          "cart_label": "Cart",
-          "account_label": "Account",
-          "login_label": "Log in",
-          "collection": "hydrogen",
-          "collection_label": "Offers",
-          "background": "#dddddd",
-          "font_size": 10,
-          "font_weight": "600",
-          "text_transform": "capitalize"
+          "item_spacing": 25
         }
       }
     },
