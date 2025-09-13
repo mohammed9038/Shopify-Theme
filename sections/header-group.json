@@ -49,7 +49,7 @@
         "enable_language_selector": true,
         "language_selector_style": "dropdown",
         "language_selector_flag_size": "16",
-        "language_selector_text_color": "#000000",
+        "language_selector_text_color": "#334fb4",
         "language_selector_background": "#ffffff",
         "language_selector_border_color": "#dddddd",
         "enable_customer_avatar": true,
