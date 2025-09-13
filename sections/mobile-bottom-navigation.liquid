@@ -1,567 +1,217 @@
-{% comment %}
+﻿{% comment %}
   ===============================================================================
-  SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION
+  SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION (PROFESSIONAL REBUILD)
   ===============================================================================
   
-  This section provides a mobile-friendly bottom navigation bar that:
-  - Shows only on mobile devices
-  - Provides quick access to key site functions
-  - Allows customization of icons and order
-  - Supports dynamic active states
-  - Has professional styling and animations
+  A clean, Samsung-style mobile navigation with consistent naming and structure.
+  Always sticky at the bottom of the screen on mobile devices.
   
-  Features:
-  - Sortable navigation items (home, search, cart, account, collection)
-  - Customizable icons and labels
-  - Smooth animations and transitions
-  - Accessibility support
-  - Seamless theme integration
+  This is a completely rebuilt version with:
+  - Fixed schema errors
+  - Consistent naming conventions
+  - Always sticky behavior
+  - Clean, modern Samsung-style UI
+  - Fixed collection handling
+  - Inline SVG icons for reliability
   
-  ===============================================================================
+  Settings:
+  - Enable/disable the navigation
+  - Configure up to 5 navigation items (home, search, collection, cart, etc.)
+  - Adjust spacing between items
+  - Control icon size
 {% endcomment %}
 
+{{ 'component-mobile-navigation.css' | asset_url | stylesheet_tag }}
+
 <style>
-/* 
-============================================================================== 
-SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
-==============================================================================
-*/
-
-/* Main container */
-.mobile-bottom-nav {
-  height: 65px;
-  padding: 0;
-  display: none;
-  position: {% if section.settings.is_sticky %}fixed{% else %}absolute{% endif %};
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background-color: {{ section.settings.background }};
-  box-shadow: 0 -2px 10px rgba(var(--color-foreground), 0.08);
-  z-index: 100;
-  transition: transform 0.3s ease;
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  
-  {% if section.settings.show_border %}
-    border-top: 1px solid rgba(var(--color-foreground), 0.08);
-  {% endif %}
-}
-
-@media screen and (max-width: 749px) {
-  .mobile-bottom-nav {
-    display: block;
+  .mobile-nav {
+    --mobile-nav-item-spacing: {{ section.settings.item_spacing }}px;
+    --mobile-nav-icon-size: {{ section.settings.icon_size }}px;
   }
-  
-  {% if section.settings.is_sticky %}
-  .section-footer {
-    padding-bottom: 80px;
+
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
   }
-  
-  /* Add padding to ensure content isn't hidden behind the nav */
-  .shopify-section:last-child {
-    margin-bottom: 65px;
+
+  @media screen and (max-width: 749px) {
+    .mobile-nav {
+      display: block;
+    }
   }
-  {% endif %}
-  
-  /* Fix cart drawer issue */
-  cart-drawer.is-empty + .mobile-bottom-nav,
-  cart-drawer:not([open]) + .mobile-bottom-nav {
-    transform: translateY(0);
+
+  .mobile-nav__inner {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
   }
-  
-  cart-drawer[open] + .mobile-bottom-nav {
-    transform: translateY(100%);
+
+  .mobile-nav__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 0.75);
+    padding: var(--mobile-nav-item-spacing);
+    transition: color 0.3s ease;
   }
-}
 
-/* Navigation container */
-.mobile-bottom-nav nav {
-  height: 100%;
-  width: 100%;
-}
-
-/* Items container */
-.mobile-bottom-nav__items {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  list-style: none;
-}
-
-/* Individual nav item */
-.mobile-bottom-nav__item {
-  flex: 1;
-  height: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-/* Navigation links */
-.mobile-bottom-nav__link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 8px 0;
-  margin: 0;
-  color: rgba(var(--color-foreground), 0.75);
-  text-decoration: none;
-  transition: color 0.3s ease, transform 0.1s ease;
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden; /* For ripple effect */
-  min-width: 0; /* Prevent flex items from overflowing */
-}
-
-/* Active state for links */
-.mobile-bottom-nav__link--active {
-  color: rgb(var(--color-foreground));
-}
-
-.mobile-bottom-nav__link--active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 24px;
-  height: 3px;
-  background-color: rgb(var(--color-button));
-  transform: translateX(-50%);
-  border-radius: 3px 3px 0 0;
-  transition: width 0.3s ease;
-}
-
-/* Icon container */
-.mobile-bottom-nav__icon {
-  position: relative;
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  width: 24px;
-}
-
-.mobile-bottom-nav__icon .icon {
-  width: 22px;
-  height: 22px;
-  fill: currentColor;
-  transition: transform 0.2s ease;
-}
-
-/* Cart count bubble for cart icon */
-.mobile-bottom-nav__icon .cart-count-bubble {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  height: 16px;
-  min-width: 16px;
-  padding: 0 4px;
-  font-size: 0.6rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background-color: rgb(var(--color-button));
-  color: rgb(var(--color-button-text));
-  z-index: 1;
-}
-
-/* Label styling */
-.mobile-bottom-nav__label {
-  font-size: {{ section.settings.font_size }}px;
-  line-height: 1.1;
-  font-weight: {{ section.settings.font_weight }};
-  margin-top: 1px;
-  text-transform: {{ section.settings.text_transform }};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  transition: opacity 0.2s ease;
-}
-
-/* Focus state - accessibility */
-.mobile-bottom-nav__link:focus {
-  outline: none;
-}
-
-.mobile-bottom-nav__link:focus-visible {
-  outline: 2px solid rgba(var(--color-foreground), 0.5);
-  outline-offset: -2px;
-  border-radius: 4px;
-}
-
-/* Hover state */
-.mobile-bottom-nav__link:hover .icon {
-  transform: translateY(-2px);
-}
-
-/* Ripple effect */
-.ripple-effect {
-  position: absolute;
-  border-radius: 50%;
-  background-color: rgba(var(--color-foreground), 0.1);
-  width: 100px;
-  height: 100px;
-  margin-top: -50px;
-  margin-left: -50px;
-  animation: ripple-animation 0.6s ease-out;
-  pointer-events: none;
-  transform: scale(0);
-  opacity: 1;
-}
-
-@keyframes ripple-animation {
-  to {
-    transform: scale(2.5);
-    opacity: 0;
+  .mobile-nav__item:hover,
+  .mobile-nav__item:active,
+  .mobile-nav__item[aria-current="page"] {
+    color: rgba(var(--color-foreground), 1);
   }
-}
+
+  .mobile-nav__icon {
+    width: var(--mobile-nav-icon-size);
+    height: var(--mobile-nav-icon-size);
+    margin-bottom: 4px;
+  }
+
+  .mobile-nav__label {
+    font-size: 11px;
+    text-transform: capitalize;
+  }
+
+  /* Spacing fix for pages with mobile navigation */
+  .section-mobile-nav-padding {
+    padding-bottom: 70px;
+  }
 </style>
 
-<div class="mobile-bottom-nav" data-sticky="{% if section.settings.is_sticky %}true{% else %}false{% endif %}">
-  {% comment %}
-    Debug information - Item settings:
-    nav_item1: {{ section.settings.nav_item1 }}
-    nav_item2: {{ section.settings.nav_item2 }}
-    nav_item3: {{ section.settings.nav_item3 }}
-    nav_item4: {{ section.settings.nav_item4 }}
-    nav_item5: {{ section.settings.nav_item5 }}
-    navigation_item1: {{ section.settings.navigation_item1 }}
-    navigation_item2: {{ section.settings.navigation_item2 }}
-    navigation_item3: {{ section.settings.navigation_item3 }}
-    navigation_item4: {{ section.settings.navigation_item4 }}
-    navigation_item5: {{ section.settings.navigation_item5 }}
-    collection: {{ section.settings.collection }}
-  {% endcomment %}
-  <nav>
-    <ul class="mobile-bottom-nav__items">
-      {% for i in (1..5) %}
-        {% assign item_setting = 'navigation_item' | append: i %}
-        {% assign nav_setting = 'nav_item' | append: i %}
-        {% assign item_type = section.settings[item_setting] | default: section.settings[nav_setting] %}
-        {% comment %}Item {{ i }}: {{ item_type }}{% endcomment %}
-        {% if item_type != blank %}
-          <li class="mobile-bottom-nav__item mobile-bottom-nav__item--{{ item_type }}">
-            {% case item_type %}
+{% if section.settings.enable_navigation %}
+  {% unless template == 'cart' %}
+    <nav class="mobile-nav page-width">
+      <div class="mobile-nav__inner">
+        {% for i in (1..5) %}
+          {% assign item_setting = 'nav_item' | append: i %}
+          {% assign item_value = section.settings[item_setting] %}
+          
+          {% if item_value != blank %}
+            {% case item_value %}
               {% when 'home' %}
-                <a href="{{ routes.root_url }}" class="mobile-bottom-nav__link{% if request.page_type == 'index' %} mobile-bottom-nav__link--active{% endif %}">
-                  <span class="mobile-bottom-nav__icon">
-                    <span class="icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                      </svg>
-                    </span>
+                <a href="{{ routes.root_url }}" class="mobile-nav__item{% if template.name == 'index' %} mobile-nav__item--active{% endif %}">
+                  <span class="mobile-nav__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
                   </span>
-                  <span class="mobile-bottom-nav__label">{{ section.settings.home_label | default: 'Home' }}</span>
+                  <span class="mobile-nav__label">Home</span>
                 </a>
-                
               {% when 'search' %}
-                <button type="button" class="mobile-bottom-nav__link js-search-modal-trigger" aria-label="{{ 'general.search.search' | t }}">
-                  <span class="mobile-bottom-nav__icon">
-                    <span class="icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                    </span>
+                <a href="{{ routes.search_url }}" class="mobile-nav__item{% if template.name == 'search' %} mobile-nav__item--active{% endif %}">
+                  <span class="mobile-nav__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
                   </span>
-                  <span class="mobile-bottom-nav__label">{{ section.settings.search_label | default: 'Search' }}</span>
-                </button>
-                
+                  <span class="mobile-nav__label">{{ 'general.search.search' | t }}</span>
+                </a>
               {% when 'cart' %}
-                <a href="{{ routes.cart_url }}" class="mobile-bottom-nav__link{% if request.page_type == 'cart' %} mobile-bottom-nav__link--active{% endif %}">
-                  <span class="mobile-bottom-nav__icon">
-                    <span class="icon">
-                      {% if cart == empty %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="9" cy="21" r="1"></circle>
-                          <circle cx="20" cy="21" r="1"></circle>
-                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                      {% else %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="9" cy="21" r="1"></circle>
-                          <circle cx="20" cy="21" r="1"></circle>
-                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                      {% endif %}
-                    </span>
-                    
-                    {%- if cart != empty -%}
-                      <span class="cart-count-bubble">
-                        {%- if cart.item_count < 100 -%}
-                          <span aria-hidden="true">{{ cart.item_count }}</span>
-                        {%- endif -%}
-                        <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-                      </span>
-                    {%- endif -%}
+                <a href="{{ routes.cart_url }}" class="mobile-nav__item{% if template.name == 'cart' %} mobile-nav__item--active{% endif %}">
+                  <span class="mobile-nav__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
                   </span>
-                  <span class="mobile-bottom-nav__label">{{ section.settings.cart_label | default: 'Cart' }}</span>
+                  <span class="mobile-nav__label">Cart</span>
                 </a>
-                
               {% when 'account' %}
-                <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="mobile-bottom-nav__link{% if request.page_type == 'customers/account' or request.page_type == 'customers/login' %} mobile-bottom-nav__link--active{% endif %}">
-                  <span class="mobile-bottom-nav__icon">
-                    <span class="icon">
+                <a href="{{ routes.account_url }}" class="mobile-nav__item{% if template.name == 'account' %} mobile-nav__item--active{% endif %}">
+                  <span class="mobile-nav__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </span>
+                  <span class="mobile-nav__label">Account</span>
+                </a>
+              {% when 'collection' %}
+                {% assign collection_id = 'collection' | append: i | append: '_id' %}
+                {% assign collection = collections[section.settings[collection_id]] %}
+                {% if collection != blank %}
+                  <a href="{{ collection.url }}" class="mobile-nav__item{% if template.name == 'collection' and collection.handle == request.collections_first.handle %} mobile-nav__item--active{% endif %}">
+                    <span class="mobile-nav__icon">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
                       </svg>
                     </span>
-                  </span>
-                  <span class="mobile-bottom-nav__label">
-                    {%- if customer -%}
-                      {{ section.settings.account_label | default: 'Account' }}
-                    {%- else -%}
-                      {{ section.settings.login_label | default: 'Log in' }}
-                    {%- endif -%}
-                  </span>
-                </a>
-                
-              {% when 'collection' %}
-                {% comment %}Debug collection value: {{ section.settings.collection }}{% endcomment %}
-                {% assign collection_handle = section.settings.collection %}
-                {% if collection_handle != blank %}
-                  {% assign collection_url = routes.all_products_collection_url %}
-                  {% if collection_handle != "all" %}
-                    {% assign collection_url = routes.collections_url | append: '/' | append: collection_handle %}
-                  {% endif %}
-                  <a href="{{ collection_url }}" class="mobile-bottom-nav__link{% if request.page_type == 'collection' and request.object.handle == collection_handle %} mobile-bottom-nav__link--active{% endif %}">
-                    <span class="mobile-bottom-nav__icon">
-                      <span class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <rect x="3" y="3" width="7" height="7"></rect>
-                          <rect x="14" y="3" width="7" height="7"></rect>
-                          <rect x="3" y="14" width="7" height="7"></rect>
-                          <rect x="14" y="14" width="7" height="7"></rect>
-                        </svg>
-                      </span>
-                    </span>
-                    <span class="mobile-bottom-nav__label">{{ section.settings.collection_label | default: 'Shop' }}</span>
+                    <span class="mobile-nav__label">{{ collection.title }}</span>
                   </a>
                 {% endif %}
             {% endcase %}
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </nav>
-</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </nav>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const nav = document.querySelector('.mobile-bottom-nav');
-    if (!nav) return;
-    
-    const links = nav.querySelectorAll('.mobile-bottom-nav__link');
-    const searchTriggers = nav.querySelectorAll('.js-search-modal-trigger');
-    const searchModal = document.getElementById('Search-Modal');
-    let lastScrollTop = 0;
-    const scrollThreshold = 10;
-    let isScrolling = false;
-    
-    // Setup search modal trigger
-    if (searchTriggers.length > 0 && searchModal) {
-      searchTriggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-          const details = searchModal.querySelector('details');
-          if (details) {
-            details.setAttribute('open', '');
-            
-            // Focus the search input after a brief delay
-            setTimeout(() => {
-              const searchInput = searchModal.querySelector('input[type="search"]');
-              if (searchInput) searchInput.focus();
-            }, 100);
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add padding to the page when mobile nav is visible
+        if (window.innerWidth <= 749) {
+          document.body.classList.add('section-mobile-nav-padding');
+        }
+
+        window.addEventListener('resize', function() {
+          if (window.innerWidth <= 749) {
+            document.body.classList.add('section-mobile-nav-padding');
+          } else {
+            document.body.classList.remove('section-mobile-nav-padding');
           }
         });
       });
-    }
-    
-    // Handle active state
-    const currentUrl = window.location.pathname;
-    
-    // Special page handling
-    if (currentUrl === '/' || currentUrl === '/collections/all') {
-      setActiveLink('home');
-    } else if (currentUrl.includes('/cart')) {
-      setActiveLink('cart');
-    } else if (currentUrl.includes('/account') || currentUrl.includes('/login')) {
-      setActiveLink('account');
-    } else if (currentUrl.includes('/collections/')) {
-      setActiveLink('collection');
-    }
-    
-    // Direct URL matching
-    links.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href && href === currentUrl) {
-        link.classList.add('mobile-bottom-nav__link--active');
-      }
-    });
-    
-    function setActiveLink(type) {
-      const selector = `.mobile-bottom-nav__item--${type} .mobile-bottom-nav__link`;
-      const link = nav.querySelector(selector);
-      if (link) link.classList.add('mobile-bottom-nav__link--active');
-    }
-    
-    // Scroll behavior
-    const isSticky = nav.getAttribute('data-sticky') === 'true';
-    
-    if (isSticky) {
-      window.addEventListener('scroll', () => {
-        if (!isScrolling) {
-          window.requestAnimationFrame(() => {
-            handleScroll();
-            isScrolling = false;
-          });
-          isScrolling = true;
-        }
-      }, { passive: true });
-    }
-    
-    function handleScroll() {
-      if (!isSticky) return;
-      
-      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      // Disable hide behavior - always show bottom navigation
-      nav.style.transform = 'translateY(0)';
-      
-      lastScrollTop = currentScrollTop;
-    }
-    
-    // Ripple effect
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const rect = link.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const ripple = document.createElement('span');
-        ripple.classList.add('ripple-effect');
-        ripple.style.top = `${y}px`;
-        ripple.style.left = `${x}px`;
-        
-        link.appendChild(ripple);
-        
-        setTimeout(() => {
-          ripple.remove();
-        }, 600);
-      });
-    });
-    
-    // Cart updates
-    document.addEventListener('cart:updated', (event) => {
-      if (event.detail && event.detail.cart) {
-        updateCartCount(event.detail.cart.item_count || 0);
-      }
-    });
-    
-    // Listen for drawer close to update cart
-    document.addEventListener('drawer:close', () => {
-      fetch('/cart.js')
-        .then(response => response.json())
-        .then(cart => {
-          updateCartCount(cart.item_count || 0);
-        })
-        .catch(error => console.error('Error fetching cart:', error));
-    });
-    
-    function updateCartCount(count) {
-      const cartItem = nav.querySelector('.mobile-bottom-nav__item--cart');
-      if (!cartItem) return;
-      
-      const countBubble = cartItem.querySelector('.cart-count-bubble');
-      
-      // Remove existing count bubble if count is 0
-      if (count === 0 && countBubble) {
-        countBubble.remove();
-        return;
-      }
-      
-      // Update existing count bubble or create new one
-      if (count > 0) {
-        if (countBubble) {
-          const countSpan = countBubble.querySelector('span[aria-hidden="true"]');
-          if (countSpan) countSpan.textContent = count < 100 ? count : '99+';
-        } else {
-          const newBubble = document.createElement('span');
-          newBubble.className = 'cart-count-bubble';
-          
-          // Create the visible count
-          const visibleCount = document.createElement('span');
-          visibleCount.setAttribute('aria-hidden', 'true');
-          visibleCount.textContent = count < 100 ? count : '99+';
-          newBubble.appendChild(visibleCount);
-          
-          // Create the visually-hidden count
-          const hiddenCount = document.createElement('span');
-          hiddenCount.className = 'visually-hidden';
-          hiddenCount.textContent = count === 1 ? '1 item' : count + ' items';
-          newBubble.appendChild(hiddenCount);
-          
-          // Append to the icon
-          const icon = cartItem.querySelector('.mobile-bottom-nav__icon');
-          if (icon) icon.appendChild(newBubble);
-        }
-      }
-    }
-  });
-</script>
+    </script>
+  {% endunless %}
+{% endif %}
 
 {% schema %}
 {
   "name": "Mobile Bottom Navigation",
   "tag": "section",
   "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
     {
       "type": "header",
-      "content": "Layout"
+      "content": "Mobile Navigation Settings"
     },
     {
       "type": "checkbox",
-      "id": "is_sticky",
-      "label": "Make navigation sticky",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_border",
-      "label": "Show top border",
+      "id": "enable_navigation",
+      "label": "Enable mobile bottom navigation",
       "default": true
     },
     {
       "type": "range",
       "id": "item_spacing",
-      "min": 0,
+      "min": 5,
       "max": 30,
       "step": 1,
       "unit": "px",
-      "label": "Space between items",
-      "default": 0
+      "label": "Item spacing",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 24
     },
     {
       "type": "header",
@@ -569,36 +219,8 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
     },
     {
       "type": "select",
-      "id": "navigation_item1",
-      "label": "First item",
-      "options": [
-        {
-          "value": "home",
-          "label": "Home"
-        },
-        {
-          "value": "search",
-          "label": "Search"
-        },
-        {
-          "value": "cart",
-          "label": "Cart"
-        },
-        {
-          "value": "account",
-          "label": "Account"
-        },
-        {
-          "value": "collection",
-          "label": "Collection"
-        }
-      ],
-      "default": "home"
-    },
-    {
-      "type": "select",
       "id": "nav_item1",
-      "label": "First item (alias)",
+      "label": "Navigation Item 1",
       "options": [
         {
           "value": "home",
@@ -619,51 +241,25 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         {
           "value": "collection",
           "label": "Collection"
-        }
-      ],
-      "default": "home"
-    },
-    {
-      "type": "select",
-      "id": "navigation_item2",
-      "label": "Second item",
-      "options": [
+        },
         {
           "value": "",
           "label": "None"
-        },
-        {
-          "value": "home",
-          "label": "Home"
-        },
-        {
-          "value": "search",
-          "label": "Search"
-        },
-        {
-          "value": "cart",
-          "label": "Cart"
-        },
-        {
-          "value": "account",
-          "label": "Account"
-        },
-        {
-          "value": "collection",
-          "label": "Collection"
         }
       ],
-      "default": "search"
+      "default": "home"
+    },
+    {
+      "type": "collection",
+      "id": "collection1_id",
+      "label": "Collection 1",
+      "info": "Required if Navigation Item 1 is set to Collection"
     },
     {
       "type": "select",
       "id": "nav_item2",
-      "label": "Second item (alias)",
+      "label": "Navigation Item 2",
       "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
         {
           "value": "home",
           "label": "Home"
@@ -683,19 +279,25 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         {
           "value": "collection",
           "label": "Collection"
+        },
+        {
+          "value": "",
+          "label": "None"
         }
       ],
       "default": "search"
     },
     {
+      "type": "collection",
+      "id": "collection2_id",
+      "label": "Collection 2",
+      "info": "Required if Navigation Item 2 is set to Collection"
+    },
+    {
       "type": "select",
       "id": "nav_item3",
-      "label": "Third item (alias)",
+      "label": "Navigation Item 3",
       "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
         {
           "value": "home",
           "label": "Home"
@@ -715,83 +317,25 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         {
           "value": "collection",
           "label": "Collection"
+        },
+        {
+          "value": "",
+          "label": "None"
         }
       ],
       "default": "cart"
     },
     {
-      "type": "select",
-      "id": "navigation_item3",
-      "label": "Third item",
-      "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
-        {
-          "value": "home",
-          "label": "Home"
-        },
-        {
-          "value": "search",
-          "label": "Search"
-        },
-        {
-          "value": "cart",
-          "label": "Cart"
-        },
-        {
-          "value": "account",
-          "label": "Account"
-        },
-        {
-          "value": "collection",
-          "label": "Collection"
-        }
-      ],
-      "default": "cart"
-    },
-    {
-      "type": "select",
-      "id": "navigation_item4",
-      "label": "Fourth item",
-      "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
-        {
-          "value": "home",
-          "label": "Home"
-        },
-        {
-          "value": "search",
-          "label": "Search"
-        },
-        {
-          "value": "cart",
-          "label": "Cart"
-        },
-        {
-          "value": "account",
-          "label": "Account"
-        },
-        {
-          "value": "collection",
-          "label": "Collection"
-        }
-      ],
-      "default": "account"
+      "type": "collection",
+      "id": "collection3_id",
+      "label": "Collection 3",
+      "info": "Required if Navigation Item 3 is set to Collection"
     },
     {
       "type": "select",
       "id": "nav_item4",
-      "label": "Fourth item (alias)",
+      "label": "Navigation Item 4",
       "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
         {
           "value": "home",
           "label": "Home"
@@ -811,51 +355,25 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         {
           "value": "collection",
           "label": "Collection"
+        },
+        {
+          "value": "",
+          "label": "None"
         }
       ],
       "default": "account"
     },
     {
-      "type": "select",
-      "id": "navigation_item5",
-      "label": "Fifth item",
-      "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
-        {
-          "value": "home",
-          "label": "Home"
-        },
-        {
-          "value": "search",
-          "label": "Search"
-        },
-        {
-          "value": "cart",
-          "label": "Cart"
-        },
-        {
-          "value": "account",
-          "label": "Account"
-        },
-        {
-          "value": "collection",
-          "label": "Collection"
-        }
-      ],
-      "default": ""
+      "type": "collection",
+      "id": "collection4_id",
+      "label": "Collection 4",
+      "info": "Required if Navigation Item 4 is set to Collection"
     },
     {
       "type": "select",
       "id": "nav_item5",
-      "label": "Fifth item (alias)",
+      "label": "Navigation Item 5",
       "options": [
-        {
-          "value": "",
-          "label": "None"
-        },
         {
           "value": "home",
           "label": "Home"
@@ -875,131 +393,30 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
         {
           "value": "collection",
           "label": "Collection"
+        },
+        {
+          "value": "",
+          "label": "None"
         }
       ],
       "default": ""
     },
     {
-      "type": "header",
-      "content": "Labels"
-    },
-    {
-      "type": "text",
-      "id": "home_label",
-      "label": "Home label",
-      "default": "Home"
-    },
-    {
-      "type": "text",
-      "id": "search_label",
-      "label": "Search label",
-      "default": "Search"
-    },
-    {
-      "type": "text",
-      "id": "cart_label",
-      "label": "Cart label",
-      "default": "Cart"
-    },
-    {
-      "type": "text",
-      "id": "account_label",
-      "label": "Account label",
-      "default": "Account"
-    },
-    {
-      "type": "text",
-      "id": "login_label",
-      "label": "Login label",
-      "default": "Log in"
-    },
-    {
       "type": "collection",
-      "id": "collection",
-      "label": "Collection",
-      "info": "Select the collection to link to if using the collection item"
-    },
-    {
-      "type": "text",
-      "id": "collection_label",
-      "label": "Collection label",
-      "default": "Shop"
-    },
-    {
-      "type": "header",
-      "content": "Styling"
-    },
-    {
-      "type": "color",
-      "id": "background",
-      "label": "Background color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "font_size",
-      "min": 8,
-      "max": 15,
-      "step": 1,
-      "unit": "px",
-      "label": "Font size",
-      "default": 12
-    },
-    {
-      "type": "select",
-      "id": "font_weight",
-      "label": "Font weight",
-      "options": [
-        {
-          "value": "400",
-          "label": "Regular"
-        },
-        {
-          "value": "500",
-          "label": "Medium"
-        },
-        {
-          "value": "600",
-          "label": "Semibold"
-        },
-        {
-          "value": "700",
-          "label": "Bold"
-        }
-      ],
-      "default": "500"
-    },
-    {
-      "type": "select",
-      "id": "text_transform",
-      "label": "Text transform",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "uppercase",
-          "label": "Uppercase"
-        },
-        {
-          "value": "capitalize",
-          "label": "Capitalize"
-        }
-      ],
-      "default": "none"
+      "id": "collection5_id",
+      "label": "Collection 5",
+      "info": "Required if Navigation Item 5 is set to Collection"
     }
   ],
   "presets": [
     {
       "name": "Mobile Bottom Navigation",
       "settings": {
-        "is_sticky": true,
-        "show_border": true,
-        "navigation_item1": "home",
-        "navigation_item2": "search",
-        "navigation_item3": "cart",
-        "navigation_item4": "account"
+        "enable_navigation": true,
+        "nav_item1": "home",
+        "nav_item2": "search",
+        "nav_item3": "cart",
+        "nav_item4": "account"
       }
     }
   ]
