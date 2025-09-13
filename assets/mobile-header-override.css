@@ -1,0 +1,31 @@
+/* Mobile Header Overrides - Hide cart, search, and language selector on mobile */
+@media screen and (max-width: 749px) {
+  /* Hide cart icon in header */
+  .header__item--cart {
+    display: none !important;
+  }
+  
+  /* Hide search icon in header */
+  .header__icon--search {
+    display: none !important;
+  }
+  
+  /* Hide language selector in header */
+  .header__item--language {
+    display: none !important;
+  }
+  
+  /* Hide GTranslate in mobile menu drawer */
+  .menu-drawer__localization .header__language-selector {
+    display: none !important;
+  }
+  
+  /* Reorganize header to account for missing elements */
+  .header--mobile-center {
+    justify-content: center;
+  }
+  
+  .header--mobile-left {
+    justify-content: flex-start;
+  }
+}
