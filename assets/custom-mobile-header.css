@@ -7,10 +7,14 @@
 
 /* Hide mobile-only elements on desktop */
 .mobile-only-cart {
-  display: none;
+  display: none !important;
 }
 
 @media screen and (max-width: 749px) {
+  /* Show the mobile cart on small screens */
+  .mobile-only-cart {
+    display: flex !important;
+  }
   /* Reset and reorganize the mobile header layout */
   .header__sortable-layout {
     display: grid;
@@ -65,18 +69,20 @@
   
   /* Mobile cart implementation */
   .mobile-only-cart {
-    display: flex;
     grid-column: 3;
     justify-self: end;
     margin-right: 15px;
     z-index: 5;
+    position: relative;
   }
   
   .mobile-only-cart .header__icon--cart {
     padding: 8px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    visibility: visible;
+    opacity: 1;
   }
   
   .mobile-only-cart .svg-wrapper svg {
