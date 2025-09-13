@@ -95,13 +95,60 @@
     <nav class="mobile-nav page-width">
       <div class="mobile-nav__inner">
         {% comment %}Debug Information{% endcomment %}
-        <!-- Mobile Nav Debug:
-          Item 1: {{ section.settings.nav_item1 }}
-          Item 2: {{ section.settings.nav_item2 }}
-          Item 3: {{ section.settings.nav_item3 }}
-          Item 4: {{ section.settings.nav_item4 }}
-          Item 5: {{ section.settings.nav_item5 }}
+        <!-- 
+          Mobile Nav Debug:
+          Item 1: {{ section.settings.nav_item1 }} (Setting value)
+          Item 2: {{ section.settings.nav_item2 }} (Setting value)
+          Item 3: {{ section.settings.nav_item3 }} (Setting value)
+          Item 4: {{ section.settings.nav_item4 }} (Setting value)
+          Item 5: {{ section.settings.nav_item5 }} (Setting value)
+          
+          Cart URL: {{ routes.cart_url }}
+          Account URL: {{ routes.account_url }}
+          Search URL: {{ routes.search_url }}
+          
+          Current template: {{ template.name }}
         -->
+        
+        {% comment %}Ensure critical navigation items always appear{% endcomment %}
+        {% unless section.settings.nav_item1 == 'home' or section.settings.nav_item2 == 'home' or section.settings.nav_item3 == 'home' or section.settings.nav_item4 == 'home' or section.settings.nav_item5 == 'home' %}
+          <a href="{{ routes.root_url }}" class="mobile-nav__item{% if template.name == 'index' %} mobile-nav__item--active{% endif %}">
+            <span class="mobile-nav__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span class="mobile-nav__label">Home</span>
+          </a>
+        {% endunless %}
+
+        {% unless section.settings.nav_item1 == 'search' or section.settings.nav_item2 == 'search' or section.settings.nav_item3 == 'search' or section.settings.nav_item4 == 'search' or section.settings.nav_item5 == 'search' %}
+          <a href="{{ routes.search_url }}" class="mobile-nav__item{% if template.name == 'search' %} mobile-nav__item--active{% endif %}">
+            <span class="mobile-nav__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <span class="mobile-nav__label">Search</span>
+          </a>
+        {% endunless %}
+
+        {% unless section.settings.nav_item1 == 'cart' or section.settings.nav_item2 == 'cart' or section.settings.nav_item3 == 'cart' or section.settings.nav_item4 == 'cart' or section.settings.nav_item5 == 'cart' %}
+          <a href="{{ routes.cart_url }}" class="mobile-nav__item{% if template.name == 'cart' %} mobile-nav__item--active{% endif %}">
+            <span class="mobile-nav__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+            </span>
+            <span class="mobile-nav__label">Cart</span>
+          </a>
+        {% endunless %}
+        
+        {% comment %}Loop through configured nav items{% endcomment %}
         {% for i in (1..5) %}
           {% assign item_setting = 'nav_item' | append: i %}
           {% assign item_value = section.settings[item_setting] %}
@@ -129,6 +176,8 @@
                   <span class="mobile-nav__label">Search</span>
                 </a>
               {% when 'cart' %}
+                {% comment %}Debug Cart URL{% endcomment %}
+                <!-- Cart URL: {{ routes.cart_url }} -->
                 <a href="{{ routes.cart_url }}" class="mobile-nav__item{% if template.name == 'cart' %} mobile-nav__item--active{% endif %}">
                   <span class="mobile-nav__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

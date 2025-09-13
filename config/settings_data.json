@@ -143,7 +143,19 @@
       "mobile-bottom-navigation": {
         "type": "mobile-bottom-navigation",
         "settings": {
-          "item_spacing": 25
+          "enable_navigation": true,
+          "item_spacing": 14,
+          "icon_size": 22,
+          "nav_item1": "home",
+          "collection1_id": "",
+          "nav_item2": "search",
+          "collection2_id": "",
+          "nav_item3": "cart",
+          "collection3_id": "",
+          "nav_item4": "collection",
+          "collection4_id": "hydrogen",
+          "nav_item5": "account",
+          "collection5_id": ""
         }
       }
     },
