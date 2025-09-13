@@ -76,35 +76,36 @@
     grid-column: 3;
     justify-self: end;
     margin-right: 16px;
-    z-index: 50;
+    z-index: 999; /* Extremely high z-index to ensure visibility above all elements */
     position: relative;
-    display: flex;
+    display: flex !important;
   }
   
   /* Cart icon styling */
   .mobile-only-cart .header__icon--cart {
     padding: 8px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-    visibility: visible;
-    opacity: 1;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   /* Cart icon SVG */
   .mobile-only-cart .svg-wrapper svg {
     width: 24px;
     height: 24px;
-    display: block;
+    display: block !important;
+    color: #ff0000; /* Temporary debug color to make the cart icon clearly visible */
   }
   
   /* Cart component visibility */
   .mobile-only-cart .header__item--cart,
   .mobile-only-cart .header__icon--cart,
   .mobile-only-cart .svg-wrapper {
-    display: flex;
-    visibility: visible;
-    opacity: 1;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   /* Hide default cart */

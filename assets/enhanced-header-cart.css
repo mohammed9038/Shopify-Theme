@@ -10,6 +10,14 @@
   transition: transform 0.2s ease;
 }
 
+/* Mobile-only cart styles to ensure visibility */
+.mobile-only-cart,
+.mobile-only-cart .header__item--cart,
+.mobile-only-cart .header__icon--cart {
+  visibility: visible !important;
+  display: flex !important;
+}
+
 @media screen and (max-width: 749px) {
   /* Mobile-specific cart styling */
   .header__icon--cart {
@@ -18,7 +26,7 @@
 
   /* SVG container alignment */
   .header__icon--cart .svg-wrapper {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
   }
