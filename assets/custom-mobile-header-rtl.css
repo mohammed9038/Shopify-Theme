@@ -1,0 +1,16 @@
+/**
+ * RTL support for custom mobile header
+ * 
+ * These styles will apply when the shop language is set to an RTL language
+ */
+
+[dir="rtl"] .mobile-only-cart .cart-count-bubble {
+  right: auto;
+  left: 0;
+  transform: translate(-25%, -25%);
+}
+
+[dir="rtl"] .header__icon--menu,
+[dir="rtl"] .mobile-only-cart .header__icon--cart {
+  transform: scaleX(-1);
+}

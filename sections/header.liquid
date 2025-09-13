@@ -902,21 +902,21 @@
     {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
     <div class="header__sortable-layout">
       {% comment %}Mobile cart - always visible on small screens{% endcomment %}
-      <div class="mobile-only-cart" style="visibility: visible !important; display: flex !important;">
-        <div class="header__item header__item--cart" style="visibility: visible !important; display: flex !important;">
-          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon" style="visibility: visible !important; display: flex !important;">
+      <div class="mobile-only-cart">
+        <div class="header__item header__item--cart">
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon">
             {% if cart == empty %}
-              <span class="svg-wrapper" style="visibility: visible !important; display: flex !important;">
+              <span class="svg-wrapper">
                 {{ 'icon-cart-empty.svg' | inline_asset_content }}
               </span>
             {% else %}
-              <span class="svg-wrapper" style="visibility: visible !important; display: flex !important;">
+              <span class="svg-wrapper">
                 {{ 'icon-cart.svg' | inline_asset_content }}
               </span>
             {% endif %}
             <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
             {%- if cart != empty -%}
-              <div class="cart-count-bubble" style="visibility: visible !important; display: flex !important;">
+              <div class="cart-count-bubble">
                 {%- if cart.item_count < 100 -%}
                   <span aria-hidden="true">{{ cart.item_count }}</span>
                 {%- endif -%}

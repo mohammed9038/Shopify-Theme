@@ -17,8 +17,14 @@
     visibility: visible;
     opacity: 1;
     background-color: var(--color-background);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     padding: 0;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* Enhanced shadow on scroll for better visual separation */
+  .scrolled-past-header .section-header {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
   }
   
   /* Header wrapper styling */
