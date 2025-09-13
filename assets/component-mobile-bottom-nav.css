@@ -1,0 +1,242 @@
+/* 
+============================================================================== 
+SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
+==============================================================================
+Mobile-friendly navigation bar fixed to the bottom of the screen on smaller devices
+Features:
+- Professional and clean design
+- Smooth animations and transitions
+- Active state indicators
+- Cart count notifications
+- Ripple effect on interaction
+- Responsive behavior
+============================================================================== 
+*/
+
+/* Main container */
+.mobile-bottom-nav {
+  height: 65px;
+  padding: 0;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Navigation container */
+.mobile-bottom-nav nav {
+  height: 100%;
+}
+
+/* Items container */
+.mobile-bottom-nav__items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Individual nav item */
+.mobile-bottom-nav__item {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Navigation links */
+.mobile-bottom-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 8px 5px;
+  color: rgba(var(--color-foreground), 0.75);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.1s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden; /* For ripple effect */
+}
+
+/* Active state for links */
+.mobile-bottom-nav__link--active {
+  color: rgb(var(--color-foreground));
+}
+
+.mobile-bottom-nav__link--active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 24px;
+  height: 3px;
+  background-color: rgb(var(--color-button));
+  transform: translateX(-50%);
+  border-radius: 3px 3px 0 0;
+  transition: width 0.3s ease;
+}
+
+/* Icon container */
+.mobile-bottom-nav__icon {
+  position: relative;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+}
+
+.mobile-bottom-nav__icon .icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+/* Cart count bubble for cart icon */
+.mobile-bottom-nav__icon .cart-count-bubble {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  z-index: 1;
+  transform: scale(0.9);
+  animation: cart-bubble-entrance 0.3s ease-out;
+}
+
+@keyframes cart-bubble-entrance {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+}
+
+/* Hover states - subtle feedback */
+.mobile-bottom-nav__link:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.mobile-bottom-nav__link:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Active state interaction */
+.mobile-bottom-nav__link:active {
+  transform: scale(0.95);
+}
+
+/* Label styling */
+.mobile-bottom-nav__label {
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 500;
+  margin-top: 1px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  transition: opacity 0.2s ease;
+}
+
+/* Hide on larger screens */
+@media screen and (min-width: 750px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+/* Focus state - accessibility */
+.mobile-bottom-nav__link:focus {
+  outline: none;
+}
+
+.mobile-bottom-nav__link:focus-visible {
+  outline: 2px solid rgba(var(--color-foreground), 0.5);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+/* Animations when loading page - smooth entrance */
+.mobile-bottom-nav {
+  animation: mobile-nav-entrance 0.4s ease-out;
+}
+
+@keyframes mobile-nav-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ripple effect on click */
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(var(--color-foreground), 0.1);
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  margin-left: -50px;
+  animation: ripple 0.6s linear;
+  transform: scale(0);
+  pointer-events: none;
+  opacity: 1;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Specific item customizations */
+.mobile-bottom-nav__item--search .mobile-bottom-nav__icon .icon {
+  stroke-width: 2px;
+}
+
+.mobile-bottom-nav__item--home .mobile-bottom-nav__icon .icon {
+  stroke-width: 1.5px;
+}
+
+.mobile-bottom-nav__item--account .mobile-bottom-nav__icon .icon {
+  stroke-width: 1.5px;
+}
+
+/* Safe area inset padding for newer mobile devices with notches */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

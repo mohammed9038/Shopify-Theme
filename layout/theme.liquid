@@ -94,7 +94,7 @@
       }
       {% endfor %}
 
-      {{ scheme_classes | prepend: 'body' }} {
+      body {
         color: rgba(var(--color-foreground), 0.75);
         background-color: rgb(var(--color-background));
       }
@@ -382,5 +382,7 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+    
+    {% section 'mobile-bottom-navigation' %}
   </body>
 </html>
