@@ -1,32 +1,36 @@
-/*
-  Custom Mobile Header Layout
-  ===========================
-  Implements a mobile header with hamburger menu (left), logo (center), and cart (right).
-  This CSS ensures a consistent mobile layout regardless of header settings.
-*/
+/**
+ * Custom Mobile Header Layout
+ * 
+ * A professional mobile header implementation featuring:
+ * - Hamburger menu (left)
+ * - Logo (center)
+ * - Cart (right)
+ * 
+ * This provides a consistent mobile experience regardless of theme settings.
+ */
 
-/* Hide mobile-only elements on desktop */
+/* Mobile cart visibility management */
 .mobile-only-cart {
-  display: none !important;
+  display: none;
 }
 
 @media screen and (max-width: 749px) {
-  /* Show the mobile cart on small screens */
+  /* Mobile cart visibility */
   .mobile-only-cart {
-    display: flex !important;
+    display: flex;
   }
-  /* Reset and reorganize the mobile header layout */
+  
+  /* Mobile header grid layout */
   .header__sortable-layout {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 0;
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 12px 0;
   }
   
-  /* Reset all previous ordering */
+  /* Reset element ordering */
   .header__item {
     order: unset;
     width: auto;
@@ -35,79 +39,80 @@
     justify-content: center;
   }
   
-  /* Ensure the menu drawer shows on the left */
+  /* Menu drawer positioning */
   header-drawer {
     justify-self: start;
     grid-column: 1;
     margin-left: 0;
-    padding-left: 15px;
-    display: flex !important;
+    padding-left: 16px;
+    display: flex;
   }
   
-  /* Position logo in the center */
+  /* Logo positioning */
   .header__item--logo {
     grid-column: 2;
     justify-self: center;
     margin: 0 auto;
   }
   
-  /* Position cart on the right */
+  /* Standard cart positioning */
   .header__item--cart {
     grid-column: 3;
     justify-self: end;
-    margin-right: 15px;
-    display: flex !important; /* Force display to ensure visibility */
+    margin-right: 16px;
+    display: flex;
   }
   
-  /* Hide all other items on mobile */
+  /* Element visibility management */
   .header__item--menu,
   .header__item--search,
   .header__item--account,
   .header__item--language {
-    display: none !important;
+    display: none;
   }
   
-  /* Mobile cart implementation */
+  /* Mobile cart component */
   .mobile-only-cart {
     grid-column: 3;
     justify-self: end;
-    margin-right: 15px;
-    z-index: 50; /* Higher z-index to ensure visibility */
+    margin-right: 16px;
+    z-index: 50;
     position: relative;
-    display: flex !important; /* Force display at the container level */
+    display: flex;
   }
   
+  /* Cart icon styling */
   .mobile-only-cart .header__icon--cart {
     padding: 8px;
-    display: flex !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    visibility: visible !important;
-    opacity: 1 !important;
+    visibility: visible;
+    opacity: 1;
   }
   
+  /* Cart icon SVG */
   .mobile-only-cart .svg-wrapper svg {
     width: 24px;
     height: 24px;
-    display: block !important; /* Ensure SVG is visible */
+    display: block;
   }
   
-  /* Ensure cart icon and its elements are all visible */
-  .mobile-only-cart *,
+  /* Cart component visibility */
   .mobile-only-cart .header__item--cart,
   .mobile-only-cart .header__icon--cart,
   .mobile-only-cart .svg-wrapper {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: flex;
+    visibility: visible;
+    opacity: 1;
   }
   
-  /* Hide default cart on mobile */
+  /* Hide default cart */
   .header__sortable-layout > .header__item--cart {
-    display: none !important;
+    display: none;
   }
   
-  /* Menu button and cart styles for consistent size */
+  /* Icon styling consistency */
   .header__icon--menu, 
   .header__icon--cart {
     padding: 8px;
@@ -116,7 +121,7 @@
     justify-content: center;
   }
   
-  /* Make the logo slightly smaller on mobile for better balance */
+  /* Logo sizing for mobile */
   .header__heading-logo-wrapper {
     max-width: 100%;
     width: auto;
@@ -129,12 +134,12 @@
     object-fit: contain;
   }
   
-  /* Ensure cart icon is visible */
+  /* SVG wrapper visibility */
   .header__icon--cart .svg-wrapper {
     display: flex;
   }
   
-  /* Enhance the visibility of the cart counter */
+  /* Cart counter styling */
   .cart-count-bubble {
     position: absolute;
     top: 0;
@@ -142,9 +147,13 @@
     transform: translate(30%, -30%);
     min-width: 18px;
     height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
   }
   
-  /* Remove any spacing that might push things out of alignment */
+  /* Layout adjustment */
   .header__item--menu {
     margin-bottom: 0;
   }

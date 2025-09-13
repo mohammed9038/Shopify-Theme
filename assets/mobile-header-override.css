@@ -1,65 +1,69 @@
-/* 
-============================================================================== 
-SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
-==============================================================================
-*/
+/**
+ * SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
+ * 
+ * Provides responsive adjustments for mobile view by:
+ * - Ensuring headers stay visible and properly positioned
+ * - Controlling visibility of elements that are duplicated in bottom navigation
+ * - Maintaining consistent spacing and alignment
+ */
 
-/* Hide redundant elements in mobile header since they're in the bottom navigation */
 @media screen and (max-width: 749px) {
-  /* Ensure header always stays visible on mobile */
+  /* Fixed header positioning */
   .section-header {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 100 !important;
-    transform: none !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transform: none;
+    visibility: visible;
+    opacity: 1;
+    background-color: var(--color-background);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
   
-  /* Prevent any scrolling behavior that might hide the header */
+  /* Override scroll behaviors */
   .scrolled-past-header .header-wrapper {
-    transform: none !important;
-    opacity: 1 !important;
+    transform: none;
+    opacity: 1;
   }
 
-  /* Ensure the sticky bottom nav doesn't get hidden */
+  /* Maintain bottom navigation visibility */
   .mobile-bottom-nav.sticky {
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
   }
   
-  /* Hide cart icon in header except for our mobile-only-cart */
+  /* Cart visibility management - show only mobile-specific cart */
   .header__sortable-layout > .header__item--cart:not(.mobile-only-cart .header__item--cart),
   .header__sortable-layout > a[href="/cart"]:not(.mobile-only-cart a[href="/cart"]),
   .header-wrapper .header__icon.header__icon--cart:not(.mobile-only-cart .header__icon--cart),
   .header .header__icon--cart:not(.mobile-only-cart .header__icon--cart) {
-    display: none !important;
+    display: none;
   }
   
-  /* Hide search icon in header */
+  /* Search visibility management - hidden from header */
   .header__icon--search,
   summary[aria-label*="Search"],
   details-modal[data-search-modal] > summary,
   .header .header__search {
-    display: none !important;
+    display: none;
   }
   
-  /* Hide language selector in header */
+  /* Language selector visibility management */
   .header__item--language,
   .header__language-selector,
   .gtranslate_wrapper:not(.mobile-bottom-nav .gtranslate_wrapper) {
-    display: none !important;
+    display: none;
   }
   
-  /* Hide GTranslate in mobile menu drawer */
+  /* Menu drawer language selector management */
   .menu-drawer__localization .header__language-selector,
   .menu-drawer .gtranslate_wrapper,
   .menu-drawer__inner-container .header__language-selector {
-    display: none !important;
+    display: none;
   }
   
-  /* Reorganize header to account for missing elements */
+  /* Header alignment variants */
   .header--mobile-center {
     justify-content: center;
   }

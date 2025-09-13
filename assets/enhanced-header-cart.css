@@ -1,22 +1,29 @@
-/* Custom styles for enhancing the cart icon visibility in the header on mobile devices */
+/**
+ * Enhanced Cart Icon Component
+ *
+ * Improves cart icon visibility and interaction feedback
+ * across different device sizes.
+ */
+
 .header__icon--cart {
   position: relative;
   transition: transform 0.2s ease;
 }
 
 @media screen and (max-width: 749px) {
+  /* Mobile-specific cart styling */
   .header__icon--cart {
     padding: 0.8rem;
   }
 
-  /* Make the cart icon more visible on mobile */
+  /* SVG container alignment */
   .header__icon--cart .svg-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
-  /* Enhance the visibility of the cart counter on mobile */
+  /* Cart counter badge styling */
   .header__icon--cart .cart-count-bubble {
     position: absolute;
     top: 0;
@@ -32,13 +39,20 @@
     align-items: center;
     justify-content: center;
     padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.5);
     transform: translate(30%, -30%);
   }
 }
 
-/* Add a slight animation on tap/click */
+/* Interactive feedback animation */
 .header__icon--cart:active {
   transform: scale(0.95);
+}
+
+/* Focus state styling */
+.header__icon--cart:focus {
+  outline: 2px solid rgba(var(--color-foreground), 0.2);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
