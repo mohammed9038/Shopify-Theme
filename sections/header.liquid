@@ -896,6 +896,9 @@
       {% for i in (1..6) %}
         {% assign item_setting = 'header_item' | append: i %}
         {% assign item_type = section.settings[item_setting] %}
+        {% if i == 6 and section.settings.enable_language_selector and section.settings.header_item6 == blank %}
+          {% assign item_type = 'language' %}
+        {% endif %}
         
         {% if item_type == 'logo' %}
           {% comment %}--- LOGO ELEMENT ---{% endcomment %}
