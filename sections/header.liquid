@@ -40,6 +40,7 @@
 <link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
 <link rel="stylesheet" href="{{ 'mobile-header-override.css' | asset_url }}" media="all">
 <link rel="stylesheet" href="{{ 'enhanced-header-cart.css' | asset_url }}" media="all">
+<link rel="stylesheet" href="{{ 'custom-mobile-header.css' | asset_url }}" media="all">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -80,7 +81,7 @@
     }
   {%- endif -%}
   
-  /* Hide drawer on desktop when not using drawer menu */
+  /* Hide drawer on desktop when not using drawer menu, but always show on mobile */
   {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
       header-drawer {
