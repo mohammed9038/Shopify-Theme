@@ -158,9 +158,9 @@
           "collection": "hydrogen",
           "collection_label": "",
           "is_sticky": true,
-          "item_spacing": 15,
+          "item_spacing": 25,
           "font_size": 10,
-          "font_weight": "500",
+          "font_weight": "600",
           "text_transform": "capitalize"
         }
       }
