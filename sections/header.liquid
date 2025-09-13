@@ -901,6 +901,28 @@
     
     {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
     <div class="header__sortable-layout">
+      {% comment %}--- Mobile-specific cart icon (always shown on mobile) ---{% endcomment %}
+      <div class="mobile-only-cart">
+        <div class="header__item header__item--cart">
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon">
+            {% if cart == empty %}
+              <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+            {% else %}
+              <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+      
       {% comment %}--- Header item sorting system ---{% endcomment %}
       {% for i in (1..6) %}
         {% assign item_setting = 'header_item' | append: i %}

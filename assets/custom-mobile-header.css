@@ -5,7 +5,15 @@
   - Hamburger menu on the left
   - Logo in the center
   - Cart icon on the right
+  
+  IMPORTANT: This CSS forces the cart to be visible on mobile
+  regardless of header item settings in the theme editor.
 */
+
+/* Hide mobile-only elements on desktop */
+.mobile-only-cart {
+  display: none;
+}
 
 @media screen and (max-width: 749px) {
   /* Reset and reorganize the mobile header layout */
@@ -57,6 +65,32 @@
   .header__item--search,
   .header__item--account,
   .header__item--language {
+    display: none !important;
+  }
+  
+  /* Mobile-only cart styling */
+  .mobile-only-cart {
+    display: flex;
+    grid-column: 3;
+    justify-self: end;
+    margin-right: 15px;
+    z-index: 5; /* Ensure cart stays above other elements */
+  }
+  
+  .mobile-only-cart .header__icon--cart {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mobile-only-cart .svg-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Hide the regular cart on mobile as we use our mobile-specific one */
+  .header__sortable-layout > .header__item--cart {
     display: none !important;
   }
   
