@@ -152,9 +152,9 @@
           "collection2_id": "",
           "nav_item3": "cart",
           "collection3_id": "",
-          "nav_item4": "account",
-          "collection4_id": "",
-          "nav_item5": "",
+          "nav_item4": "collection",
+          "collection4_id": "hydrogen",
+          "nav_item5": "account",
           "collection5_id": ""
         }
       }
