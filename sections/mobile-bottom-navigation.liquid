@@ -27,6 +27,7 @@
   .mobile-nav {
     --mobile-nav-item-spacing: {{ section.settings.item_spacing }}px;
     --mobile-nav-icon-size: {{ section.settings.icon_size }}px;
+    --mobile-nav-height: {{ section.settings.nav_height }}px;
   }
 
   .mobile-nav {
@@ -38,6 +39,7 @@
     background-color: #fff;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     display: none;
+    height: var(--mobile-nav-height);
   }
 
   @media screen and (max-width: 749px) {
@@ -49,7 +51,9 @@
   .mobile-nav__inner {
     display: flex;
     justify-content: space-around;
-    padding: 12px 0;
+    align-items: center;
+    height: 100%;
+    padding: 0;
   }
 
   .mobile-nav__item {
@@ -71,17 +75,18 @@
   .mobile-nav__icon {
     width: var(--mobile-nav-icon-size);
     height: var(--mobile-nav-icon-size);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .mobile-nav__label {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: capitalize;
+    line-height: 1;
   }
 
   /* Spacing fix for pages with mobile navigation */
   .section-mobile-nav-padding {
-    padding-bottom: 70px;
+    padding-bottom: calc(var(--mobile-nav-height) + 10px);
   }
 </style>
 
@@ -89,6 +94,14 @@
   {% unless template == 'cart' %}
     <nav class="mobile-nav page-width">
       <div class="mobile-nav__inner">
+        {% comment %}Debug Information{% endcomment %}
+        <!-- Mobile Nav Debug:
+          Item 1: {{ section.settings.nav_item1 }}
+          Item 2: {{ section.settings.nav_item2 }}
+          Item 3: {{ section.settings.nav_item3 }}
+          Item 4: {{ section.settings.nav_item4 }}
+          Item 5: {{ section.settings.nav_item5 }}
+        -->
         {% for i in (1..5) %}
           {% assign item_setting = 'nav_item' | append: i %}
           {% assign item_value = section.settings[item_setting] %}
@@ -212,6 +225,16 @@
       "unit": "px",
       "label": "Icon size",
       "default": 24
+    },
+    {
+      "type": "range",
+      "id": "nav_height",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Navigation height",
+      "default": 60
     },
     {
       "type": "header",

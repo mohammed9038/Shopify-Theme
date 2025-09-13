@@ -9,6 +9,7 @@
   background-color: #ffffff;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   display: none;
+  height: var(--mobile-nav-height, 60px);
 }
 
 @media screen and (max-width: 749px) {
@@ -17,14 +18,16 @@
   }
   
   .section-mobile-nav-padding {
-    padding-bottom: 70px;
+    padding-bottom: calc(var(--mobile-nav-height, 60px) + 10px);
   }
 }
 
 .mobile-nav__inner {
   display: flex;
   justify-content: space-around;
-  padding: 12px 0;
+  align-items: center;
+  height: 100%;
+  padding: 0;
 }
 
 .mobile-nav__item {
@@ -47,7 +50,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .mobile-nav__icon svg {
@@ -56,9 +59,9 @@
 }
 
 .mobile-nav__label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   text-align: center;
   text-transform: capitalize;
   white-space: nowrap;
