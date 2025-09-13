@@ -80,12 +80,13 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
 /* Navigation container */
 .mobile-bottom-nav nav {
   height: 100%;
+  width: 100%;
 }
 
 /* Items container */
 .mobile-bottom-nav__items {
   display: flex;
-  justify-content: {% if section.settings.item_spacing > 0 %}space-between{% else %}space-between{% endif %};
+  justify-content: space-between;
   align-items: center;
   height: 100%;
   margin: 0;
@@ -102,8 +103,6 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
   display: flex;
   justify-content: center;
   width: 100%;
-  display: flex;
-  justify-content: center;
 }
 
 /* Navigation links */
@@ -207,7 +206,12 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
   border-radius: 4px;
 }
 
-/* Ripple effect on click */
+/* Hover state */
+.mobile-bottom-nav__link:hover .icon {
+  transform: translateY(-2px);
+}
+
+/* Ripple effect */
 .ripple-effect {
   position: absolute;
   border-radius: 50%;
@@ -216,70 +220,27 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
   height: 100px;
   margin-top: -50px;
   margin-left: -50px;
-  animation: ripple 0.6s linear;
-  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
   pointer-events: none;
+  transform: scale(0);
   opacity: 1;
 }
 
-@keyframes ripple {
+@keyframes ripple-animation {
   to {
-    transform: scale(3);
+    transform: scale(2.5);
     opacity: 0;
   }
 }
 </style>
 
-{% style %}
-  .mobile-bottom-nav {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: {{ section.settings.background }};
-    box-shadow: 0 -2px 10px rgba(var(--color-foreground), 0.08);
-    z-index: 100;
-    transition: transform 0.3s ease;
-    {% if section.settings.show_border %}
-      border-top: 1px solid rgba(var(--color-foreground), 0.08);
-    {% endif %}
-  }
-  
-  @media screen and (max-width: 749px) {
-    .mobile-bottom-nav {
-      display: flex;
-    }
-    
-    .section-footer {
-      padding-bottom: 80px;
-    }
-    
-    /* Add padding to ensure content isn't hidden behind the nav */
-    .shopify-section:last-child {
-      margin-bottom: 65px;
-    }
-    
-    /* Fix cart drawer issue */
-    cart-drawer.is-empty + .mobile-bottom-nav,
-    cart-drawer:not([open]) + .mobile-bottom-nav {
-      transform: translateY(0);
-    }
-    
-    cart-drawer[open] + .mobile-bottom-nav {
-      transform: translateY(100%);
-    }
-  }
-{% endstyle %}
-
 <div class="mobile-bottom-nav" data-sticky="{% if section.settings.is_sticky %}true{% else %}false{% endif %}">
-  <nav class="page-width">
-    <ul class="mobile-bottom-nav__items" role="list">
+  <nav>
+    <ul class="mobile-bottom-nav__items">
       {% for i in (1..5) %}
-        {% assign item_setting = 'nav_item' | append: i %}
+        {% assign item_setting = 'navigation_item' | append: i %}
         {% assign item_type = section.settings[item_setting] %}
-        
-        {% if item_type != blank and item_type != 'none' %}
+        {% if item_type != blank %}
           <li class="mobile-bottom-nav__item mobile-bottom-nav__item--{{ item_type }}">
             {% case item_type %}
               {% when 'home' %}
@@ -296,7 +257,7 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
                 </a>
                 
               {% when 'search' %}
-                <button type="button" class="mobile-bottom-nav__link js-search-modal-trigger">
+                <button type="button" class="mobile-bottom-nav__link js-search-modal-trigger" aria-label="{{ 'general.search.search' | t }}">
                   <span class="mobile-bottom-nav__icon">
                     <span class="icon">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -382,209 +343,203 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
   </nav>
 </div>
 
-{% javascript %}
-/**
- * Mobile Bottom Navigation
- * 
- * This file implements the functionality for the mobile bottom navigation component.
- * Features include:
- * - Search modal integration
- * - Active state management
- * - Cart interaction & count updates
- * - Smooth animations on scroll
- * - Ripple effect on clicks
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-  const nav = document.querySelector('.mobile-bottom-nav');
-  if (!nav) return;
-  
-  const links = nav.querySelectorAll('.mobile-bottom-nav__link');
-  const searchTriggers = nav.querySelectorAll('.js-search-modal-trigger');
-  const searchModal = document.getElementById('Search-Modal');
-  let lastScrollTop = 0;
-  const scrollThreshold = 10;
-  let isScrolling = false;
-  
-  // Setup search modal trigger
-  if (searchTriggers.length > 0 && searchModal) {
-    searchTriggers.forEach(trigger => {
-      trigger.addEventListener('click', () => {
-        const details = searchModal.querySelector('details');
-        if (details) {
-          details.setAttribute('open', '');
-          
-          // Focus the search input after a brief delay
-          setTimeout(() => {
-            const searchInput = searchModal.querySelector('input[type="search"]');
-            if (searchInput) searchInput.focus();
-          }, 100);
-        }
-      });
-    });
-  }
-  
-  // Handle active state
-  const currentUrl = window.location.pathname;
-  
-  // Special page handling
-  if (currentUrl === '/' || currentUrl === '/collections/all') {
-    setActiveLink('home');
-  } else if (currentUrl.includes('/cart')) {
-    setActiveLink('cart');
-  } else if (currentUrl.includes('/account') || currentUrl.includes('/login')) {
-    setActiveLink('account');
-  } else if (currentUrl.includes('/collections/')) {
-    setActiveLink('collection');
-  }
-  
-  // Direct URL matching
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && href === currentUrl) {
-      link.classList.add('mobile-bottom-nav__link--active');
-    }
-  });
-  
-  function setActiveLink(type) {
-    const selector = `.mobile-bottom-nav__item--${type} .mobile-bottom-nav__link`;
-    const link = nav.querySelector(selector);
-    if (link) link.classList.add('mobile-bottom-nav__link--active');
-  }
-  
-  // Scroll behavior
-  const isSticky = nav.getAttribute('data-sticky') === 'true';
-  
-  if (isSticky) {
-    window.addEventListener('scroll', () => {
-      if (!isScrolling) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          isScrolling = false;
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const nav = document.querySelector('.mobile-bottom-nav');
+    if (!nav) return;
+    
+    const links = nav.querySelectorAll('.mobile-bottom-nav__link');
+    const searchTriggers = nav.querySelectorAll('.js-search-modal-trigger');
+    const searchModal = document.getElementById('Search-Modal');
+    let lastScrollTop = 0;
+    const scrollThreshold = 10;
+    let isScrolling = false;
+    
+    // Setup search modal trigger
+    if (searchTriggers.length > 0 && searchModal) {
+      searchTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const details = searchModal.querySelector('details');
+          if (details) {
+            details.setAttribute('open', '');
+            
+            // Focus the search input after a brief delay
+            setTimeout(() => {
+              const searchInput = searchModal.querySelector('input[type="search"]');
+              if (searchInput) searchInput.focus();
+            }, 100);
+          }
         });
-        isScrolling = true;
-      }
-    }, { passive: true });
-  }
-  
-  function handleScroll() {
-    if (!isSticky) return;
+      });
+    }
     
-    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    // Handle active state
+    const currentUrl = window.location.pathname;
     
-    // Only apply hide/show if we've scrolled enough
-    if (Math.abs(currentScrollTop - lastScrollTop) > scrollThreshold) {
-      // Scrolling down, hide the navigation
-      if (currentScrollTop > lastScrollTop && currentScrollTop > 100) {
-        nav.style.transform = 'translateY(100%)';
-      } 
-      // Scrolling up, show the navigation
-      else {
-        nav.style.transform = 'translateY(0)';
+    // Special page handling
+    if (currentUrl === '/' || currentUrl === '/collections/all') {
+      setActiveLink('home');
+    } else if (currentUrl.includes('/cart')) {
+      setActiveLink('cart');
+    } else if (currentUrl.includes('/account') || currentUrl.includes('/login')) {
+      setActiveLink('account');
+    } else if (currentUrl.includes('/collections/')) {
+      setActiveLink('collection');
+    }
+    
+    // Direct URL matching
+    links.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href === currentUrl) {
+        link.classList.add('mobile-bottom-nav__link--active');
       }
+    });
+    
+    function setActiveLink(type) {
+      const selector = `.mobile-bottom-nav__item--${type} .mobile-bottom-nav__link`;
+      const link = nav.querySelector(selector);
+      if (link) link.classList.add('mobile-bottom-nav__link--active');
+    }
+    
+    // Scroll behavior
+    const isSticky = nav.getAttribute('data-sticky') === 'true';
+    
+    if (isSticky) {
+      window.addEventListener('scroll', () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            isScrolling = false;
+          });
+          isScrolling = true;
+        }
+      }, { passive: true });
+    }
+    
+    function handleScroll() {
+      if (!isSticky) return;
+      
+      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Disable hide behavior - always show bottom navigation
+      nav.style.transform = 'translateY(0)';
       
       lastScrollTop = currentScrollTop;
     }
-  }
-  
-  // Ripple effect
-  links.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const rect = link.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple-effect');
-      ripple.style.top = `${y}px`;
-      ripple.style.left = `${x}px`;
-      
-      link.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 600);
+    
+    // Ripple effect
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const rect = link.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple-effect');
+        ripple.style.top = `${y}px`;
+        ripple.style.left = `${x}px`;
+        
+        link.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
     });
-  });
-  
-  // Cart updates
-  document.addEventListener('cart:updated', (event) => {
-    if (event.detail && event.detail.cart) {
-      updateCartCount(event.detail.cart.item_count || 0);
-    }
-  });
-  
-  // Listen for drawer close to update cart
-  document.addEventListener('drawer:close', () => {
-    fetch('/cart.js')
-      .then(response => response.json())
-      .then(cart => {
-        updateCartCount(cart.item_count || 0);
-      })
-      .catch(error => console.error('Error fetching cart:', error));
-  });
-  
-  function updateCartCount(count) {
-    const cartItem = nav.querySelector('.mobile-bottom-nav__item--cart');
-    if (!cartItem) return;
     
-    const countBubble = cartItem.querySelector('.cart-count-bubble');
+    // Cart updates
+    document.addEventListener('cart:updated', (event) => {
+      if (event.detail && event.detail.cart) {
+        updateCartCount(event.detail.cart.item_count || 0);
+      }
+    });
     
-    // Remove existing count bubble if count is 0
-    if (count === 0 && countBubble) {
-      countBubble.remove();
-      return;
-    }
+    // Listen for drawer close to update cart
+    document.addEventListener('drawer:close', () => {
+      fetch('/cart.js')
+        .then(response => response.json())
+        .then(cart => {
+          updateCartCount(cart.item_count || 0);
+        })
+        .catch(error => console.error('Error fetching cart:', error));
+    });
     
-    // Update existing count bubble or create new one
-    if (count > 0) {
-      if (countBubble) {
-        const countSpan = countBubble.querySelector('span[aria-hidden="true"]');
-        if (countSpan) countSpan.textContent = count < 100 ? count : '99+';
-      } else {
-        const newBubble = document.createElement('span');
-        newBubble.className = 'cart-count-bubble';
-        
-        // Create the visible count
-        const visibleCount = document.createElement('span');
-        visibleCount.setAttribute('aria-hidden', 'true');
-        visibleCount.textContent = count < 100 ? count : '99+';
-        newBubble.appendChild(visibleCount);
-        
-        // Create the visually-hidden count
-        const hiddenCount = document.createElement('span');
-        hiddenCount.className = 'visually-hidden';
-        hiddenCount.textContent = count === 1 ? '1 item' : count + ' items';
-        newBubble.appendChild(hiddenCount);
-        
-        const iconWrapper = cartItem.querySelector('.mobile-bottom-nav__icon');
-        if (iconWrapper) iconWrapper.appendChild(newBubble);
+    function updateCartCount(count) {
+      const cartItem = nav.querySelector('.mobile-bottom-nav__item--cart');
+      if (!cartItem) return;
+      
+      const countBubble = cartItem.querySelector('.cart-count-bubble');
+      
+      // Remove existing count bubble if count is 0
+      if (count === 0 && countBubble) {
+        countBubble.remove();
+        return;
+      }
+      
+      // Update existing count bubble or create new one
+      if (count > 0) {
+        if (countBubble) {
+          const countSpan = countBubble.querySelector('span[aria-hidden="true"]');
+          if (countSpan) countSpan.textContent = count < 100 ? count : '99+';
+        } else {
+          const newBubble = document.createElement('span');
+          newBubble.className = 'cart-count-bubble';
+          
+          // Create the visible count
+          const visibleCount = document.createElement('span');
+          visibleCount.setAttribute('aria-hidden', 'true');
+          visibleCount.textContent = count < 100 ? count : '99+';
+          newBubble.appendChild(visibleCount);
+          
+          // Create the visually-hidden count
+          const hiddenCount = document.createElement('span');
+          hiddenCount.className = 'visually-hidden';
+          hiddenCount.textContent = count === 1 ? '1 item' : count + ' items';
+          newBubble.appendChild(hiddenCount);
+          
+          // Append to the icon
+          const icon = cartItem.querySelector('.mobile-bottom-nav__icon');
+          if (icon) icon.appendChild(newBubble);
+        }
       }
     }
-  }
-});
-{% endjavascript %}
+  });
+</script>
 
 {% schema %}
 {
   "name": "Mobile Bottom Navigation",
-  "class": "mobile-nav-section",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
     {
       "type": "header",
-      "content": "Layout Settings"
+      "content": "Layout"
     },
     {
-      "type": "color",
-      "id": "background",
-      "label": "Background Color",
-      "default": "#ffffff"
+      "type": "checkbox",
+      "id": "is_sticky",
+      "label": "Make navigation sticky",
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_border",
-      "label": "Show Border",
+      "label": "Show top border",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Space between items",
+      "default": 0
     },
     {
       "type": "header",
@@ -592,8 +547,8 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     {
       "type": "select",
-      "id": "nav_item1",
-      "label": "First Item",
+      "id": "navigation_item1",
+      "label": "First item",
       "options": [
         {
           "value": "home",
@@ -614,19 +569,19 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "value": "collection",
           "label": "Collection"
-        },
-        {
-          "value": "none",
-          "label": "None"
         }
       ],
       "default": "home"
     },
     {
       "type": "select",
-      "id": "nav_item2",
-      "label": "Second Item",
+      "id": "navigation_item2",
+      "label": "Second item",
       "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
         {
           "value": "home",
           "label": "Home"
@@ -646,19 +601,19 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "value": "collection",
           "label": "Collection"
-        },
-        {
-          "value": "none",
-          "label": "None"
         }
       ],
       "default": "search"
     },
     {
       "type": "select",
-      "id": "nav_item3",
-      "label": "Third Item",
+      "id": "navigation_item3",
+      "label": "Third item",
       "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
         {
           "value": "home",
           "label": "Home"
@@ -678,19 +633,19 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "value": "collection",
           "label": "Collection"
-        },
-        {
-          "value": "none",
-          "label": "None"
         }
       ],
       "default": "cart"
     },
     {
       "type": "select",
-      "id": "nav_item4",
-      "label": "Fourth Item",
+      "id": "navigation_item4",
+      "label": "Fourth item",
       "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
         {
           "value": "home",
           "label": "Home"
@@ -710,19 +665,19 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "value": "collection",
           "label": "Collection"
-        },
-        {
-          "value": "none",
-          "label": "None"
         }
       ],
       "default": "account"
     },
     {
       "type": "select",
-      "id": "nav_item5",
-      "label": "Fifth Item",
+      "id": "navigation_item5",
+      "label": "Fifth item",
       "options": [
+        {
+          "value": "",
+          "label": "None"
+        },
         {
           "value": "home",
           "label": "Home"
@@ -742,98 +697,80 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           "value": "collection",
           "label": "Collection"
-        },
-        {
-          "value": "none",
-          "label": "None"
         }
       ],
-      "default": "collection"
+      "default": ""
     },
     {
       "type": "header",
-      "content": "Navigation Labels"
+      "content": "Labels"
     },
     {
       "type": "text",
       "id": "home_label",
-      "label": "Home Label",
+      "label": "Home label",
       "default": "Home"
     },
     {
       "type": "text",
       "id": "search_label",
-      "label": "Search Label",
+      "label": "Search label",
       "default": "Search"
     },
     {
       "type": "text",
       "id": "cart_label",
-      "label": "Cart Label",
+      "label": "Cart label",
       "default": "Cart"
     },
     {
       "type": "text",
       "id": "account_label",
-      "label": "Account Label",
+      "label": "Account label",
       "default": "Account"
     },
     {
       "type": "text",
       "id": "login_label",
-      "label": "Login Label",
+      "label": "Login label",
       "default": "Log in"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "Featured Collection"
+      "label": "Collection",
+      "info": "Select the collection to link to if using the collection item"
     },
     {
       "type": "text",
       "id": "collection_label",
-      "label": "Collection Label",
-      "info": "Defaults to collection title if left blank"
+      "label": "Collection label",
+      "default": "Shop"
     },
     {
       "type": "header",
-      "content": "Layout Options"
+      "content": "Styling"
     },
     {
-      "type": "checkbox",
-      "id": "is_sticky",
-      "label": "Make Navigation Sticky",
-      "default": true,
-      "info": "Navigation will stay at the bottom even when scrolling"
-    },
-    {
-      "type": "range",
-      "id": "item_spacing",
-      "label": "Space Between Items",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "default": 0,
-      "unit": "px"
-    },
-    {
-      "type": "header",
-      "content": "Font & Style Options"
+      "type": "color",
+      "id": "background",
+      "label": "Background color",
+      "default": "#ffffff"
     },
     {
       "type": "range",
       "id": "font_size",
-      "label": "Label Font Size",
       "min": 8,
-      "max": 16,
+      "max": 15,
       "step": 1,
-      "default": 10,
-      "unit": "px"
+      "unit": "px",
+      "label": "Font size",
+      "default": 12
     },
     {
       "type": "select",
       "id": "font_weight",
-      "label": "Font Weight",
+      "label": "Font weight",
       "options": [
         {
           "value": "400",
@@ -857,37 +794,34 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       "type": "select",
       "id": "text_transform",
-      "label": "Text Transform",
+      "label": "Text transform",
       "options": [
         {
           "value": "none",
           "label": "None"
         },
         {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
           "value": "capitalize",
           "label": "Capitalize"
-        },
-        {
-          "value": "uppercase",
-          "label": "UPPERCASE"
-        },
-        {
-          "value": "lowercase",
-          "label": "lowercase"
         }
       ],
-      "default": "capitalize"
+      "default": "none"
     }
   ],
   "presets": [
     {
       "name": "Mobile Bottom Navigation",
       "settings": {
-        "nav_item1": "home",
-        "nav_item2": "search",
-        "nav_item3": "cart",
-        "nav_item4": "account",
-        "nav_item5": "collection"
+        "is_sticky": true,
+        "show_border": true,
+        "navigation_item1": "home",
+        "navigation_item2": "search",
+        "navigation_item3": "cart",
+        "navigation_item4": "account"
       }
     }
   ]

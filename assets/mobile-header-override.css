@@ -21,6 +21,13 @@ SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
     transform: none !important;
     opacity: 1 !important;
   }
+
+  /* Ensure the sticky bottom nav doesn't get hidden */
+  .mobile-bottom-nav.sticky {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
   
   /* Hide cart icon in header */
   .header__item--cart,
