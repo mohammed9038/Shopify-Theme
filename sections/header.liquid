@@ -132,6 +132,11 @@
   }
   
   /* Language selector alignment */
+  .header__item--language {
+    display: flex;
+    align-items: center;
+  }
+  
   .header__item--language .gtranslate_wrapper {
     margin: 0;
     display: flex;
@@ -893,16 +898,12 @@
     
     {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
     <div class="header__sortable-layout">
-      {% assign language_selector_found = false %}
+      {% comment %}--- Header item sorting system ---{% endcomment %}
       {% for i in (1..6) %}
         {% assign item_setting = 'header_item' | append: i %}
         {% assign item_type = section.settings[item_setting] %}
-        {% if item_type == 'language' %}
-          {% assign language_selector_found = true %}
-        {% endif %}
         {% if i == 6 and section.settings.enable_language_selector and section.settings.header_item6 == blank %}
           {% assign item_type = 'language' %}
-          {% assign language_selector_found = true %}
         {% endif %}
         
         {% if item_type == 'logo' %}
@@ -1027,42 +1028,13 @@
           {% comment %}--- LANGUAGE SELECTOR ELEMENT ---{% endcomment %}
           <div class="header__item header__item--language">
             <div class="header__language-selector">
-              <div class="gtranslate_wrapper" 
-                   data-style="{{ section.settings.language_selector_style }}"
-                   data-flag-size="{{ section.settings.language_selector_flag_size }}"
-                   data-text-color="{{ section.settings.language_selector_text_color }}"
-                   data-bg-color="{{ section.settings.language_selector_background }}"
-                   data-border-color="{{ section.settings.language_selector_border_color }}">
-                <!-- Language Selector Placeholder -->
-                <span class="gtranslate-placeholder" style="display: inline-flex; align-items: center; padding: 5px 10px; font-size: 14px; border: 1px solid rgba(var(--color-foreground), 0.1); border-radius: 4px;">
-                  <span class="svg-wrapper" style="margin-right: 5px; width: {{ section.settings.language_selector_flag_size | default: 24 }}px; height: {{ section.settings.language_selector_flag_size | default: 24 }}px; display: inline-flex;">{{ 'icon-language.svg' | inline_asset_content }}</span>
-                  <span>EN</span>
-                </span>
-              </div>
+              <div class="gtranslate_wrapper"></div>
             </div>
           </div>
         {% endif %}
       {% endfor %}
       
-      {% comment %}--- FALLBACK LANGUAGE SELECTOR ---{% endcomment %}
-      {% if section.settings.enable_language_selector and language_selector_found == false %}
-        <div class="header__item header__item--language">
-          <div class="header__language-selector">
-            <div class="gtranslate_wrapper" 
-                 data-style="{{ section.settings.language_selector_style }}"
-                 data-flag-size="{{ section.settings.language_selector_flag_size }}"
-                 data-text-color="{{ section.settings.language_selector_text_color }}"
-                 data-bg-color="{{ section.settings.language_selector_background }}"
-                 data-border-color="{{ section.settings.language_selector_border_color }}">
-              <!-- Fallback Language Selector Placeholder -->
-              <span class="gtranslate-placeholder" style="display: inline-flex; align-items: center; padding: 5px 10px; font-size: 14px; border: 1px solid rgba(var(--color-foreground), 0.1); border-radius: 4px;">
-                <span class="svg-wrapper" style="margin-right: 5px; width: {{ section.settings.language_selector_flag_size | default: 24 }}px; height: {{ section.settings.language_selector_flag_size | default: 24 }}px; display: inline-flex;">{{ 'icon-language.svg' | inline_asset_content }}</span>
-                <span>EN</span>
-              </span>
-            </div>
-          </div>
-        </div>
-      {% endif %}
+      {% comment %}--- No fallback language selector needed anymore ---{% endcomment %}
     </div>
 
     {%- comment -%} COUNTRY SELECTOR - Keep this separate from the sortable layout {%- endcomment -%}
@@ -1114,138 +1086,9 @@
    */
 
   /**
-   * Initialize and customize GTranslate language selector
-   * Enhanced with retry mechanism and placeholder handling
+   * GTranslate is now initialized directly by the dropdown.js script
+   * No additional JavaScript is needed for the language selector
    */
-  const initializeLanguageSelector = () => {
-    // Remove placeholder when GTranslate is loaded
-    const removePlaceholders = () => {
-      const placeholders = document.querySelectorAll('.gtranslate-placeholder');
-      placeholders.forEach(placeholder => {
-        placeholder.style.display = 'none';
-      });
-    };
-    
-    // Check if GTranslate is loaded
-    const isGTranslateLoaded = () => {
-      return !!document.querySelector('.gt_float_switcher');
-    };
-    
-    // Configure GTranslate once it's loaded
-    const configureGTranslate = () => {
-      const gtWrappers = document.querySelectorAll('.gtranslate_wrapper');
-      
-      gtWrappers.forEach(wrapper => {
-        // Force wrapper to be visible
-        wrapper.style.display = 'inline-flex';
-        wrapper.style.visibility = 'visible';
-        wrapper.style.opacity = '1';
-        
-        // Apply custom CSS variables based on data attributes
-        const applyCustomStyle = (property, cssVar) => {
-          if (wrapper.dataset[property]) {
-            wrapper.style.setProperty(`--gt-${cssVar}`, wrapper.dataset[property]);
-          }
-        };
-        
-        applyCustomStyle('textColor', 'text-color');
-        applyCustomStyle('bgColor', 'bg-color');
-        applyCustomStyle('borderColor', 'border-color');
-        
-        // Apply header styling to GTranslate
-        const switcher = wrapper.querySelector('.gt_float_switcher');
-        if (switcher) {
-          // Make sure switcher is visible
-          switcher.style.visibility = 'visible';
-          switcher.style.opacity = '1';
-          switcher.style.display = 'block';
-          
-          // Match font styling with header
-          const gtOptions = switcher.querySelectorAll('a, span');
-          gtOptions.forEach(option => {
-            option.style.fontFamily = 'var(--font-heading-family)';
-            option.style.fontSize = 'var(--font-body-scale)';
-          });
-          
-          // Force dropdown to display correctly
-          switcher.addEventListener('click', function() {
-            const options = switcher.querySelector('.gt_options');
-            if (options) {
-              // Ensure dropdown opens downward
-              options.style.position = 'absolute';
-              options.style.top = '100%';
-              options.style.bottom = 'auto';
-              options.style.zIndex = '1000';
-              
-              // Match width with parent
-              options.style.width = '100%';
-              options.style.minWidth = '120px';
-            }
-          });
-        }
-      });
-      
-      // Ensure only English and Arabic are shown
-      const gtOptions = document.querySelectorAll('.gt_option');
-      gtOptions.forEach(option => {
-        const link = option.querySelector('a');
-        if (link) {
-          const lang = link.getAttribute('data-gt-lang');
-          if (lang && lang !== 'en' && lang !== 'ar') {
-            option.style.display = 'none';
-          }
-        }
-      });
-      
-      // Remove placeholders when GTranslate is properly loaded
-      removePlaceholders();
-    };
-    
-    // Initial setup
-    const initialSetup = () => {
-      // Make all wrappers visible
-      const gtWrappers = document.querySelectorAll('.gtranslate_wrapper');
-      gtWrappers.forEach(wrapper => {
-        wrapper.style.display = 'inline-flex';
-        wrapper.style.visibility = 'visible';
-        wrapper.style.opacity = '1';
-      });
-      
-      // Check if GTranslate is already loaded
-      if (isGTranslateLoaded()) {
-        configureGTranslate();
-        return true;
-      }
-      return false;
-    };
-    
-    // Try initial setup
-    const loaded = initialSetup();
-    if (!loaded) {
-      // Setup retry mechanism if not loaded yet
-      let attempts = 0;
-      const maxAttempts = 10;
-      const checkInterval = setInterval(() => {
-        if (isGTranslateLoaded()) {
-          configureGTranslate();
-          clearInterval(checkInterval);
-          console.log('GTranslate loaded and configured');
-        } else if (attempts < maxAttempts) {
-          attempts++;
-          console.log(`Waiting for GTranslate to load (attempt ${attempts}/${maxAttempts})`);
-        } else {
-          clearInterval(checkInterval);
-          console.log('GTranslate failed to load after multiple attempts');
-        }
-      }, 1000);
-    }
-  };
-
-  // Initialize language selector on DOM content loaded
-  document.addEventListener('DOMContentLoaded', initializeLanguageSelector);
-  
-  // Also initialize on window load to catch any late loading
-  window.addEventListener('load', initializeLanguageSelector);
 
   /**
    * StickyHeader Class

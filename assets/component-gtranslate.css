@@ -1,13 +1,11 @@
 /* GTranslate Styling for Dawn Theme */
 .gtranslate_wrapper {
-  display: inline-flex !important;  /* Force display to ensure visibility */
+  display: inline-flex;
   align-items: center;
   margin-right: 1rem;
   position: relative;
-  visibility: visible !important;   /* Ensure visibility */
-  opacity: 1 !important;           /* Ensure opacity */
-  min-width: 80px;                /* Minimum width to ensure visibility */
-  min-height: 30px;               /* Minimum height to ensure visibility */
+  min-width: 80px;
+  min-height: 30px;
 }
 
 .gtranslate_wrapper .gt_float_switcher {
@@ -73,14 +71,51 @@
   font-family: var(--font-body-family);
 }
 
-/* Force dropdown to open downward and apply consistent styling */
-.gt_float_switcher {
-  position: relative !important;
-  height: auto !important;
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  min-width: 100px;
+/* Styling for GTranslate dropdown */
+.header__item--language {
+  display: flex;
+  align-items: center;
+}
+
+.header__language-selector {
+  display: flex;
+  align-items: center;
+}
+
+/* Improve dropdown appearance */
+.gt_dropdown {
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: var(--font-heading-family);
+  font-size: var(--font-body-size);
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  transition: all 0.2s ease;
+}
+
+.gt_dropdown:hover {
+  box-shadow: 0 2px 5px rgba(var(--color-foreground), 0.08);
+  transform: translateY(-2px);
+}
+
+.gt_dropdown .gt_current_language img {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Style dropdown options */
+.gt_dropdown .gt_languages {
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 3px 10px rgba(var(--color-foreground), 0.1);
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.gt_dropdown .gt_languages a {
+  padding: 8px 10px;
+  transition: background 0.2s ease;
+}
+
+.gt_dropdown .gt_languages a:hover {
+  background-color: rgba(var(--color-foreground), 0.05);
 }
 
 .gt_float_switcher .gt_options {
