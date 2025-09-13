@@ -1,0 +1,203 @@
+/* Enhanced Search Modal Styles
+   ========================================================================== */
+
+/* Modal container */
+.search-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: rgba(var(--color-foreground), 0.04);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  backdrop-filter: blur(4px);
+}
+
+.search-modal--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Search form container */
+.search-modal__form {
+  width: 100%;
+  max-width: 680px;
+  margin-top: calc(var(--header-height) + 2rem);
+  padding: 2rem;
+  background-color: rgb(var(--color-background));
+  border-radius: var(--buttons-radius);
+  box-shadow: 0 10px 25px rgba(var(--color-foreground), 0.1);
+  transform: translateY(-50px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-modal--open .search-modal__form {
+  transform: translateY(0);
+}
+
+/* Search input */
+.search-modal__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-modal__input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 1.8rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.2);
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+  transition: border-color 0.3s ease;
+}
+
+.search-modal__input:focus {
+  outline: none;
+  border-bottom-color: rgba(var(--color-foreground), 0.6);
+}
+
+.search-modal__input::placeholder {
+  color: rgba(var(--color-foreground), 0.6);
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Search button */
+.search-modal__button {
+  background: none;
+  border: none;
+  padding: 0.8rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--color-foreground));
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-modal__button:hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+  transform: scale(1.1);
+}
+
+/* Close button */
+.search-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(var(--color-foreground), 0.75);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-modal__close:hover {
+  background-color: rgba(var(--color-foreground), 0.06);
+  transform: rotate(90deg);
+}
+
+/* Results container */
+.search-modal__results {
+  margin-top: 2rem;
+  max-height: calc(90vh - var(--header-height) - 10rem);
+  overflow-y: auto;
+}
+
+/* Predictive search styles */
+.predictive-search {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.predictive-search__item {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: rgb(var(--color-foreground));
+  transition: transform 0.2s ease;
+  border-radius: var(--buttons-radius-small);
+  overflow: hidden;
+  background: rgba(var(--color-foreground), 0.03);
+}
+
+.predictive-search__item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(var(--color-foreground), 0.08);
+}
+
+.predictive-search__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+}
+
+.predictive-search__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.predictive-search__item:hover .predictive-search__image {
+  transform: scale(1.05);
+}
+
+.predictive-search__item-content {
+  padding: 1rem;
+}
+
+.predictive-search__item-title {
+  font-family: var(--font-heading-family);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.predictive-search__item-vendor {
+  font-size: 0.8rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.predictive-search__item-price {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+/* Mobile styles */
+@media screen and (max-width: 749px) {
+  .search-modal__form {
+    margin-top: var(--header-height);
+    padding: 1.5rem;
+  }
+  
+  .search-modal__input {
+    font-size: 1.2rem;
+  }
+  
+  .predictive-search {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+  }
+}

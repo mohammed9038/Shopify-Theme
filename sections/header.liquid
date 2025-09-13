@@ -1,12 +1,43 @@
+{% comment %}
+  ===============================================================================
+  SHOPIFY DAWN THEME - PROFESSIONAL HEADER SECTION
+  ===============================================================================
+  
+  This header section provides comprehensive customization options for:
+  - Navigation menus (dropdown, mega menu, drawer)
+  - Logo positioning and styling
+  - Search functionality (icon or bar)
+  - Responsive design
+  - Professional typography and spacing
+  - Language selection (GTranslate)
+  
+  Features:
+  - Clean, organized code structure
+  - Sortable header elements
+  - Comprehensive customization options
+  - Mobile-first responsive design
+  - Performance optimized
+  - Professional animations and transitions
+  - SEO friendly
+  
+  ===============================================================================
+{% endcomment %}
+
+{% comment %}
+  ===================================================================
+  STYLESHEET DEPENDENCIES
+  Load only the required CSS components for better performance
+  ===================================================================
+{% endcomment %}
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-language-selector.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search-modal-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-gtranslate.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -16,18 +47,38 @@
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
-<style>
+{% comment %}
+  ===================================================================
+  HEADER CORE STYLES
+  Core styling for header structure and components
+  ===================================================================
+{% endcomment %}
+{%- style -%}
+  /* =========================================================================
+     LAYOUT & STRUCTURE
+     Base layout system for the professional header
+     ========================================================================= */
+  
+  /* Header drawer positioning */
   header-drawer {
     justify-self: start;
     margin-left: -1.2rem;
   }
-
+  
+  /* Menu drawer container */
+  .menu-drawer-container {
+    display: flex;
+  }
+  
+  /* Logo size reduction when sticky */
   {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
     .scrolled-past-header .header__heading-logo-wrapper {
       width: 75%;
+      transition: width 0.2s ease-out;
     }
   {%- endif -%}
-
+  
+  /* Hide drawer on desktop when not using drawer menu */
   {%- if section.settings.menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
       header-drawer {
@@ -35,11 +86,151 @@
       }
     }
   {%- endif -%}
+  
+  /* =========================================================================
+     SORTABLE HEADER LAYOUT SYSTEM
+     ========================================================================= */
+  
+  .header__sortable-layout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+    position: relative;
+  }
+  
+  /* Common styles for all sortable items */
+  .header__item {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: relative;
+  }
+  
+  /* Item-specific flex behavior */
+  .header__item--logo {
+    flex: 0 0 auto;
+  }
+  
+  .header__item--menu {
+    flex: 1 1 auto;
+  }
+  
+  .header__item--search {
+    flex: 0 1 auto;
+    min-width: 50px;
+  }
+  
+  .header__item--account,
+  .header__item--cart,
+  .header__item--language {
+    flex: 0 0 auto;
+  }
+  
+  /* Language selector alignment */
+  .header__item--language .gtranslate_wrapper {
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .header__localization {
+    margin-left: auto;
+  }
+  
+  /* =========================================================================
+     MENU COMPONENTS
+     ========================================================================= */
+  
+  .list-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .list-menu--inline {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  summary.list-menu__item {
+    padding-right: 2.7rem;
+    position: relative;
+  }
+  
+  .list-menu__item {
+    display: flex;
+    align-items: center;
+    line-height: calc(1 + 0.3 / var(--font-body-scale));
+  }
+  
+  .list-menu__item--link {
+    text-decoration: none;
+    padding: 1rem 0.5rem;
+    line-height: calc(1 + 0.8 / var(--font-body-scale));
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+  
+  /* =========================================================================
+     RESPONSIVE BEHAVIOR
+     ========================================================================= */
+     
+  /* Tablet & Desktop */
+  @media screen and (min-width: 750px) {
+    .list-menu__item--link {
+      padding: 0.8rem 1rem;
+    }
+    
+    .header__sortable-layout {
+      flex-wrap: nowrap;
+    }
+  }
+  
+  /* Mobile layout */
+  @media screen and (max-width: 749px) {
+    .header__sortable-layout {
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .header__item--menu {
+      order: -1;
+      width: 100%;
+      flex: 0 0 100%;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    
+    .header__item--logo {
+      flex: 1 1 auto;
+      justify-content: center;
+      margin: 0;
+    }
+    
+    .header__item {
+      padding: 0;
+      margin: 0 0.3rem;
+    }
+    
+    .header__icon {
+      padding: 0.6rem;
+    }
+  }
 
   .menu-drawer-container {
     display: flex;
   }
 
+  /* =========================================================================
+     MENU LIST COMPONENTS
+     ========================================================================= */
+  
   .list-menu {
     list-style: none;
     padding: 0;
@@ -49,6 +240,7 @@
   .list-menu--inline {
     display: inline-flex;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   summary.list-menu__item {
@@ -63,31 +255,40 @@
 
   .list-menu__item--link {
     text-decoration: none;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    padding: 1rem 0.5rem;
     line-height: calc(1 + 0.8 / var(--font-body-scale));
+    transition: color 0.2s ease;
   }
 
   @media screen and (min-width: 750px) {
     .list-menu__item--link {
-      padding-bottom: 0.5rem;
-      padding-top: 0.5rem;
+      padding: 0.8rem 1rem;
     }
   }
-</style>
-
-{%- style -%}
+  /* =========================================================================
+     HEADER SPACING & POSITIONING
+     ========================================================================= */
+  
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+    background-color: {{ section.settings.background }};
+    box-shadow: 0 2px 10px rgba(var(--color-foreground), 0.04);
   }
 
   .section-header {
-    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
+    position: sticky;
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+    z-index: 100;
+    top: 0;
   }
 
-  /* Navigation Menu Customizations */
+  /* =========================================================================
+     NAVIGATION MENU LAYOUT
+     ========================================================================= */
+  
   {% if section.settings.menu_position == 'top' %}
+    /* TOP ROW MENU CONFIGURATION */
     .header-wrapper {
       display: flex;
       flex-direction: column;
@@ -97,7 +298,7 @@
       order: -1;
       background: rgba(var(--color-background), 0.98);
       border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
-      padding: 0.8rem 3rem;
+      padding: 1rem 3rem;
       {% if section.settings.menu_alignment == 'center' %}
         text-align: center;
       {% elsif section.settings.menu_alignment == 'right' %}
@@ -105,6 +306,7 @@
       {% else %}
         text-align: left;
       {% endif %}
+      transition: padding 0.3s ease;
     }
     
     .header__top-menu .list-menu {
@@ -121,13 +323,21 @@
       {% endif %}
     }
   {% else %}
+    /* INLINE MENU CONFIGURATION */
     .header__top-menu {
       display: none;
     }
   {% endif %}
 
-  /* Navigation Menu Styling for Inline Position */
+  /* =========================================================================
+     MENU STYLING & TYPOGRAPHY
+     Professional menu styling with animations and visual feedback
+     ========================================================================= */
+  
+  /* Inline menu positioning */
   .header .header__inline-menu {
+    display: flex;
+    align-items: center;
     {% if section.settings.menu_alignment == 'center' %}
       justify-content: center;
     {% elsif section.settings.menu_alignment == 'right' %}
@@ -136,26 +346,151 @@
       justify-content: flex-start;
     {% endif %}
   }
+  
+  /* Enhanced menu styling - professional appearance with visual feedback */
+  .header .list-menu__item--link {
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.8rem 1.2rem;
+    overflow: hidden;
+    border-radius: var(--buttons-radius-small, 4px);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Hover state with subtle elevation */
+  .header .list-menu__item--link:hover {
+    color: {{ section.settings.menu_hover_color }};
+    transform: translateY(-2px);
+    background-color: rgba(var(--color-foreground), 0.03);
+  }
+  
+  /* Active/pressed state */
+  .header .list-menu__item--link:active {
+    transform: translateY(0);
+  }
+  
+  /* Underline animation effect - subtle professional indicator */
+  .header .list-menu__item--link::after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0.4rem;
+    left: 10%;
+    background-color: {{ section.settings.menu_hover_color }};
+    transform-origin: bottom center;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    opacity: 0.85;
+    border-radius: 1px;
+  }
+  
+  /* Animate underline on hover */
+  .header .list-menu__item--link:hover::after {
+    transform: scaleX(1);
+  }
+  
+  /* Active state styling - current page indicator */
+  .header .list-menu__item--link[aria-current="page"] {
+    font-weight: 600;
+  }
+  
+  .header .list-menu__item--link[aria-current="page"]::after {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  
+  /* Keep underline for active item */
+  .header .list-menu__item--link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
 
+  /* Menu item appearance */
   .list-menu__item--link {
     color: {{ section.settings.menu_text_color }};
     font-weight: {{ section.settings.menu_font_weight }};
     font-size: {{ section.settings.menu_font_size }}px;
     margin-right: {{ section.settings.menu_spacing }}px;
+    position: relative;
   }
-
+  
+  /* Menu item hover state */
   .list-menu__item--link:hover {
     color: {{ section.settings.menu_hover_color }};
+    opacity: 0.9;
+  }
+  
+  /* Active menu item indicator */
+  .list-menu__item--link[aria-current="page"]:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    background-color: currentColor;
+    opacity: 0.7;
   }
 
-  /* Logo Customizations */
+  /* =========================================================================
+     LOGO STYLING & ANIMATIONS
+     Professional logo presentation with subtle hover effects
+     ========================================================================= */
+  
+  /* Logo container with proper padding and interactions */
   .header__heading-link {
     padding: {{ section.settings.logo_padding_top }}px {{ section.settings.logo_padding_right }}px {{ section.settings.logo_padding_bottom }}px {{ section.settings.logo_padding_left }}px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    border-radius: var(--buttons-radius-small, 4px);
+    overflow: hidden;
+  }
+  
+  /* Subtle hover animation for logo */
+  .header__heading-link:hover {
+    transform: scale(1.02) translateY(-1px);
+    box-shadow: 0 3px 8px rgba(var(--color-foreground), 0.03);
+  }
+  
+  /* Active state for logo */
+  .header__heading-link:active {
+    transform: scale(1);
+    box-shadow: none;
+  }
+  
+  /* Logo wrapper container */
+  .header__heading-logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: width 0.2s ease-out;
+  }
+  
+  /* Logo image styling */
+  .header__heading-logo {
+    transition: width 0.3s ease, height 0.3s ease, opacity 0.2s ease;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    will-change: transform;
   }
 
-  /* Search Customizations */
+  /* =========================================================================
+     SEARCH COMPONENT STYLING
+     ========================================================================= */
+  
   {% if section.settings.search_type == 'bar' %}
-    .header__search {
+    .header__search--bar {
+      display: flex;
+      align-items: center;
       {% if section.settings.search_position == 'left' %}
         order: -1;
       {% elsif section.settings.search_position == 'center' %}
@@ -167,73 +502,339 @@
       {% endif %}
     }
 
-    .header__search .search {
+    /* Search bar container */
+    .header__search--bar .search {
       display: flex;
       align-items: center;
       width: {{ section.settings.search_bar_width }}px;
+      max-width: 100%;
       background: {{ section.settings.search_bar_background }};
       border: 1px solid {{ section.settings.search_bar_border }};
       border-radius: {{ section.settings.search_bar_border_radius }}px;
-      padding: 8px 12px;
+      padding: 10px 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(var(--color-foreground), 0.03);
     }
 
-    .header__search .search input {
+    /* Search focus & hover states */
+    .header__search--bar .search:hover,
+    .header__search--bar .search:focus-within {
+      border-color: rgba(var(--color-foreground), 0.4);
+      box-shadow: 0 4px 12px rgba(var(--color-foreground), 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Search input field */
+    .header__search--bar .search__input {
       background: transparent;
       border: none;
       outline: none;
       width: 100%;
       font-size: 14px;
+      color: inherit;
+      font-family: var(--font-body-family);
+      font-weight: var(--font-body-weight);
+      padding: 0;
+      transition: transform 0.2s ease;
+    }
+    
+    /* Input focus animation */
+    .header__search--bar .search:focus-within .search__input {
+      transform: scale(1.01);
     }
 
-    .header__search .search svg {
-      width: 18px;
-      height: 18px;
+    /* Placeholder styling */
+    .header__search--bar .search__input::placeholder {
+      color: rgba(var(--color-foreground), 0.6);
+      font-style: italic;
+      opacity: 0.8;
+    }
+
+    /* Search button */
+    .header__search--bar .search__button {
+      background: none;
+      border: none;
+      padding: 8px;
       margin-left: 8px;
+      margin-right: -8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      color: rgba(var(--color-foreground), 0.75);
+    }
+    
+    .header__search--bar .search__button:hover {
+      background-color: rgba(var(--color-foreground), 0.06);
+      color: rgba(var(--color-foreground), 0.9);
+      transform: scale(1.1);
+    }
+    
+    .header__search--bar .search__button:active {
+      transform: scale(0.95);
+    }
+
+    /* Button hover effect */
+    .header__search--bar .search__button:hover {
+      transform: scale(1.1);
+      color: rgba(var(--color-foreground), 1);
+    }
+
+    /* Search icon sizing */
+    .header__search--bar .search__button .svg-wrapper {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   {% endif %}
 
-  @media screen and (min-width: 750px) {
+  /* =========================================================================
+     HEADER ICON STYLING & ANIMATIONS
+     Professional icon styling with subtle animations and interactions
+     ========================================================================= */
+     
+  /* Base icon styling */
+  .header__icon {
+    color: rgba(var(--color-foreground), 0.75);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--buttons-radius-small, 4px);
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    box-sizing: content-box;
+  }
+  
+  /* Icon hover state */
+  .header__icon:hover {
+    color: rgba(var(--color-foreground), 0.95);
+    transform: translateY(-2px);
+    background-color: rgba(var(--color-foreground), 0.05);
+    box-shadow: 0 2px 5px rgba(var(--color-foreground), 0.06);
+  }
+  
+  /* Icon active state */
+  .header__icon:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  /* Icon hover effect - radial gradient animation */
+  .header__icon::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(circle, rgba(var(--color-foreground), 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(1.5);
+    transition: opacity 0.4s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .header__icon:hover::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* SVG wrapper for icon animation */
+  .header__icon .svg-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  
+  .header__icon:hover .svg-wrapper {
+    transform: scale(1.1);
+  }
+  
+  /* =========================================================================
+     SPECIFIC ICON STYLING
+     Custom animations for individual icon types
+     ========================================================================= */
+     
+  /* Search icon animation */
+  .search-icon {
+    display: inline-flex;
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .header__icon--search:hover .search-icon {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  
+  .header__icon--search:active .search-icon {
+    transform: scale(0.95);
+  }
+  
+  /* Search modal transition */
+  .header__search details[open] .header__icon--summary {
+    background-color: rgba(var(--color-foreground), 0.06);
+  }
+  
+  /* Account icon */
+  .header__icon--account .svg-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Cart icon */
+  .header__icon--cart {
+    position: relative;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  .header__icon--cart:hover {
+    transform: translateY(-2px);
+  }
+  
+  .header__icon--cart:active {
+    transform: translateY(0);
+  }
+  
+  /* Cart icon animation */
+  .header__icon--cart .icon {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  .header__icon--cart:hover .icon {
+    transform: scale(1.05);
+  }
+  
+  /* Cart count bubble */
+  .cart-count-bubble {
+    background-color: {{ section.settings.menu_hover_color }};
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(var(--color-foreground), 0.1);
+  }
+  
+  .header__icon--cart:hover .cart-count-bubble {
+    transform: scale(1.1) translateY(-1px);
+    box-shadow: 0 3px 6px rgba(var(--color-foreground), 0.15);
+  }
+
+  /* =========================================================================
+     RESPONSIVE DESIGN
+     ========================================================================= */
+  
+  /* Tablet breakpoint */
+  @media screen and (min-width: 750px) and (max-width: 989px) {
     .section-header {
       margin-bottom: {{ section.settings.margin_bottom }}px;
     }
+    
+    .header__sortable-layout {
+      padding: 0.3rem 0;
+      gap: 1.2rem;
+    }
+    
+    .header__item--logo {
+      flex: 0 0 auto;
+      margin-right: 1rem;
+    }
+    
+    .header__icon {
+      padding: 0.7rem;
+    }
+    
+    .header__item--menu {
+      flex: 1 1 auto;
+    }
   }
 
+  /* Desktop breakpoint */
   @media screen and (min-width: 990px) {
     .header {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+    
+    .header__sortable-layout {
+      gap: 2rem;
+      padding: 0;
+    }
+    
+    .header__icon {
+      padding: 0.8rem;
+    }
+    
+    .list-menu__item--link {
+      padding: 0.8rem 1.2rem;
+    }
 
-    /* Desktop-only customizations */
     {% if section.settings.search_type == 'bar' %}
-      .header__search {
+      .header__search--bar {
         display: flex !important;
       }
       
-      .header__search .search {
+      .header__search--bar .search {
         max-width: {{ section.settings.search_bar_width }}px;
+      }
+    {% endif %}
+  }
+
+  /* Mobile & Tablet adjustments */
+  @media screen and (max-width: 989px) {
+    {% if section.settings.menu_position == 'top' %}
+      .header__top-menu {
+        padding: 0.8rem 1.5rem;
+      }
+      
+      .header__top-menu .list-menu {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .header__top-menu .list-menu__item--link {
+        padding: 0.6rem 1rem;
+        font-size: 14px;
       }
     {% endif %}
   }
 {%- endstyle -%}
 
+{% comment %}--- CART NOTIFICATION SCRIPT ---{% endcomment %}
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 
+{% comment %}--- VARIABLE ASSIGNMENTS ---{% endcomment %}
 {%- liquid
   for block in section.blocks
     if block.type == '@app'
       assign has_app_block = true
     endif
   endfor
--%}
 
-{% liquid
+  assign social_links = false
+  assign localization_forms = false
+
+  if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+    assign social_links = true
+  endif
+
+  if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+    assign localization_forms = true
+  endif
+
   assign header_tag = 'div'
-
   if section.settings.sticky_header_type != 'none'
     assign header_tag = 'sticky-header'
   endif
-%}
+-%}
 
 <{{ header_tag }}
   {% if header_tag == 'sticky-header' %}
@@ -289,85 +890,150 @@
         render 'header-search', input_id: 'Search-In-Modal-1'
       endif
     -%}
-
-    {%- if section.settings.logo_position != 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo motion-reduce',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
+    
+    {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
+    <div class="header__sortable-layout">
+      {% for i in (1..6) %}
+        {% assign item_setting = 'header_item' | append: i %}
+        {% assign item_type = section.settings[item_setting] %}
+        
+        {% if item_type == 'logo' %}
+          {% comment %}--- LOGO ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--logo">
+            {%- if request.page_type == 'index' -%}
+              <h1 class="header__heading">
+            {%- endif -%}
+            <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+              {%- if settings.logo != blank -%}
+                <div class="header__heading-logo-wrapper">
+                  {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                  {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                  {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+                  {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                  {{
+                    settings.logo
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'header__heading-logo motion-reduce',
+                      widths: widths,
+                      height: logo_height,
+                      width: settings.logo_width,
+                      alt: logo_alt,
+                      sizes: sizes,
+                      preload: true
+                  }}
+                </div>
+              {%- else -%}
+                <span class="h2">{{ shop.name }}</span>
+              {%- endif -%}
+            </a>
+            {%- if request.page_type == 'index' -%}
+              </h1>
+            {%- endif -%}
           </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- comment -%} Navigation Menu - only render here if NOT positioned at top {%- endcomment -%}
-    {%- if section.settings.menu != blank and section.settings.menu_position != 'top' -%}
-      {%- if section.settings.menu_type_desktop == 'dropdown' -%}
-        {% render 'header-dropdown-menu' %}
-      {%- elsif section.settings.menu_type_desktop == 'mega' -%}
-        {% render 'header-mega-menu' %}
-      {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
-        {% render 'header-mega-menu' %}
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- if section.settings.logo_position == 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
+        {% elsif item_type == 'menu' and section.settings.menu != blank and section.settings.menu_position != 'top' %}
+          {% comment %}--- NAVIGATION MENU ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--menu">
+            {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+              {% render 'header-dropdown-menu' %}
+            {%- elsif section.settings.menu_type_desktop == 'mega' -%}
+              {% render 'header-mega-menu' %}
+            {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
+              {% render 'header-mega-menu' %}
+            {%- endif -%}
           </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
+        {% elsif item_type == 'search' %}
+          {% comment %}--- SEARCH ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--search">
+            {% if section.settings.search_type == 'bar' %}
+              <div class="header__search header__search--bar">
+                <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+                  <input
+                    class="search__input"
+                    type="search"
+                    name="q"
+                    value="{{ search.terms | escape }}"
+                    placeholder="{{ 'general.search.search' | t }}"
+                    aria-label="{{ 'general.search.search' | t }}"
+                  >
+                  <button type="submit" class="search__button" aria-label="{{ 'general.search.search' | t }}">
+                    <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+                  </button>
+                </form>
+              </div>
+            {% else %}
+              {% render 'header-search', input_id: 'Search-In-Modal' %}
+            {% endif %}
+          </div>
+        {% elsif item_type == 'account' and shop.customer_accounts_enabled %}
+          {% comment %}--- ACCOUNT ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--account">
+            <a
+              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+              class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+              rel="nofollow"
+            >
+              {%- if section.settings.enable_customer_avatar -%}
+                <account-icon>
+                  {%- if customer and customer.has_avatar? -%}
+                    {{ customer | avatar }}
+                  {%- else -%}
+                    <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+                  {%- endif -%}
+                </account-icon>
+              {%- else -%}
+                <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          </div>
+        {% elsif item_type == 'cart' %}
+          {% comment %}--- CART ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--cart">
+            <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+              {% if cart == empty %}
+                <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+              {% else %}
+                <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+              {% endif %}
+              <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+              {%- if cart != empty -%}
+                <div class="cart-count-bubble">
+                  {%- if cart.item_count < 100 -%}
+                    <span aria-hidden="true">{{ cart.item_count }}</span>
+                  {%- endif -%}
+                  <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+                </div>
+              {%- endif -%}
+            </a>
+          </div>
+        {% elsif item_type == 'language' and section.settings.enable_language_selector %}
+          {% comment %}--- LANGUAGE SELECTOR ELEMENT ---{% endcomment %}
+          <div class="header__item header__item--language">
+            <div class="header__language-selector">
+              <div class="gtranslate_wrapper" 
+                   data-style="{{ section.settings.language_selector_style }}"
+                   data-flag-size="{{ section.settings.language_selector_flag_size }}"
+                   data-text-color="{{ section.settings.language_selector_text_color }}"
+                   data-bg-color="{{ section.settings.language_selector_background }}"
+                   data-border-color="{{ section.settings.language_selector_border_color }}">
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
 
-    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
+    {%- comment -%} COUNTRY SELECTOR - Keep this separate from the sortable layout {%- endcomment -%}
+    <div class="header__localization{% if section.settings.enable_country_selector %} header__icons--localization header-localization{% endif %}">
       <div class="desktop-localization-wrapper">
         {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
           <localization-form class="small-hide medium-hide" data-prevent-hide>
@@ -379,90 +1045,17 @@
             {%- endform -%}
           </localization-form>
         {% endif %}
-
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {%- endif -%}
       </div>
-      {% if section.settings.search_type == 'bar' %}
-        <div class="header__search header__search--bar">
-          <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-            <input
-              class="search__input"
-              type="search"
-              name="q"
-              value="{{ search.terms | escape }}"
-              placeholder="{{ 'general.search.search' | t }}"
-              aria-label="{{ 'general.search.search' | t }}"
-            >
-            <button type="submit" class="search__button" aria-label="{{ 'general.search.search' | t }}">
-              <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
-            </button>
-          </form>
-        </div>
-      {% else %}
-        {% render 'header-search', input_id: 'Search-In-Modal' %}
-      {% endif %}
+    </div>
 
-      {%- if shop.customer_accounts_enabled -%}
-        <a
-          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-          class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
-          rel="nofollow"
-        >
-          {%- if section.settings.enable_customer_avatar -%}
-            <account-icon>
-              {%- if customer and customer.has_avatar? -%}
-                {{ customer | avatar }}
-              {%- else -%}
-                <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-              {%- endif -%}
-            </account-icon>
-          {%- else -%}
-            <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-          {%- endif -%}
-          <span class="visually-hidden">
-            {%- liquid
-              if customer
-                echo 'customer.account_fallback' | t
-              else
-                echo 'customer.log_in' | t
-              endif
-            -%}
-          </span>
-        </a>
-      {%- endif -%}
-
+    {%- comment -%} APP BLOCKS - Keep this separate from the sortable layout {%- endcomment -%}
+    <div class="header__app-blocks">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when '@app' -%}
             {% render block %}
         {%- endcase -%}
       {%- endfor -%}
-
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-        {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-        {% endif %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-          </div>
-        {%- endif -%}
-      </a>
     </div>
   </header>
 </{{ header_tag }}>
@@ -474,51 +1067,159 @@
   -%}
 {%- endif -%}
 
+{%- comment -%}
+  Header JavaScript
+{%- endcomment -%}
 {% javascript %}
+  /**
+   * Header JavaScript - Dawn Theme
+   * 
+   * Contains:
+   * - Language selector (GTranslate) initialization
+   * - Sticky header behavior
+   * - Header interaction enhancements
+   */
+
+  /**
+   * Initialize and customize GTranslate language selector
+   */
+  const initializeLanguageSelector = () => {
+    // Wait for GTranslate to initialize
+    setTimeout(() => {
+      const gtWrappers = document.querySelectorAll('.gtranslate_wrapper');
+      
+      gtWrappers.forEach(wrapper => {
+        // Apply custom CSS variables based on data attributes
+        const applyCustomStyle = (property, cssVar) => {
+          if (wrapper.dataset[property]) {
+            wrapper.style.setProperty(`--gt-${cssVar}`, wrapper.dataset[property]);
+          }
+        };
+        
+        applyCustomStyle('textColor', 'text-color');
+        applyCustomStyle('bgColor', 'bg-color');
+        applyCustomStyle('borderColor', 'border-color');
+        
+        // Apply header styling to GTranslate
+        const switcher = wrapper.querySelector('.gt_float_switcher');
+        if (switcher) {
+          // Match font styling with header
+          const gtOptions = switcher.querySelectorAll('a, span');
+          gtOptions.forEach(option => {
+            option.style.fontFamily = 'var(--font-heading-family)';
+            option.style.fontSize = 'var(--font-body-scale)';
+          });
+          
+          // Force dropdown to display correctly
+          switcher.addEventListener('click', function() {
+            const options = switcher.querySelector('.gt_options');
+            if (options) {
+              // Ensure dropdown opens downward
+              options.style.position = 'absolute';
+              options.style.top = '100%';
+              options.style.bottom = 'auto';
+              options.style.zIndex = '1000';
+              
+              // Match width with parent
+              options.style.width = '100%';
+              options.style.minWidth = '120px';
+            }
+          });
+        }
+      });
+      
+      // Ensure only English and Arabic are shown
+      const gtOptions = document.querySelectorAll('.gt_option');
+      gtOptions.forEach(option => {
+        const link = option.querySelector('a');
+        if (link) {
+          const lang = link.getAttribute('data-gt-lang');
+          if (lang && lang !== 'en' && lang !== 'ar') {
+            option.style.display = 'none';
+          }
+        }
+      });
+    }, 1000);
+  };
+
+  // Initialize language selector on DOM content loaded
+  document.addEventListener('DOMContentLoaded', initializeLanguageSelector);
+
+  /**
+   * StickyHeader Class
+   * Manages sticky header behavior, scroll effects, and interactions
+   */
   class StickyHeader extends HTMLElement {
     constructor() {
       super();
+      this.header = null;
+      this.headerBounds = {};
+      this.currentScrollTop = 0;
+      this.preventReveal = false;
+      this.isScrolling = null;
+      this.headerIsAlwaysSticky = false;
+      this.predictiveSearch = null;
+      this.disclosures = null;
+      this.searchModal = null;
     }
 
+    /**
+     * Connected callback - initialize the sticky header
+     */
     connectedCallback() {
       this.header = document.querySelector('.section-header');
       this.headerIsAlwaysSticky =
         this.getAttribute('data-sticky-type') === 'always' ||
         this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      this.headerBounds = {};
-
+      
+      // Set initial header height
       this.setHeaderHeight();
 
-      window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
+      // Update header height on window resize
+      const mediaQuery = window.matchMedia('(max-width: 990px)');
+      mediaQuery.addEventListener('change', this.setHeaderHeight.bind(this));
 
+      // Make header sticky if always-sticky mode is enabled
       if (this.headerIsAlwaysSticky) {
         this.header.classList.add('shopify-section-header-sticky');
       }
 
+      // Initialize scroll tracking
       this.currentScrollTop = 0;
       this.preventReveal = false;
       this.predictiveSearch = this.querySelector('predictive-search');
 
-      this.onScrollHandler = this.onScroll.bind(this);
+      // Set up event handlers
+      this.onScrollHandler = this.throttledScroll.bind(this);
       this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
 
       this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
+      window.addEventListener('scroll', this.onScrollHandler, { passive: true });
 
+      // Create intersection observer for header bounds
       this.createObserver();
     }
 
+    /**
+     * Set the header height CSS variable
+     */
     setHeaderHeight() {
       document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
     }
 
+    /**
+     * Clean up event listeners on disconnect
+     */
     disconnectedCallback() {
       this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
       window.removeEventListener('scroll', this.onScrollHandler);
     }
 
+    /**
+     * Create intersection observer to track header position
+     */
     createObserver() {
-      let observer = new IntersectionObserver((entries, observer) => {
+      const observer = new IntersectionObserver((entries) => {
         this.headerBounds = entries[0].intersectionRect;
         observer.disconnect();
       });
@@ -526,36 +1227,65 @@
       observer.observe(this.header);
     }
 
+    /**
+     * Throttled scroll handler for better performance
+     */
+    throttledScroll() {
+      // Use requestAnimationFrame for performance
+      if (!this.scrollTimeout) {
+        this.scrollTimeout = window.requestAnimationFrame(() => {
+          this.onScroll();
+          this.scrollTimeout = null;
+        });
+      }
+    }
+
+    /**
+     * Main scroll handler
+     */
     onScroll() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
+      // Skip header hide/reveal if predictive search is open
       if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
 
+      // Scrolling down
       if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
         this.header.classList.add('scrolled-past-header');
-        if (this.preventHide) return;
-        requestAnimationFrame(this.hide.bind(this));
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        if (!this.preventHide) {
+          this.hide();
+        }
+      } 
+      // Scrolling up
+      else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
         this.header.classList.add('scrolled-past-header');
         if (!this.preventReveal) {
-          requestAnimationFrame(this.reveal.bind(this));
+          this.reveal();
         } else {
+          // Clear the scrolling timeout
           window.clearTimeout(this.isScrolling);
 
+          // Set a timeout to reset preventReveal flag
           this.isScrolling = setTimeout(() => {
             this.preventReveal = false;
           }, 66);
 
-          requestAnimationFrame(this.hide.bind(this));
+          this.hide();
         }
-      } else if (scrollTop <= this.headerBounds.top) {
+      } 
+      // At top of page
+      else if (scrollTop <= this.headerBounds.top) {
         this.header.classList.remove('scrolled-past-header');
-        requestAnimationFrame(this.reset.bind(this));
+        this.reset();
       }
 
+      // Update current scroll position
       this.currentScrollTop = scrollTop;
     }
 
+    /**
+     * Hide the header
+     */
     hide() {
       if (this.headerIsAlwaysSticky) return;
       this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
@@ -563,28 +1293,43 @@
       this.closeSearchModal();
     }
 
+    /**
+     * Reveal the header
+     */
     reveal() {
       if (this.headerIsAlwaysSticky) return;
       this.header.classList.add('shopify-section-header-sticky', 'animate');
       this.header.classList.remove('shopify-section-header-hidden');
     }
 
+    /**
+     * Reset header state
+     */
     reset() {
       if (this.headerIsAlwaysSticky) return;
       this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
     }
 
+    /**
+     * Close all menu disclosures
+     */
     closeMenuDisclosure() {
       this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
       this.disclosures.forEach((disclosure) => disclosure.close());
     }
 
+    /**
+     * Close search modal
+     */
     closeSearchModal() {
       this.searchModal = this.searchModal || this.header.querySelector('details-modal');
-      this.searchModal.close(false);
+      if (this.searchModal) {
+        this.searchModal.close(false);
+      }
     }
   }
 
+  // Register the custom element
   customElements.define('sticky-header', StickyHeader);
 {% endjavascript %}
 
@@ -635,6 +1380,222 @@
   "max_blocks": 3,
   "settings": [
     {
+      "type": "header",
+      "content": "Header Layout"
+    },
+    {
+      "type": "select",
+      "id": "header_item1",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        }
+      ],
+      "default": "logo",
+      "label": "First Item"
+    },
+    {
+      "type": "select",
+      "id": "header_item2",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        }
+      ],
+      "default": "menu",
+      "label": "Second Item"
+    },
+    {
+      "type": "select",
+      "id": "header_item3",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "search",
+      "label": "Third Item"
+    },
+    {
+      "type": "select",
+      "id": "header_item4",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "account",
+      "label": "Fourth Item"
+    },
+    {
+      "type": "select",
+      "id": "header_item5",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "cart",
+      "label": "Fifth Item"
+    },
+    {
+      "type": "select",
+      "id": "header_item6",
+      "options": [
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "menu",
+          "label": "Menu"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account",
+          "label": "Account"
+        },
+        {
+          "value": "cart",
+          "label": "Cart"
+        },
+        {
+          "value": "language",
+          "label": "Language Selector"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "language",
+      "label": "Sixth Item"
+    },
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
       "type": "select",
       "id": "logo_position",
       "options": [
@@ -676,6 +1637,50 @@
       "label": "t:sections.header.settings.mobile_logo_position.label"
     },
     {
+      "type": "range",
+      "id": "logo_padding_top",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo padding top",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "logo_padding_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo padding bottom",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "logo_padding_left",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo padding left",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "logo_padding_right",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo padding right",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Navigation Menu"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "default": "main-menu",
@@ -700,34 +1705,6 @@
       ],
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
-    },
-    {
-      "type": "header",
-      "content": "Navigation Menu"
     },
     {
       "type": "select",
@@ -827,50 +1804,6 @@
     },
     {
       "type": "header",
-      "content": "Logo Settings"
-    },
-    {
-      "type": "range",
-      "id": "logo_padding_top",
-      "min": 0,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Logo padding top",
-      "default": 10
-    },
-    {
-      "type": "range",
-      "id": "logo_padding_bottom",
-      "min": 0,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Logo padding bottom",
-      "default": 10
-    },
-    {
-      "type": "range",
-      "id": "logo_padding_left",
-      "min": 0,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Logo padding left",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "logo_padding_right",
-      "min": 0,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Logo padding right",
-      "default": 0
-    },
-    {
-      "type": "header",
       "content": "Search Settings"
     },
     {
@@ -942,6 +1875,34 @@
       "default": 5
     },
     {
+      "type": "header",
+      "content": "Header Behavior"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
+        },
+        {
+          "value": "always",
+          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
+        }
+      ],
+      "default": "on-scroll-up",
+      "label": "t:sections.header.settings.sticky_header_type.label"
+    },
+    {
       "type": "checkbox",
       "id": "show_line_separator",
       "default": true,
@@ -980,6 +1941,72 @@
       "default": true,
       "label": "t:sections.header.settings.enable_language_selector.label",
       "info": "t:sections.header.settings.enable_language_selector.info"
+    },
+    {
+      "type": "header",
+      "content": "Language Selector Styling"
+    },
+    {
+      "type": "select",
+      "id": "language_selector_style",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        },
+        {
+          "value": "flags",
+          "label": "Flags only"
+        },
+        {
+          "value": "flags_dropdown",
+          "label": "Flags with dropdown"
+        },
+        {
+          "value": "flags_name",
+          "label": "Flags with language name"
+        }
+      ],
+      "default": "flags_dropdown",
+      "label": "Display style"
+    },
+    {
+      "type": "select",
+      "id": "language_selector_flag_size",
+      "options": [
+        {
+          "value": "16",
+          "label": "Small"
+        },
+        {
+          "value": "24",
+          "label": "Medium"
+        },
+        {
+          "value": "32",
+          "label": "Large"
+        }
+      ],
+      "default": "24",
+      "label": "Flag size"
+    },
+    {
+      "type": "color",
+      "id": "language_selector_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "language_selector_background",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "language_selector_border_color",
+      "label": "Border color",
+      "default": "#dddddd"
     },
     {
       "type": "checkbox",
