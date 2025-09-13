@@ -156,7 +156,12 @@
           "account_label": "Account",
           "login_label": "Log in",
           "collection": "hydrogen",
-          "collection_label": ""
+          "collection_label": "",
+          "is_sticky": true,
+          "item_spacing": 15,
+          "font_size": 10,
+          "font_weight": "500",
+          "text_transform": "capitalize"
         }
       }
     },
