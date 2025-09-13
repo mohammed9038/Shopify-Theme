@@ -144,7 +144,7 @@
         "type": "mobile-bottom-navigation",
         "settings": {
           "enable_navigation": true,
-          "item_spacing": 14,
+          "item_spacing": 9,
           "icon_size": 22,
           "nav_item1": "home",
           "collection1_id": "",

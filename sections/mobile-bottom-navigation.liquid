@@ -30,65 +30,7 @@
     --mobile-nav-height: {{ section.settings.nav_height }}px;
   }
   
-  /* Mobile top cart navigation */
-  .mobile-top-cart {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 1001; /* Higher z-index to ensure visibility */
-    background-color: transparent;
-    padding: 0;
-    display: none;
-  }
-  
-  @media screen and (max-width: 749px) {
-    .mobile-top-cart {
-      display: block;
-    }
-  }
-  
-  .mobile-top-cart__link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    color: rgba(var(--color-foreground), 1);
-    position: relative;
-    transition: transform 0.2s ease;
-  }
-  
-  .mobile-top-cart__link:active {
-    transform: scale(0.95);
-  }
-  
-  .mobile-top-cart__icon {
-    width: 22px;
-    height: 22px;
-    stroke-width: 2px;
-  }
-  
-  .mobile-top-cart__count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: rgb(var(--color-button));
-    color: rgb(var(--color-button-text));
-    font-size: 11px;
-    font-weight: 700;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
+  /* Mobile cart is now in the header, not in the bottom navigation */
 
   .mobile-nav {
     position: fixed;
@@ -152,29 +94,6 @@
 </style>
 
 {% if section.settings.enable_navigation %}
-  {% comment %}Add Mobile Top Cart Navigation - Now with improved visibility{% endcomment %}
-  <div class="mobile-top-cart">
-    <a href="{{ routes.cart_url }}" class="mobile-top-cart__link">
-      <span class="mobile-top-cart__icon">
-        {% if cart == empty %}
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-        {% else %}
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-        {% endif %}
-      </span>
-      {% if cart != empty and cart.item_count > 0 %}
-        <span class="mobile-top-cart__count">{{ cart.item_count }}</span>
-      {% endif %}
-    </a>
-  </div>
   
   {% unless template == 'cart' %}
     <nav class="mobile-nav page-width">
@@ -354,7 +273,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Note: Cart is always displayed at the top right corner on mobile, so selecting it in the bottom navigation has no effect."
+      "content": "Note: Cart is displayed in the header, not in the bottom navigation. Selecting it here has no effect."
     },
     {
       "type": "select",
