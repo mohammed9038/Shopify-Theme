@@ -72,8 +72,9 @@
     grid-column: 3;
     justify-self: end;
     margin-right: 15px;
-    z-index: 5;
+    z-index: 50; /* Higher z-index to ensure visibility */
     position: relative;
+    display: flex !important; /* Force display at the container level */
   }
   
   .mobile-only-cart .header__icon--cart {
@@ -81,13 +82,24 @@
     display: flex !important;
     align-items: center;
     justify-content: center;
-    visibility: visible;
-    opacity: 1;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   .mobile-only-cart .svg-wrapper svg {
     width: 24px;
     height: 24px;
+    display: block !important; /* Ensure SVG is visible */
+  }
+  
+  /* Ensure cart icon and its elements are all visible */
+  .mobile-only-cart *,
+  .mobile-only-cart .header__item--cart,
+  .mobile-only-cart .header__icon--cart,
+  .mobile-only-cart .svg-wrapper {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   /* Hide default cart on mobile */

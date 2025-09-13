@@ -29,11 +29,11 @@ SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
     visibility: visible !important;
   }
   
-  /* Hide cart icon in header */
-  .header__item--cart,
-  a[href="/cart"],
-  .header-wrapper .header__icon.header__icon--cart,
-  .header .header__icon--cart {
+  /* Hide cart icon in header except for our mobile-only-cart */
+  .header__sortable-layout > .header__item--cart:not(.mobile-only-cart .header__item--cart),
+  .header__sortable-layout > a[href="/cart"]:not(.mobile-only-cart a[href="/cart"]),
+  .header-wrapper .header__icon.header__icon--cart:not(.mobile-only-cart .header__icon--cart),
+  .header .header__icon--cart:not(.mobile-only-cart .header__icon--cart) {
     display: none !important;
   }
   
