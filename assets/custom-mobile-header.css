@@ -10,15 +10,22 @@
  * Updated with enhanced styling for professional appearance.
  */
 
-/* Mobile cart visibility management */
+/* Mobile cart visibility management - hidden by default on all screens */
 .mobile-only-cart {
-  display: none;
+  display: none !important;
+}
+
+/* Explicit desktop rule to hide the mobile cart */
+@media screen and (min-width: 750px) {
+  .mobile-only-cart {
+    display: none !important;
+  }
 }
 
 @media screen and (max-width: 749px) {
-  /* Mobile cart visibility */
+  /* Mobile cart visibility - only shown on mobile */
   .mobile-only-cart {
-    display: flex;
+    display: flex !important;
   }
   
   /* Mobile header grid layout - single line layout */
@@ -60,7 +67,8 @@
     align-items: center;
     max-height: 100%;
     overflow: visible;
-    margin: 0 10px;
+    margin: 0;
+    padding-left: 10px;
   }
   
   /* Standard cart positioning */
@@ -69,6 +77,13 @@
     display: flex;
     margin-right: 0;
     align-items: center;
+    padding-right: 5px;
+  }
+  
+  /* Specific spacing for mobile cart after logo */
+  .mobile-only-cart {
+    margin-left: 15px;
+    padding-right: 10px;
   }
   
   /* Element visibility management */

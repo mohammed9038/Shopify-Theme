@@ -1,0 +1,20 @@
+/**
+ * Desktop Cart Styling
+ * 
+ * This file ensures the desktop cart appears in the correct position
+ * based on the theme settings without duplication.
+ */
+
+@media screen and (min-width: 750px) {
+  /* Desktop cart visibility */
+  .header__item--cart:not(.mobile-only-cart .header__item--cart) {
+    display: flex;
+  }
+  
+  /* Hide any mobile cart on desktop */
+  .mobile-only-cart {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}

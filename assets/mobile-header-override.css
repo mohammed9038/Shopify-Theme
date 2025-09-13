@@ -45,14 +45,14 @@
     visibility: visible;
   }
   
-  /* Cart visibility management - show only mobile-specific cart */
-  .header__sortable-layout > .header__item--cart:not(.mobile-only-cart),
+  /* Cart visibility management - show only mobile-specific cart on mobile */
+  .header__sortable-layout > .header__item--cart:not(.mobile-only-cart .header__item--cart),
   .header-wrapper .header__icon.header__icon--cart:not(.mobile-only-cart .header__icon--cart),
   .header .header__icon--cart:not(.mobile-only-cart .header__icon--cart) {
     display: none;
   }
   
-  /* Explicitly show the mobile cart */
+  /* Explicitly show the mobile cart on mobile */
   .mobile-only-cart {
     display: flex !important;
   }
