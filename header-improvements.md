@@ -40,6 +40,11 @@
 ### Language Selector Integration
 - Added professional styling for GTranslate language selector
 - Ensured consistent appearance with other header elements
+- Enhanced GTranslate initialization with retry mechanism
+- Added visible placeholders while GTranslate loads
+- Fixed visibility issues to ensure language selector always appears
+- Limited language options to English and Arabic
+- Improved styling for better integration with header design
 
 ### Mobile Responsiveness
 - Improved mobile menu appearance and functionality

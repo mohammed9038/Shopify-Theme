@@ -296,6 +296,93 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    
+    <!-- GTranslate: Language Translator -->
+    <script>
+      window.gtranslateSettings = {
+        "default_language": "en",
+        "detect_browser_language": true,
+        "languages": ["en", "ar"], /* Limit to English and Arabic only */
+        "wrapper_selector": ".gtranslate_wrapper",
+        "switcher_horizontal_position": "right",
+        "switcher_vertical_position": "top",
+        "float_switcher_open_direction": "bottom",
+        "flag_style": "3d",
+        "flag_size": 24,
+        "alt_flags": {"en": "usa", "ar": "saudi_arabia"}, /* Use preferred country flags */
+        "native_language_names": true, /* Show native language names */
+        "custom_domains": {"en": "none", "ar": "none"} /* No subdomain switching */
+      };
+      
+      /* Enhanced initialization with retry mechanism */
+      document.addEventListener('DOMContentLoaded', function() {
+        /* First check if wrappers exist */
+        initGTranslate();
+        
+        /* Add a retry mechanism to ensure GTranslate is initialized */
+        let attempts = 0;
+        const checkInterval = setInterval(function() {
+          if (document.querySelector('.gt_float_switcher')) {
+            /* GTranslate is loaded, can stop checking */
+            clearInterval(checkInterval);
+            console.log('GTranslate loaded successfully');
+          } else if (attempts < 10) {
+            /* Try to re-initialize */
+            attempts++;
+            initGTranslate();
+          } else {
+            /* Give up after 10 attempts */
+            clearInterval(checkInterval);
+            console.log('GTranslate failed to load after multiple attempts');
+          }
+        }, 1000);
+        
+        /* Initialize GTranslate configuration from wrapper data attributes */
+        function initGTranslate() {
+          const defaultWrappers = document.querySelectorAll('.gtranslate_wrapper');
+          if (defaultWrappers.length > 0) {
+            const firstWrapper = defaultWrappers[0];
+            
+            /* Apply data attributes if available */
+            if (firstWrapper.dataset.flagSize) {
+              window.gtranslateSettings.flag_size = parseInt(firstWrapper.dataset.flagSize);
+            }
+            
+            if (firstWrapper.dataset.style) {
+              const style = firstWrapper.dataset.style;
+              if (style === 'dropdown') {
+                window.gtranslateSettings.switcher_css = 'gtranslate_dropdown';
+              } else if (style === 'flags') {
+                window.gtranslateSettings.switcher_css = 'gtranslate_flags_only';
+              } else if (style === 'flags_name') {
+                window.gtranslateSettings.switcher_css = 'gtranslate_flags_name';
+              }
+            }
+            
+            /* Apply CSS variables from data attributes */
+            if (firstWrapper.dataset.textColor) {
+              document.documentElement.style.setProperty('--gt-text-color', firstWrapper.dataset.textColor);
+            }
+            
+            if (firstWrapper.dataset.bgColor) {
+              document.documentElement.style.setProperty('--gt-bg-color', firstWrapper.dataset.bgColor);
+            }
+            
+            if (firstWrapper.dataset.borderColor) {
+              document.documentElement.style.setProperty('--gt-border-color', firstWrapper.dataset.borderColor);
+            }
+            
+            /* Force wrappers to be visible */
+            defaultWrappers.forEach(wrapper => {
+              wrapper.style.display = 'inline-block';
+              wrapper.style.visibility = 'visible';
+              wrapper.style.opacity = '1';
+            });
+          }
+        }
+      });
+    </script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/dwf.js" defer></script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

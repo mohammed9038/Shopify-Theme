@@ -1,9 +1,13 @@
 /* GTranslate Styling for Dawn Theme */
 .gtranslate_wrapper {
-  display: inline-flex;
+  display: inline-flex !important;  /* Force display to ensure visibility */
   align-items: center;
   margin-right: 1rem;
   position: relative;
+  visibility: visible !important;   /* Ensure visibility */
+  opacity: 1 !important;           /* Ensure opacity */
+  min-width: 80px;                /* Minimum width to ensure visibility */
+  min-height: 30px;               /* Minimum height to ensure visibility */
 }
 
 .gtranslate_wrapper .gt_float_switcher {
@@ -73,6 +77,10 @@
 .gt_float_switcher {
   position: relative !important;
   height: auto !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  min-width: 100px;
 }
 
 .gt_float_switcher .gt_options {
