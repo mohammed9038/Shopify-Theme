@@ -148,16 +148,9 @@
         </localization-form>
       {% endif %}
 
-      {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-        <localization-form class="small-hide medium-hide">
-          {%- form 'localization', id: 'AnnouncementLanguageForm', class: 'localization-form' -%}
-            <div>
-              <h2 class="visually-hidden" id="AnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-              {%- render 'language-localization', localPosition: 'AnnouncementLanguage' -%}
-            </div>
-          {%- endform -%}
-        </localization-form>
-      {%- endif -%}
+      {%- comment -%}
+        Disabled default language selector since we're using GTranslate
+      {%- endcomment -%}
     </div>
   </div>
 </div>
