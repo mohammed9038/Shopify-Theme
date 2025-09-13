@@ -143,7 +143,7 @@
       "mobile-bottom-navigation": {
         "type": "mobile-bottom-navigation",
         "settings": {
-          "background": "#ffffff",
+          "background": "#dddddd",
           "show_border": true,
           "nav_item1": "home",
           "nav_item2": "search",
