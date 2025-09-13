@@ -9,7 +9,7 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/2_f0b5849c-1d6d-4cd4-97b9-98895aec69af.png",
+    "logo": "shopify://shop_images/logo-mk.png",
     "logo_width": 260,
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
@@ -146,6 +146,7 @@
           "enable_navigation": true,
           "item_spacing": 9,
           "icon_size": 22,
+          "nav_height": 60,
           "nav_item1": "home",
           "collection1_id": "",
           "nav_item2": "search",

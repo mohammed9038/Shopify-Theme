@@ -1,0 +1,102 @@
+/*
+  Universal Cart Styling
+  ======================
+  Ensures consistent cart appearance and positioning on all devices.
+  This CSS works alongside custom-mobile-header.css to maintain cart visibility.
+*/
+
+/* Base cart styling for all screen sizes */
+.mobile-only-cart {
+  display: flex !important;
+  position: relative;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 50; /* High enough z-index to ensure visibility, but not excessively high */
+  pointer-events: auto; /* Ensure clicks work */
+}
+
+.mobile-only-cart .header__icon--cart {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+  opacity: 1;
+  transition: transform 0.2s ease;
+}
+
+.mobile-only-cart .header__icon--cart:hover {
+  transform: scale(1.05);
+}
+
+.mobile-only-cart .svg-wrapper svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+  display: block;
+}
+
+/* Cart counter styling */
+.mobile-only-cart .cart-count-bubble {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(25%, -25%);
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+/* Desktop specific styling */
+@media screen and (min-width: 750px) {
+  .mobile-only-cart {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Slightly larger cart icon for desktop */
+  .mobile-only-cart .svg-wrapper svg {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .mobile-only-cart .header__icon--cart {
+    padding: 10px;
+  }
+  
+  .mobile-only-cart .svg-wrapper svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* Hide default cart item */
+  [data-header-item-type="cart"] {
+    display: none !important;
+  }
+}
+
+/* Mobile specific styling */
+@media screen and (max-width: 749px) {
+  .mobile-only-cart {
+    grid-column: 3;
+    justify-self: end;
+    margin-right: 15px;
+  }
+  
+  /* Hide any cart items that might come from the sortable items */
+  .header__sortable-layout > div[data-header-item-type="cart"] {
+    display: none !important;
+  }
+}
