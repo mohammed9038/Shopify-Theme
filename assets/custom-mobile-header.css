@@ -1,13 +1,8 @@
-/* 
+/*
   Custom Mobile Header Layout
   ===========================
-  Implements a mobile header with:
-  - Hamburger menu on the left
-  - Logo in the center
-  - Cart icon on the right
-  
-  IMPORTANT: This CSS forces the cart to be visible on mobile
-  regardless of header item settings in the theme editor.
+  Implements a mobile header with hamburger menu (left), logo (center), and cart (right).
+  This CSS ensures a consistent mobile layout regardless of header settings.
 */
 
 /* Hide mobile-only elements on desktop */
@@ -68,13 +63,13 @@
     display: none !important;
   }
   
-  /* Mobile-only cart styling */
+  /* Mobile cart implementation */
   .mobile-only-cart {
     display: flex;
     grid-column: 3;
     justify-self: end;
     margin-right: 15px;
-    z-index: 5; /* Ensure cart stays above other elements */
+    z-index: 5;
   }
   
   .mobile-only-cart .header__icon--cart {
@@ -89,7 +84,7 @@
     height: 24px;
   }
   
-  /* Hide the regular cart on mobile as we use our mobile-specific one */
+  /* Hide default cart on mobile */
   .header__sortable-layout > .header__item--cart {
     display: none !important;
   }

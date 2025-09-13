@@ -29,8 +29,7 @@
     --mobile-nav-icon-size: {{ section.settings.icon_size }}px;
     --mobile-nav-height: {{ section.settings.nav_height }}px;
   }
-  
-  /* Mobile cart is now in the header, not in the bottom navigation */
+  /* Navigation configuration */
 
   .mobile-nav {
     position: fixed;
@@ -139,7 +138,7 @@
           </a>
         {% endunless %}
 
-        {% comment %}Cart removed from bottom navigation as it's now shown at the top{% endcomment %}
+        {% comment %}Cart is handled in the header{% endcomment %}
         
         {% comment %}Loop through configured nav items{% endcomment %}
         {% for i in (1..5) %}
@@ -169,7 +168,7 @@
                   <span class="mobile-nav__label">Search</span>
                 </a>
               {% when 'cart' %}
-                {% comment %}Skip cart in bottom navigation as it's shown at the top{% endcomment %}
+                {% comment %}Cart is handled in the header{% endcomment %}
               {% when 'account' %}
                 <a href="{{ routes.account_url }}" class="mobile-nav__item{% if template.name == 'account' %} mobile-nav__item--active{% endif %}">
                   <span class="mobile-nav__icon">
@@ -273,7 +272,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Note: The cart is now displayed in the header (top right corner on mobile), not in the bottom navigation. Selecting it here has no effect."
+      "content": "Note: Cart is displayed in the header. Selecting it here has no effect."
     },
     {
       "type": "select",
