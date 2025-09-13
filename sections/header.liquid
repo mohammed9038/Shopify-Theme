@@ -40,34 +40,6 @@
 <link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
 <link rel="stylesheet" href="{{ 'mobile-header-override.css' | asset_url }}" media="all">
 
-<style>
-  /* Inline CSS backup to ensure mobile header elements are hidden */
-  @media screen and (max-width: 749px) {
-    .header__item--cart,
-    .header__icon--cart,
-    .header__icon--search,
-    .header__item--language,
-    .header__language-selector {
-      display: none !important;
-    }
-    
-    /* Visual indicator that styles are applied */
-    .header-wrapper {
-      position: relative;
-    }
-    
-    .header-wrapper:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 2px;
-      width: 100%;
-      background-color: #ff5500;
-    }
-  }
-</style>
-
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}

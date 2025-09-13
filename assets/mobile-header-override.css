@@ -1,4 +1,10 @@
-/* Mobile Header Overrides - Hide cart, search, and language selector on mobile */
+/* 
+============================================================================== 
+SHOPIFY DAWN THEME - MOBILE HEADER OVERRIDES
+==============================================================================
+*/
+
+/* Hide redundant elements in mobile header since they're in the bottom navigation */
 @media screen and (max-width: 749px) {
   /* Hide cart icon in header */
   .header__item--cart,
@@ -33,23 +39,9 @@
   /* Reorganize header to account for missing elements */
   .header--mobile-center {
     justify-content: center;
-    border-bottom: 2px solid #ff5500 !important;
   }
   
   .header--mobile-left {
     justify-content: flex-start;
-    border-bottom: 2px solid #ff5500 !important;
-  }
-  
-  /* Test indicator that CSS is loaded */
-  .header-wrapper:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 3px;
-    width: 100%;
-    background-color: #ff5500;
-    z-index: 10;
   }
 }
