@@ -239,7 +239,8 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
     <ul class="mobile-bottom-nav__items">
       {% for i in (1..5) %}
         {% assign item_setting = 'navigation_item' | append: i %}
-        {% assign item_type = section.settings[item_setting] %}
+        {% assign nav_setting = 'nav_item' | append: i %}
+        {% assign item_type = section.settings[item_setting] | default: section.settings[nav_setting] %}
         {% if item_type != blank %}
           <li class="mobile-bottom-nav__item mobile-bottom-nav__item--{{ item_type }}">
             {% case item_type %}
@@ -320,8 +321,10 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
                 </a>
                 
               {% when 'collection' %}
-                {% if section.settings.collection != blank %}
-                  <a href="{{ section.settings.collection.url }}" class="mobile-bottom-nav__link{% if request.page_type == 'collection' and request.object.id == section.settings.collection.id %} mobile-bottom-nav__link--active{% endif %}">
+                {% comment %}Debug collection value: {{ section.settings.collection }}{% endcomment %}
+                {% assign collection_handle = section.settings.collection %}
+                {% if collection_handle != blank %}
+                  <a href="{{ routes.collections_url }}/{{ collection_handle }}" class="mobile-bottom-nav__link{% if request.page_type == 'collection' and request.object.handle == collection_handle %} mobile-bottom-nav__link--active{% endif %}">
                     <span class="mobile-bottom-nav__icon">
                       <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -332,7 +335,7 @@ SHOPIFY DAWN THEME - MOBILE BOTTOM NAVIGATION COMPONENT
                         </svg>
                       </span>
                     </span>
-                    <span class="mobile-bottom-nav__label">{{ section.settings.collection_label | default: section.settings.collection.title }}</span>
+                    <span class="mobile-bottom-nav__label">{{ section.settings.collection_label | default: 'Shop' }}</span>
                   </a>
                 {% endif %}
             {% endcase %}
