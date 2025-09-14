@@ -1,0 +1,414 @@
+{%- comment -%}
+  Professional Search Modal
+  Enhanced search experience with predictive search and recent searches
+{%- endcomment -%}
+
+{%- liquid
+  assign enable_search_modal = section.settings.enable_search_modal
+  assign enable_predictive_search = section.settings.enable_predictive_search
+  assign search_placeholder = section.settings.search_placeholder | default: 'general.search.placeholder'
+-%}
+
+{%- if enable_search_modal -%}
+  <div id="search-modal" 
+       class="search-modal" 
+       role="dialog" 
+       aria-modal="true" 
+       aria-labelledby="search-modal-title"
+       aria-hidden="true">
+    
+    <div class="search-modal__overlay"></div>
+    
+    <div class="search-modal__content">
+      <div class="search-modal__header">
+        <h2 id="search-modal-title" class="search-modal__title">
+          {{ 'general.search.title' | t }}
+        </h2>
+        
+        <button type="button" 
+                class="search-modal__close" 
+                aria-label="{{ 'general.common.close' | t }}">
+          {%- render 'icon-close' -%}
+        </button>
+      </div>
+      
+      <div class="search-modal__form-wrapper">
+        <form action="{{ routes.search_url }}" 
+              method="get" 
+              class="search-modal__form"
+              role="search">
+          
+          <div class="search-modal__input-wrapper">
+            <label for="search-modal-input" class="visually-hidden">
+              {{ search_placeholder | t }}
+            </label>
+            
+            <input type="search"
+                   id="search-modal-input"
+                   name="q"
+                   value="{{ search.terms | escape }}"
+                   placeholder="{{ search_placeholder | t }}"
+                   class="search-modal__input"
+                   autocomplete="off"
+                   autocorrect="off"
+                   autocapitalize="off"
+                   spellcheck="false"
+                   {%- if enable_predictive_search -%}
+                     data-predictive-search-input
+                   {%- endif -%}>
+            
+            <button type="submit" 
+                    class="search-modal__submit"
+                    aria-label="{{ 'general.search.submit' | t }}">
+              {%- render 'icon-search' -%}
+            </button>
+            
+            <button type="button" 
+                    class="search-modal__clear"
+                    aria-label="{{ 'general.search.clear' | t }}"
+                    style="display: none;">
+              {%- render 'icon-close' -%}
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="search-modal__results">
+        {%- if enable_predictive_search -%}
+          <div id="predictive-search-results" 
+               class="predictive-search__results"
+               aria-live="polite"
+               aria-label="{{ 'general.search.results' | t }}">
+            {%- comment -%} Predictive search results will be loaded here {%- endcomment -%}
+          </div>
+        {%- endif -%}
+        
+        <div class="search-modal__suggestions">
+          {%- if section.settings.show_search_suggestions -%}
+            <div class="search-suggestions">
+              <h3 class="search-suggestions__title">{{ 'general.search.suggestions' | t }}</h3>
+              <ul class="search-suggestions__list" role="list">
+                {%- assign suggestion_terms = section.settings.search_suggestions | split: ',' -%}
+                {%- for term in suggestion_terms limit: 6 -%}
+                  <li class="search-suggestions__item">
+                    <a href="{{ routes.search_url }}?q={{ term | strip | url_encode }}" 
+                       class="search-suggestions__link">
+                      {{ term | strip }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.show_popular_products -%}
+            <div class="search-popular-products">
+              <h3 class="search-popular-products__title">{{ 'general.search.popular_products' | t }}</h3>
+              <div class="search-popular-products__grid">
+                {%- assign popular_collection = collections[section.settings.popular_products_collection] -%}
+                {%- for product in popular_collection.products limit: 4 -%}
+                  <a href="{{ product.url }}" class="search-popular-product">
+                    <div class="search-popular-product__image">
+                      {%- if product.featured_media -%}
+                        {{ product.featured_media | image_url: width: 100 | image_tag: 
+                           loading: 'lazy',
+                           alt: product.featured_media.alt | escape,
+                           width: 50,
+                           height: 50
+                        }}
+                      {%- endif -%}
+                    </div>
+                    <div class="search-popular-product__details">
+                      <h4 class="search-popular-product__title">{{ product.title }}</h4>
+                      <div class="search-popular-product__price">
+                        {%- render 'price', product: product, use_variant: true -%}
+                      </div>
+                    </div>
+                  </a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- style -%}
+  .search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-default) ease;
+  }
+  
+  .search-modal--open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .search-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+  }
+  
+  .search-modal__content {
+    position: relative;
+    max-width: min(800px, 90vw);
+    margin: 5vh auto;
+    background: var(--search-modal-bg, rgb(var(--color-background)));
+    border-radius: var(--search-modal-radius, 1.2rem);
+    box-shadow: var(--search-modal-shadow, 0 20px 60px rgba(0, 0, 0, 0.3));
+    max-height: 90vh;
+    overflow: hidden;
+    transform: translateY(-2rem);
+    transition: transform var(--duration-default) ease;
+  }
+  
+  .search-modal--open .search-modal__content {
+    transform: translateY(0);
+  }
+  
+  .search-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--search-modal-header-padding, 2rem);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  
+  .search-modal__title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: rgb(var(--color-foreground));
+    margin: 0;
+  }
+  
+  .search-modal__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: background-color var(--duration-short) ease;
+  }
+  
+  .search-modal__close:hover {
+    background: rgba(var(--color-foreground), 0.1);
+  }
+  
+  .search-modal__close svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .search-modal__form-wrapper {
+    padding: var(--search-modal-form-padding, 2rem);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  
+  .search-modal__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-modal__input {
+    width: 100%;
+    padding: 1.6rem 10rem 1.6rem 2rem;
+    border: 2px solid rgba(var(--color-foreground), 0.2);
+    border-radius: 3rem;
+    background: transparent;
+    font-size: 1.6rem;
+    color: rgb(var(--color-foreground));
+    transition: border-color var(--duration-short) ease;
+  }
+  
+  .search-modal__input:focus {
+    outline: none;
+    border-color: rgb(var(--color-link));
+  }
+  
+  .search-modal__input::placeholder {
+    color: rgba(var(--color-foreground), 0.6);
+  }
+  
+  .search-modal__submit {
+    position: absolute;
+    right: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: rgb(var(--color-button));
+    border-radius: 50%;
+    color: rgb(var(--color-button-text));
+    cursor: pointer;
+    transition: all var(--duration-short) ease;
+  }
+  
+  .search-modal__submit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(var(--color-button), 0.3);
+  }
+  
+  .search-modal__clear {
+    position: absolute;
+    right: 6rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(var(--color-foreground), 0.1);
+    border-radius: 50%;
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    transition: all var(--duration-short) ease;
+  }
+  
+  .search-modal__clear:hover {
+    background: rgba(var(--color-foreground), 0.2);
+  }
+  
+  .search-modal__results {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: var(--search-modal-results-padding, 2rem);
+  }
+  
+  .predictive-search__results {
+    margin-bottom: 2rem;
+  }
+  
+  .search-suggestions__title,
+  .search-popular-products__title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: rgb(var(--color-foreground));
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .search-suggestions__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .search-suggestions__link {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    background: rgba(var(--color-foreground), 0.05);
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 2rem;
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: all var(--duration-short) ease;
+  }
+  
+  .search-suggestions__link:hover {
+    background: rgba(var(--color-link), 0.1);
+    border-color: rgb(var(--color-link));
+    color: rgb(var(--color-link));
+  }
+  
+  .search-popular-products {
+    margin-top: 2rem;
+  }
+  
+  .search-popular-products__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.6rem;
+  }
+  
+  .search-popular-product {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 0.8rem;
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+    transition: all var(--duration-short) ease;
+  }
+  
+  .search-popular-product:hover {
+    border-color: rgb(var(--color-link));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-popular-product__image {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 0.4rem;
+    overflow: hidden;
+  }
+  
+  .search-popular-product__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .search-popular-product__title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0 0 0.4rem;
+    line-height: 1.3;
+  }
+  
+  .search-popular-product__price {
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+  
+  @media screen and (max-width: 749px) {
+    .search-modal__content {
+      margin: 2vh auto;
+      max-height: 96vh;
+    }
+    
+    .search-modal__header,
+    .search-modal__form-wrapper,
+    .search-modal__results {
+      padding: 1.6rem;
+    }
+    
+    .search-modal__input {
+      padding: 1.4rem 8rem 1.4rem 1.6rem;
+      font-size: 1.4rem;
+    }
+    
+    .search-popular-products__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+{%- endstyle -%}

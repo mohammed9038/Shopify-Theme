@@ -1,48 +1,84 @@
-{% comment %}
-  Header Navigation Snippet
-  Accessible desktop navigation with dropdown support
-{% endcomment %}
+{%- comment -%}
+  Professional Header Navigation Component
+  Renders main navigation with dropdowns and mobile optimization
+{%- endcomment -%}
 
-<nav class="header__navigation" role="navigation" aria-label="{{ 'general.accessibility.nav_main' | t }}">
-  <ul class="header__nav-list" role="menubar">
-    {% for link in menu.links %}
-      <li class="header__nav-item" role="none">
-        {% if link.links != blank %}
-          {% comment %} Dropdown menu {% endcomment %}
-          <details class="header__nav-dropdown" role="none">
-            <summary class="header__nav-link header__nav-link--dropdown" 
-                     role="menuitem" 
-                     aria-haspopup="true"
-                     aria-expanded="false">
+{%- liquid
+  assign menu = section.settings.menu
+  assign menu_items = linklists[menu].links
+  assign show_desktop_nav = section.settings.enable_desktop_navigation
+  assign show_mega_menu = section.settings.enable_mega_menu
+  assign max_menu_depth = section.settings.max_menu_depth | default: 2
+-%}
+
+{%- if show_desktop_nav and menu_items.size > 0 -%}
+  <nav class="header__navigation navigation" role="navigation" aria-label="{{ 'sections.header.navigation' | t }}">
+    <ul class="navigation__list list-unstyled" role="list">
+      {%- for link in menu_items -%}
+        {%- liquid
+          assign has_dropdown = false
+          assign is_mega_menu = false
+          
+          if link.links.size > 0
+            assign has_dropdown = true
+            if show_mega_menu and link.links.size > 6
+              assign is_mega_menu = true
+            endif
+          endif
+          
+          assign link_classes = 'navigation__link'
+          if link.current
+            assign link_classes = link_classes | append: ' navigation__link--current'
+          endif
+          if has_dropdown
+            assign link_classes = link_classes | append: ' navigation__link--has-dropdown'
+          endif
+        -%}
+        
+        <li class="navigation__item{% if has_dropdown %} navigation__item--has-dropdown{% endif %}{% if is_mega_menu %} navigation__item--mega-menu{% endif %}">
+          {%- if has_dropdown -%}
+            <details class="navigation__dropdown{% if is_mega_menu %} navigation__dropdown--mega{% endif %}">
+              <summary class="{{ link_classes }}" 
+                       aria-expanded="false"
+                       aria-controls="dropdown-{{ forloop.index }}">
+                {{ link.title }}
+                <span class="navigation__dropdown-icon">
+                  {%- render 'icon-chevron-down' -%}
+                </span>
+              </summary>
+              
+              <div class="navigation__dropdown-content" 
+                   id="dropdown-{{ forloop.index }}"
+                   role="region"
+                   aria-label="{{ link.title }} {{ 'sections.header.submenu' | t }}">
+                
+                {%- if is_mega_menu -%}
+                  {%- render 'header-mega-menu', 
+                      menu_items: link.links,
+                      parent_title: link.title,
+                      max_depth: max_menu_depth
+                  -%}
+                {%- else -%}
+                  {%- render 'header-dropdown-menu', 
+                      menu_items: link.links,
+                      parent_title: link.title,
+                      max_depth: max_menu_depth
+                  -%}
+                {%- endif -%}
+              </div>
+            </details>
+          {%- else -%}
+            <a href="{{ link.url }}" 
+               class="{{ link_classes }}"
+               {% if link.current %}aria-current="page"{% endif %}>
               {{ link.title }}
-              {% render 'icon-caret' %}
-            </summary>
-            <ul class="header__nav-submenu" role="menu" aria-label="{{ link.title }}">
-              {% for child_link in link.links %}
-                <li class="header__nav-subitem" role="none">
-                  <a href="{{ child_link.url }}" 
-                     class="header__nav-sublink"
-                     role="menuitem"
-                     {% if child_link.current %}aria-current="page"{% endif %}>
-                    {{ child_link.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </details>
-        {% else %}
-          {% comment %} Simple link {% endcomment %}
-          <a href="{{ link.url }}" 
-             class="header__nav-link"
-             role="menuitem"
-             {% if link.current %}aria-current="page"{% endif %}>
-            {{ link.title }}
-          </a>
-        {% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-</nav>
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}
 
 <style>
   /* Header Navigation Styles */

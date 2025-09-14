@@ -37,7 +37,22 @@
     },
     "search": {
       "search": "Search",
-      "reset": "Clear search term"
+      "reset": "Clear search term",
+      "title": "Search",
+      "placeholder": "Search products...",
+      "submit": "Search",
+      "clear": "Clear search",
+      "results": "Search results",
+      "suggestions": "Search suggestions",
+      "popular_products": "Popular products"
+    },
+    "common": {
+      "close": "Close"
+    },
+    "accessibility": {
+      "menu": "Menu",
+      "close": "Close",
+      "view_all": "View all {{ title }}"
     },
     "cart": {
       "view": "View cart ({{ count }})",
@@ -66,6 +81,8 @@
     "skip_to_text": "Skip to content",
     "skip_to_product_info": "Skip to product information",
     "close": "Close",
+    "menu": "Menu",
+    "view_all": "View all {{ title }}",
     "unit_price_separator": "per",
     "vendor": "Vendor:",
     "error": "Error",
@@ -278,6 +295,9 @@
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",
+      "navigation": "Navigation",
+      "submenu": "submenu",
+      "mobile_menu": "Mobile menu",
       "cart_count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"
@@ -302,6 +322,10 @@
       "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Duties included. Taxes, discounts and shipping calculated at checkout.",
       "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Taxes, discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
       "taxes_at_checkout_shipping_at_checkout_without_policy": "Taxes, discounts and shipping calculated at checkout.",
+      "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
+      "taxes_included_but_shipping_at_checkout": "Taxes included and shipping calculated at checkout.",
+      "taxes_included_and_shipping_policy_html": "Taxes included. <a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout.",
       "headings": {
         "product": "Product",
         "price": "Price",
@@ -316,7 +340,8 @@
       }
     },
     "footer": {
-      "payment": "Payment methods"
+      "payment": "Payment methods",
+      "social": "Social"
     },
     "featured_blog": {
       "view_all": "View all",
@@ -473,11 +498,17 @@
       "payment_status": "Payment status",
       "fulfillment_status": "Fulfillment status",
       "total": "Total",
+      "tracking_number": "Tracking number",
+      "subtotal": "Subtotal",
+      "total_duties": "Duties",
       "none": "You haven't placed any orders yet."
     },
     "recover_password": {
       "title": "Reset your password",
       "subtext": "We will send you an email to reset your password",
+      "email": "Email",
+      "submit": "Submit",
+      "cancel": "Cancel",
       "success": "We've sent you an email with a link to update your password."
     },
     "register": {
@@ -508,6 +539,8 @@
       "copy_code": "Copy gift card code",
       "expiration_date": "Expires {{ expires_on }}",
       "copy_code_success": "Code copied successfully",
+      "remaining_html": "Remaining balance: {{ balance }}",
+      "print_gift_card": "Print gift card",
       "expired": "Expired"
     }
   },
@@ -527,5 +560,25 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "layout": {
+    "navigation": {
+      "search": "Search",
+      "menu": "Menu",
+      "cart": "Cart"
+    },
+    "cart": {
+      "title": "Cart"
+    },
+    "customer": {
+      "account": "Account",
+      "log_out": "Log out"
+    },
+    "footer": {
+      "social": "Follow us"
+    }
+  },
+  "date_formats": {
+    "month_year": "%B %Y"
   }
 }
