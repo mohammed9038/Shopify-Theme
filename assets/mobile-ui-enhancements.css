@@ -1,0 +1,800 @@
+/**
+ * Mobile UI Enhancements - Dawn Theme
+ * 
+ * Professional mobile experience improvements for the entire Dawn theme
+ * Optimized for touch interfaces and mobile performance
+ * 
+ * Features:
+ * - Touch-optimized interface elements
+ * - Mobile-first responsive design improvements
+ * - Enhanced mobile navigation
+ * - Better mobile form experience
+ * - Optimized mobile cart and checkout
+ * - Professional mobile animations
+ * 
+ * @version 1.0.0
+ * @compatibility Dawn Theme 15.4.0+
+ * @responsive Mobile-first design
+ */
+
+/* ===============================================================
+   MOBILE-FIRST DESIGN TOKENS
+   Enhanced mobile spacing and sizing
+   =============================================================== */
+
+:root {
+  /* Mobile-optimized spacing */
+  --mobile-spacing-xs: 0.25rem;
+  --mobile-spacing-sm: 0.5rem;
+  --mobile-spacing-md: 0.75rem;
+  --mobile-spacing-lg: 1rem;
+  --mobile-spacing-xl: 1.5rem;
+  --mobile-spacing-2xl: 2rem;
+  
+  /* Touch target sizes (44px minimum) */
+  --touch-target-sm: 44px;
+  --touch-target-md: 48px;
+  --touch-target-lg: 56px;
+  
+  /* Mobile-optimized typography */
+  --mobile-text-xs: 0.75rem;
+  --mobile-text-sm: 0.875rem;
+  --mobile-text-base: 1rem;
+  --mobile-text-lg: 1.125rem;
+  --mobile-text-xl: 1.25rem;
+  
+  /* Safe area insets for notched devices */
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
+  --safe-area-left: env(safe-area-inset-left);
+  --safe-area-right: env(safe-area-inset-right);
+}
+
+/* ===============================================================
+   MOBILE HEADER ENHANCEMENTS
+   Professional mobile header experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .header-wrapper {
+    padding-top: var(--safe-area-top);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  
+  .header {
+    min-height: 60px;
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-lg);
+  }
+  
+  .header__heading-logo img {
+    max-height: 40px;
+  }
+  
+  .header__icon {
+    width: var(--touch-target-sm);
+    height: var(--touch-target-sm);
+    border-radius: 12px;
+    background: transparent;
+    transition: all 200ms ease;
+  }
+  
+  .header__icon:hover,
+  .header__icon:active {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(0.95);
+  }
+  
+  .header__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  /* Cart count bubble mobile optimization */
+  .cart-count-bubble {
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    top: -2px;
+    right: -2px;
+    border: 2px solid rgb(var(--color-background));
+  }
+}
+
+/* ===============================================================
+   MOBILE NAVIGATION ENHANCEMENTS
+   Professional mobile menu experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .menu-drawer {
+    width: 100%;
+    max-width: 400px;
+    background: rgb(var(--color-background));
+    border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .menu-drawer__navigation {
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-lg);
+  }
+  
+  .menu-drawer__menu-item {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  
+  .menu-drawer__menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .menu-drawer__menu-item--link {
+    display: flex;
+    align-items: center;
+    padding: var(--mobile-spacing-lg) 0;
+    font-size: var(--mobile-text-lg);
+    font-weight: 500;
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+    min-height: var(--touch-target-sm);
+    transition: color 200ms ease;
+  }
+  
+  .menu-drawer__menu-item--link:hover,
+  .menu-drawer__menu-item--link:active {
+    color: rgba(var(--color-foreground), 0.7);
+  }
+  
+  .menu-drawer__menu-item--link[aria-current="page"] {
+    font-weight: 600;
+    color: rgb(var(--color-foreground));
+  }
+}
+
+/* ===============================================================
+   MOBILE PRODUCT PAGE ENHANCEMENTS
+   Optimized mobile product experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .product {
+    display: block;
+  }
+  
+  .product__media-wrapper {
+    margin-bottom: var(--mobile-spacing-xl);
+  }
+  
+  .product__info-wrapper {
+    padding: 0 var(--mobile-spacing-lg);
+  }
+  
+  .product__title h1 {
+    font-size: var(--mobile-text-xl);
+    line-height: 1.3;
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .product__text {
+    font-size: var(--mobile-text-base);
+    line-height: 1.6;
+    margin-bottom: var(--mobile-spacing-lg);
+  }
+  
+  .price__container {
+    margin: var(--mobile-spacing-lg) 0;
+  }
+  
+  .price {
+    font-size: var(--mobile-text-xl);
+  }
+  
+  /* Mobile variant picker */
+  .variant-picker {
+    margin: var(--mobile-spacing-lg) 0;
+  }
+  
+  .variant-picker__option {
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .variant-picker__label {
+    font-size: var(--mobile-text-base);
+    font-weight: 500;
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  /* Mobile swatch improvements */
+  .swatch {
+    width: var(--touch-target-sm);
+    height: var(--touch-target-sm);
+    border-radius: 8px;
+    margin-right: var(--mobile-spacing-sm);
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  .swatch input:checked + label {
+    border: 2px solid rgb(var(--color-foreground));
+    transform: scale(0.95);
+  }
+}
+
+/* ===============================================================
+   MOBILE COLLECTION PAGE ENHANCEMENTS
+   Professional mobile collection browsing
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .collection-hero {
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-lg);
+    margin-bottom: var(--mobile-spacing-xl);
+    text-align: left;
+  }
+  
+  .collection-hero__title {
+    font-size: var(--mobile-text-xl);
+    margin-bottom: var(--mobile-spacing-md);
+  }
+  
+  .collection-hero__description {
+    font-size: var(--mobile-text-base);
+  }
+  
+  /* Mobile product grid */
+  .collection-product-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--mobile-spacing-md);
+    padding: 0 var(--mobile-spacing-lg);
+  }
+  
+  .card-product {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  
+  .card-product .card__content {
+    padding: var(--mobile-spacing-md);
+  }
+  
+  .card-product .card__heading {
+    font-size: var(--mobile-text-sm);
+    line-height: 1.4;
+    margin-bottom: var(--mobile-spacing-xs);
+  }
+  
+  .card-product .price {
+    font-size: var(--mobile-text-base);
+    font-weight: 600;
+  }
+  
+  /* Mobile filters */
+  .facets-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(var(--color-background));
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+    padding-bottom: calc(var(--mobile-spacing-md) + var(--safe-area-bottom));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+  
+  .facets-mobile__button {
+    width: 100%;
+    min-height: var(--touch-target-md);
+    font-weight: 500;
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* ===============================================================
+   MOBILE CART ENHANCEMENTS
+   Professional mobile cart experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .cart-drawer {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cart-drawer__header {
+    padding: var(--mobile-spacing-lg);
+    padding-top: calc(var(--mobile-spacing-lg) + var(--safe-area-top));
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    flex-shrink: 0;
+  }
+  
+  .cart-drawer__contents {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .cart-drawer__footer {
+    padding: var(--mobile-spacing-lg);
+    padding-bottom: calc(var(--mobile-spacing-lg) + var(--safe-area-bottom));
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    background: rgba(var(--color-foreground), 0.02);
+    flex-shrink: 0;
+  }
+  
+  .cart-item {
+    padding: var(--mobile-spacing-md) 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  
+  .cart-item__image {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md);
+  }
+  
+  .cart-item__details h3 {
+    font-size: var(--mobile-text-base);
+    margin-bottom: var(--mobile-spacing-xs);
+  }
+  
+  .cart-item__price {
+    font-size: var(--mobile-text-base);
+    font-weight: 600;
+  }
+  
+  /* Mobile quantity selector */
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  
+  .quantity-selector__button {
+    width: var(--touch-target-sm);
+    height: var(--touch-target-sm);
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(var(--color-foreground));
+    font-size: 18px;
+    line-height: 1;
+  }
+  
+  .quantity-selector__input {
+    width: 60px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-size: var(--mobile-text-base);
+    height: var(--touch-target-sm);
+  }
+}
+
+/* ===============================================================
+   MOBILE FORM ENHANCEMENTS
+   Touch-optimized form experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .field__input,
+  .select__select,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    min-height: var(--touch-target-md);
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+    font-size: 16px; /* Prevents zoom on iOS */
+    border-radius: var(--radius-lg);
+  }
+  
+  .field__label {
+    font-size: var(--mobile-text-base);
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  .field {
+    margin-bottom: var(--mobile-spacing-lg);
+  }
+  
+  /* Mobile button improvements */
+  .btn,
+  .button,
+  button[type="submit"],
+  input[type="submit"] {
+    min-height: var(--touch-target-md);
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-xl);
+    font-size: var(--mobile-text-base);
+    font-weight: 600;
+    border-radius: var(--radius-lg);
+    width: 100%;
+  }
+  
+  .btn:active,
+  .button:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ===============================================================
+   MOBILE SEARCH ENHANCEMENTS
+   Professional mobile search experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .search-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(var(--color-background));
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .search-modal__header {
+    padding: var(--mobile-spacing-lg);
+    padding-top: calc(var(--mobile-spacing-lg) + var(--safe-area-top));
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  
+  .search-modal__input {
+    width: 100%;
+    min-height: var(--touch-target-md);
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border-radius: var(--radius-lg);
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .search-modal__results {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .search-result {
+    display: flex;
+    align-items: center;
+    padding: var(--mobile-spacing-md) 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    text-decoration: none;
+    min-height: var(--touch-target-md);
+  }
+  
+  .search-result__image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-md);
+    margin-right: var(--mobile-spacing-md);
+  }
+  
+  .search-result__details h3 {
+    font-size: var(--mobile-text-base);
+    margin-bottom: var(--mobile-spacing-xs);
+  }
+  
+  .search-result__price {
+    font-size: var(--mobile-text-sm);
+    font-weight: 600;
+  }
+}
+
+/* ===============================================================
+   MOBILE FOOTER ENHANCEMENTS
+   Professional mobile footer experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .footer {
+    padding-bottom: var(--safe-area-bottom);
+  }
+  
+  .footer__content-top {
+    padding: var(--mobile-spacing-xl) var(--mobile-spacing-lg);
+  }
+  
+  .footer__blocks-wrapper {
+    display: block;
+  }
+  
+  .footer-block {
+    margin-bottom: var(--mobile-spacing-xl);
+  }
+  
+  .footer-block:last-child {
+    margin-bottom: 0;
+  }
+  
+  .footer-block__heading {
+    font-size: var(--mobile-text-lg);
+    margin-bottom: var(--mobile-spacing-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .footer-block__heading::after {
+    content: '+';
+    font-size: 20px;
+    transition: transform 200ms ease;
+  }
+  
+  .footer-block--expanded .footer-block__heading::after {
+    transform: rotate(45deg);
+  }
+  
+  .footer-block__details {
+    overflow: hidden;
+    transition: max-height 300ms ease;
+    max-height: 0;
+  }
+  
+  .footer-block--expanded .footer-block__details {
+    max-height: 500px;
+  }
+  
+  .footer-block__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-block__list-item {
+    margin-bottom: var(--mobile-spacing-sm);
+  }
+  
+  .footer-block__list-item a {
+    color: rgba(var(--color-foreground), 0.8);
+    text-decoration: none;
+    font-size: var(--mobile-text-base);
+    line-height: 1.5;
+    display: block;
+    padding: var(--mobile-spacing-xs) 0;
+  }
+}
+
+/* ===============================================================
+   MOBILE MODAL ENHANCEMENTS
+   Touch-optimized modal experience
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  .modal {
+    padding: var(--mobile-spacing-lg);
+    padding-top: calc(var(--mobile-spacing-lg) + var(--safe-area-top));
+    padding-bottom: calc(var(--mobile-spacing-lg) + var(--safe-area-bottom));
+  }
+  
+  .modal__content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal__header {
+    padding: var(--mobile-spacing-lg);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    flex-shrink: 0;
+  }
+  
+  .modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--mobile-spacing-lg);
+  }
+  
+  .modal__footer {
+    padding: var(--mobile-spacing-lg);
+    padding-bottom: calc(var(--mobile-spacing-lg) + var(--safe-area-bottom));
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    flex-shrink: 0;
+  }
+}
+
+/* ===============================================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   Improved mobile performance and battery life
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  /* Reduce complex shadows on mobile */
+  .card:hover {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  /* Optimize animations for mobile */
+  * {
+    animation-duration: 0.2s;
+    transition-duration: 0.2s;
+  }
+  
+  /* Reduce transform-heavy animations */
+  .card:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Optimize scroll performance */
+  .scrollable-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+/* ===============================================================
+   MOBILE ACCESSIBILITY ENHANCEMENTS
+   Better mobile accessibility
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  /* Larger touch targets */
+  a, button, input, select, textarea {
+    min-height: var(--touch-target-sm);
+    min-width: var(--touch-target-sm);
+  }
+  
+  /* Better contrast for small screens */
+  .text-subdued {
+    color: rgba(var(--color-foreground), 0.7);
+  }
+  
+  /* Improved spacing for readability */
+  p, .text-block {
+    line-height: 1.6;
+    margin-bottom: var(--mobile-spacing-lg);
+  }
+  
+  /* Better focus indicators for touch */
+  :focus-visible {
+    outline: 3px solid rgb(var(--color-foreground));
+    outline-offset: 2px;
+  }
+}
+
+/* ===============================================================
+   MOBILE LANDSCAPE OPTIMIZATIONS
+   Better landscape mobile experience
+   =============================================================== */
+
+@media screen and (max-width: 949px) and (orientation: landscape) {
+  .header {
+    min-height: 50px;
+  }
+  
+  .header__heading-logo img {
+    max-height: 32px;
+  }
+  
+  .product__media-wrapper {
+    max-height: 60vh;
+    overflow: hidden;
+  }
+  
+  .modal__content {
+    max-height: 80vh;
+  }
+  
+  .cart-drawer {
+    max-height: 90vh;
+  }
+}
+
+/* ===============================================================
+   MOBILE PWA ENHANCEMENTS
+   Progressive Web App optimizations
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  /* Prevent iOS bounce scroll */
+  body {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .main-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* PWA splash screen compatibility */
+  .loading-splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(var(--color-background));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  /* Installation prompt styling */
+  .install-prompt {
+    position: fixed;
+    bottom: var(--mobile-spacing-lg);
+    left: var(--mobile-spacing-lg);
+    right: var(--mobile-spacing-lg);
+    background: rgb(var(--color-background));
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--mobile-spacing-lg);
+    box-shadow: var(--shadow-large);
+    z-index: 1000;
+  }
+}
+
+/* ===============================================================
+   MOBILE DEBUGGING AND DEVELOPMENT
+   Development aids for mobile testing
+   =============================================================== */
+
+@media screen and (max-width: 749px) {
+  /* Development overlay for touch targets */
+  .debug-touch-targets * {
+    outline: 1px solid rgba(255, 0, 0, 0.3) !important;
+  }
+  
+  .debug-touch-targets a,
+  .debug-touch-targets button,
+  .debug-touch-targets input,
+  .debug-touch-targets select,
+  .debug-touch-targets textarea {
+    background: rgba(0, 255, 0, 0.1) !important;
+  }
+  
+  /* Safe area visualization */
+  .debug-safe-areas::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--safe-area-top);
+    background: rgba(255, 0, 0, 0.3);
+    z-index: 10000;
+    pointer-events: none;
+  }
+  
+  .debug-safe-areas::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--safe-area-bottom);
+    background: rgba(255, 0, 0, 0.3);
+    z-index: 10000;
+    pointer-events: none;
+  }
+}

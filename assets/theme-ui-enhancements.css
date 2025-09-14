@@ -1,0 +1,862 @@
+/**
+ * Professional Theme UI Enhancements - Dawn Theme
+ * 
+ * This file contains comprehensive UI improvements for the entire Dawn theme
+ * while respecting all Shopify theme settings and maintaining compatibility.
+ * 
+ * Features:
+ * - Modern design patterns and typography
+ * - Enhanced spacing and visual hierarchy
+ * - Improved responsive behavior
+ * - Better accessibility and user experience
+ * - Consistent design language across all sections
+ * - Professional animations and micro-interactions
+ * 
+ * @version 1.0.0
+ * @compatibility Dawn Theme 15.4.0+
+ * @author Professional Theme Enhancement
+ */
+
+/* ===============================================================
+   GLOBAL DESIGN SYSTEM ENHANCEMENTS
+   Modern design tokens and improved visual consistency
+   =============================================================== */
+
+:root {
+  /* Enhanced spacing scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Modern shadow system */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Enhanced transition system */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Professional color enhancements */
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
+  
+  /* Enhanced typography scale */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Modern border radius scale */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+}
+
+/* ===============================================================
+   ENHANCED TYPOGRAPHY SYSTEM
+   Improved readability and visual hierarchy
+   =============================================================== */
+
+/* Better font rendering */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced heading hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: rgb(var(--color-foreground));
+}
+
+h1 { font-size: clamp(1.875rem, 4vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.875rem); }
+h4 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+h5 { font-size: clamp(1rem, 1.5vw, 1.25rem); }
+h6 { font-size: clamp(0.875rem, 1vw, 1.125rem); }
+
+/* Enhanced body text */
+body {
+  line-height: 1.6;
+  color: rgb(var(--color-foreground));
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.65;
+}
+
+/* Better link styling */
+a:not(.button):not(.btn):not(.link--text) {
+  color: rgb(var(--color-foreground));
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--color-foreground), 0.3);
+  text-underline-offset: 0.2em;
+  transition: all var(--transition-fast);
+}
+
+a:not(.button):not(.btn):not(.link--text):hover {
+  text-decoration-color: rgba(var(--color-foreground), 0.8);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED BUTTON SYSTEM
+   Respects Shopify button settings while adding improvements
+   =============================================================== */
+
+.btn,
+.button,
+button[type="submit"],
+input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  border: var(--buttons-border-thickness, 1px) solid rgba(var(--color-button), var(--buttons-border-opacity, 1));
+  border-radius: var(--buttons-radius, 0.375rem);
+  background: rgb(var(--color-button));
+  color: rgb(var(--color-button-label));
+  box-shadow: var(--shadow-subtle);
+  min-height: 44px; /* Accessibility: minimum touch target */
+  padding: 0.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover,
+.button:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+  background: rgb(var(--color-button));
+  filter: brightness(0.95);
+}
+
+.btn:active,
+.button:active,
+button[type="submit"]:active,
+input[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* Secondary button style */
+.btn--secondary,
+.button--secondary {
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  border-color: rgba(var(--color-foreground), 0.2);
+}
+
+.btn--secondary:hover,
+.button--secondary:hover {
+  background: rgba(var(--color-foreground), 0.05);
+  border-color: rgba(var(--color-foreground), 0.3);
+}
+
+/* ===============================================================
+   ENHANCED CARD SYSTEM
+   Respects Shopify card settings with modern improvements
+   =============================================================== */
+
+.card {
+  background: rgb(var(--color-background));
+  border: var(--border-width, 1px) solid rgba(var(--color-foreground), var(--border-opacity, 0.1));
+  border-radius: var(--border-radius, var(--radius-lg));
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  border-color: rgba(var(--color-foreground), calc(var(--border-opacity, 0.1) + 0.05));
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Product card enhancements */
+.card-product {
+  background: rgb(var(--color-background));
+  position: relative;
+}
+
+.card-product .card__media {
+  border-radius: var(--border-radius, var(--radius-lg)) var(--border-radius, var(--radius-lg)) 0 0;
+  overflow: hidden;
+}
+
+.card-product .card__content {
+  padding: var(--spacing-lg);
+}
+
+.card-product .card__heading {
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  margin-bottom: var(--spacing-sm);
+}
+
+.card-product .price {
+  font-weight: var(--font-weight-semibold);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED FORM SYSTEM
+   Respects Shopify input settings with improvements
+   =============================================================== */
+
+.field__input,
+.select__select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: var(--inputs-border-thickness, 1px) solid rgba(var(--color-foreground), var(--inputs-border-opacity, 0.2));
+  border-radius: var(--inputs-radius, var(--radius-md));
+  background: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all var(--transition-base);
+  min-height: 44px; /* Accessibility */
+}
+
+.field__input:focus,
+.select__select:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgb(var(--color-foreground));
+  box-shadow: 0 0 0 3px rgba(var(--color-foreground), 0.1);
+  background: rgb(var(--color-background));
+}
+
+.field__input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+/* Enhanced field wrapper */
+.field {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.field__label {
+  display: block;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED GRID SYSTEM
+   Improved responsive behavior and spacing
+   =============================================================== */
+
+.grid {
+  display: grid;
+  gap: var(--grid-desktop-vertical-spacing, var(--spacing-lg)) var(--grid-desktop-horizontal-spacing, var(--spacing-lg));
+}
+
+.grid--1-col { grid-template-columns: 1fr; }
+.grid--2-col { grid-template-columns: repeat(2, 1fr); }
+.grid--3-col { grid-template-columns: repeat(3, 1fr); }
+.grid--4-col { grid-template-columns: repeat(4, 1fr); }
+
+@media screen and (max-width: 749px) {
+  .grid {
+    gap: var(--grid-mobile-vertical-spacing, var(--spacing-md)) var(--grid-mobile-horizontal-spacing, var(--spacing-md));
+  }
+  
+  .grid--2-col-tablet { grid-template-columns: 1fr; }
+  .grid--3-col { grid-template-columns: repeat(2, 1fr); }
+  .grid--4-col { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media screen and (max-width: 480px) {
+  .grid--3-col,
+  .grid--4-col { grid-template-columns: 1fr; }
+}
+
+/* ===============================================================
+   ENHANCED SECTION SPACING
+   Respects Shopify section padding settings
+   =============================================================== */
+
+.section {
+  padding: var(--spacing-sections-mobile, var(--spacing-lg)) 0;
+}
+
+@media screen and (min-width: 750px) {
+  .section {
+    padding: var(--spacing-sections-desktop, var(--spacing-xl)) 0;
+  }
+}
+
+/* ===============================================================
+   ENHANCED NAVIGATION AND MENU SYSTEM
+   Professional styling for all menu types
+   =============================================================== */
+
+.list-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list-menu__item {
+  position: relative;
+}
+
+.list-menu__item--link {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-base);
+  border-radius: var(--radius-sm);
+}
+
+.list-menu__item--link:hover {
+  background: rgba(var(--color-foreground), 0.05);
+  color: rgb(var(--color-foreground));
+}
+
+.list-menu__item--link[aria-current="page"] {
+  background: rgba(var(--color-foreground), 0.1);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ===============================================================
+   ENHANCED PRODUCT PAGE STYLING
+   Professional product display improvements
+   =============================================================== */
+
+.product__info-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.product__title h1 {
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.product__text {
+  color: rgba(var(--color-foreground), 0.8);
+  line-height: 1.6;
+}
+
+.price__container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+  color: rgb(var(--color-foreground));
+}
+
+.price--sold-out {
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+.price--on-sale .price__regular {
+  text-decoration: line-through;
+  color: rgba(var(--color-foreground), 0.6);
+  font-weight: var(--font-weight-normal);
+}
+
+.price--on-sale .price__sale {
+  color: var(--color-error);
+}
+
+/* Product variant picker enhancements */
+.product-form__variant-picker {
+  margin: var(--spacing-lg) 0;
+}
+
+.product-form__variant-picker .fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.product-form__variant-picker .legend {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED COLLECTION PAGE STYLING
+   Professional collection display improvements
+   =============================================================== */
+
+.collection-hero {
+  text-align: center;
+  padding: var(--spacing-2xl) 0;
+  background: rgba(var(--color-foreground), 0.02);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.collection-hero__title {
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.collection-hero__description {
+  max-width: 600px;
+  margin: 0 auto;
+  color: rgba(var(--color-foreground), 0.8);
+  line-height: 1.6;
+}
+
+/* Facets and filters */
+.facets {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.facet-filters__field {
+  margin-bottom: var(--spacing-md);
+}
+
+.facet-filters__label {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED CART AND CHECKOUT STYLING
+   Professional cart experience improvements
+   =============================================================== */
+
+.cart-drawer {
+  background: rgb(var(--color-background));
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  box-shadow: var(--shadow-large);
+}
+
+.cart-drawer__header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.cart-drawer__contents {
+  padding: var(--spacing-lg);
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item__image {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cart-item__details h3 {
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-xs);
+}
+
+.cart-item__price {
+  font-weight: var(--font-weight-semibold);
+  color: rgb(var(--color-foreground));
+}
+
+/* ===============================================================
+   ENHANCED FOOTER STYLING
+   Professional footer improvements
+   =============================================================== */
+
+.footer {
+  background: rgba(var(--color-foreground), 0.02);
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.footer__content-top {
+  padding: var(--spacing-2xl) 0;
+}
+
+.footer__content-bottom {
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.footer__blocks-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-2xl);
+}
+
+.footer-block__heading {
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  color: rgb(var(--color-foreground));
+}
+
+.footer-block__details-content {
+  color: rgba(var(--color-foreground), 0.8);
+  line-height: 1.6;
+}
+
+/* ===============================================================
+   ENHANCED MODAL AND POPUP STYLING
+   Professional modal improvements
+   =============================================================== */
+
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal__content {
+  background: rgb(var(--color-background));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-large);
+  max-width: 600px;
+  margin: var(--spacing-2xl) auto;
+  overflow: hidden;
+}
+
+.modal__header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.modal__body {
+  padding: var(--spacing-lg);
+}
+
+.modal__footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid rgba(var(--color-foreground), 0.1);
+  background: rgba(var(--color-foreground), 0.02);
+}
+
+/* ===============================================================
+   ENHANCED SEARCH STYLING
+   Professional search experience
+   =============================================================== */
+
+.search__input {
+  background: rgb(var(--color-background));
+  border: 1px solid rgba(var(--color-foreground), 0.2);
+  border-radius: var(--radius-full);
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  font-size: 1rem;
+  transition: all var(--transition-base);
+}
+
+.search__input:focus {
+  outline: none;
+  border-color: rgb(var(--color-foreground));
+  box-shadow: 0 0 0 3px rgba(var(--color-foreground), 0.1);
+}
+
+.search__button {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(var(--color-foreground), 0.6);
+  cursor: pointer;
+}
+
+/* ===============================================================
+   ENHANCED BADGE AND TAG STYLING
+   Professional badges and tags
+   =============================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  background: rgba(var(--color-foreground), 0.1);
+  color: rgb(var(--color-foreground));
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(var(--color-foreground), var(--alpha-badge-border, 0.1));
+}
+
+.badge--sale {
+  background: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}
+
+.badge--sold-out {
+  background: rgba(var(--color-foreground), 0.6);
+  color: white;
+  border-color: rgba(var(--color-foreground), 0.6);
+}
+
+/* ===============================================================
+   ENHANCED ANIMATION SYSTEM
+   Respects user preferences for reduced motion
+   =============================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===============================================================
+   ENHANCED ACCESSIBILITY IMPROVEMENTS
+   Better focus states and screen reader support
+   =============================================================== */
+
+/* Enhanced focus indicators */
+:focus-visible {
+  outline: 2px solid rgb(var(--color-foreground));
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  z-index: 10000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Better screen reader support */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===============================================================
+   ENHANCED RESPONSIVE UTILITIES
+   Better responsive behavior across devices
+   =============================================================== */
+
+/* Hide/show utilities for different screen sizes */
+@media screen and (max-width: 749px) {
+  .small-hide { display: none !important; }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .medium-hide { display: none !important; }
+}
+
+@media screen and (min-width: 990px) {
+  .large-hide { display: none !important; }
+}
+
+@media screen and (max-width: 989px) {
+  .desktop-hide { display: none !important; }
+}
+
+@media screen and (min-width: 750px) {
+  .mobile-hide { display: none !important; }
+}
+
+/* Container queries for advanced responsive design */
+@container (max-width: 400px) {
+  .card__content {
+    padding: var(--spacing-md);
+  }
+}
+
+/* ===============================================================
+   PRINT STYLES
+   Better printing experience
+   =============================================================== */
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  .header,
+  .footer,
+  .cart-drawer,
+  .modal,
+  .announcement-bar {
+    display: none !important;
+  }
+  
+  .page-width {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+}
+
+/* ===============================================================
+   HIGH CONTRAST MODE SUPPORT
+   Better accessibility for high contrast users
+   =============================================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --border-opacity: 1;
+    --shadow-opacity: 0;
+  }
+  
+  .card {
+    border-width: 2px;
+  }
+  
+  .button, .btn {
+    border-width: 2px;
+  }
+}
+
+/* ===============================================================
+   DARK MODE PREPARATION
+   Future-ready dark mode support
+   =============================================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* This will be activated when Dawn adds official dark mode support */
+  :root {
+    --shadow-opacity: 0.2;
+  }
+}

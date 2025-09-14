@@ -35,6 +35,9 @@
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'sticky-header.js' | asset_url }}" defer="defer"></script>
+    
+    <!-- Theme Enhancement JavaScript -->
+    <script src="{{ 'theme-enhancements.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
@@ -47,6 +50,11 @@
     {{ 'mobile-header-override.css' | asset_url | stylesheet_tag }}
     {{ 'custom-mobile-header-rtl.css' | asset_url | stylesheet_tag }}
     {{ 'desktop-cart-fix.css' | asset_url | stylesheet_tag }}
+    
+    <!-- Theme UI Enhancements - Professional Theme-wide Improvements -->
+    {{ 'theme-ui-enhancements.css' | asset_url | stylesheet_tag }}
+    {{ 'mobile-ui-enhancements.css' | asset_url | stylesheet_tag }}
+    {{ 'theme-utilities.css' | asset_url | stylesheet_tag }}
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
