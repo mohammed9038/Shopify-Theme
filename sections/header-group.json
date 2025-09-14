@@ -22,8 +22,8 @@
         "header_item6": "none",
         "logo_position": "top-left",
         "mobile_logo_position": "center",
-        "logo_padding_top": 2,
-        "logo_padding_bottom": 2,
+        "logo_padding_top": 0,
+        "logo_padding_bottom": 0,
         "logo_padding_left": 0,
         "logo_padding_right": 0,
         "menu": "menu",
@@ -54,8 +54,8 @@
         "language_selector_border_color": "#dddddd",
         "enable_customer_avatar": true,
         "margin_bottom": 0,
-        "padding_top": 8,
-        "padding_bottom": 8
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     }
   },
