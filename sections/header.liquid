@@ -29,6 +29,31 @@
   Load only the required CSS components for better performance
   ===================================================================
 {% endcomment %}
+
+{%- liquid
+  assign sticky_header_type = section.settings.sticky_header_type
+  assign menu_type_desktop = section.settings.menu_type_desktop
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign background = section.settings.background
+  assign margin_bottom = section.settings.margin_bottom
+  assign menu_position = section.settings.menu_position
+  assign menu_alignment = section.settings.menu_alignment
+  assign menu_hover_color = section.settings.menu_hover_color
+  assign menu_text_color = section.settings.menu_text_color
+  assign menu_font_weight = section.settings.menu_font_weight
+  assign menu_font_size = section.settings.menu_font_size
+  assign menu_spacing = section.settings.menu_spacing
+  assign color_scheme = section.settings.color_scheme
+  assign show_line_separator = section.settings.show_line_separator
+  assign logo_position = section.settings.logo_position
+  assign mobile_logo_position = section.settings.mobile_logo_position
+  assign menu = section.settings.menu
+  assign search_type = section.settings.search_type
+  assign search_position = section.settings.search_position
+  assign enable_customer_avatar = section.settings.enable_customer_avatar
+  assign enable_country_selector = section.settings.enable_country_selector
+-%}
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-language-selector.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -37,16 +62,13 @@
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-gtranslate.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'mobile-header-override.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'enhanced-header-cart.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'custom-mobile-header.css' | asset_url }}" media="all">
+<link rel="stylesheet" href="{{ 'professional-header.css' | asset_url }}" media="all">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
-{%- if section.settings.menu_type_desktop == 'mega' -%}
+{%- if menu_type_desktop == 'mega' -%}
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
@@ -56,6 +78,32 @@
   Core styling for header structure and components
   ===================================================================
 {% endcomment %}
+
+{%- liquid
+  assign sticky_header_type = section.settings.sticky_header_type
+  assign menu_type_desktop = section.settings.menu_type_desktop
+  assign padding_top = section.settings.padding_top
+  assign padding_bottom = section.settings.padding_bottom
+  assign background = section.settings.background
+  assign margin_bottom = section.settings.margin_bottom
+  assign menu_position = section.settings.menu_position
+  assign menu_alignment = section.settings.menu_alignment
+  assign menu_hover_color = section.settings.menu_hover_color
+  assign menu_text_color = section.settings.menu_text_color
+  assign menu_font_weight = section.settings.menu_font_weight
+  assign menu_font_size = section.settings.menu_font_size
+  assign menu_spacing = section.settings.menu_spacing
+  assign color_scheme = section.settings.color_scheme
+  assign show_line_separator = section.settings.show_line_separator
+  assign logo_position = section.settings.logo_position
+  assign mobile_logo_position = section.settings.mobile_logo_position
+  assign menu = section.settings.menu
+  assign search_type = section.settings.search_type
+  assign search_position = section.settings.search_position
+  assign enable_customer_avatar = section.settings.enable_customer_avatar
+  assign enable_country_selector = section.settings.enable_country_selector
+-%}
+
 {%- style -%}
   /* =========================================================================
      LAYOUT & STRUCTURE
@@ -74,7 +122,7 @@
   }
   
   /* Logo size reduction when sticky */
-  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+  {%- if sticky_header_type == 'reduce-logo-size' -%}
     .scrolled-past-header .header__heading-logo-wrapper {
       width: 75%;
       transition: width 0.2s ease-out;
@@ -82,7 +130,7 @@
   {%- endif -%}
   
   /* Hide drawer on desktop when not using drawer menu, but always show on mobile */
-  {%- if section.settings.menu_type_desktop != "drawer" -%}
+  {%- if menu_type_desktop != "drawer" -%}
     @media screen and (min-width: 990px) {
       header-drawer {
         display: none;
@@ -278,15 +326,15 @@
      ========================================================================= */
   
   .header {
-    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+    padding: {{ padding_top | times: 0.5 | round: 0 }}px 3rem {{ padding_bottom | times: 0.5 | round: 0 }}px 3rem;
     transition: padding 0.3s ease, box-shadow 0.3s ease;
-    background-color: {{ section.settings.background }};
+    background-color: {{ background }};
     box-shadow: 0 2px 10px rgba(var(--color-foreground), 0.04);
   }
 
   .section-header {
     position: sticky;
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+    margin-bottom: {{ margin_bottom | times: 0.75 | round: 0 }}px;
     z-index: 100;
     top: 0;
   }
@@ -295,7 +343,7 @@
      NAVIGATION MENU LAYOUT
      ========================================================================= */
   
-  {% if section.settings.menu_position == 'top' %}
+  {% if menu_position == 'top' %}
     /* TOP ROW MENU CONFIGURATION */
     .header-wrapper {
       display: flex;
@@ -307,9 +355,9 @@
       background: rgba(var(--color-background), 0.98);
       border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
       padding: 1rem 3rem;
-      {% if section.settings.menu_alignment == 'center' %}
+      {% if menu_alignment == 'center' %}
         text-align: center;
-      {% elsif section.settings.menu_alignment == 'right' %}
+      {% elsif menu_alignment == 'right' %}
         text-align: right;
       {% else %}
         text-align: left;
@@ -322,9 +370,9 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      {% if section.settings.menu_alignment == 'center' %}
+      {% if menu_alignment == 'center' %}
         justify-content: center;
-      {% elsif section.settings.menu_alignment == 'right' %}
+      {% elsif menu_alignment == 'right' %}
         justify-content: flex-end;
       {% else %}
         justify-content: flex-start;
@@ -346,9 +394,9 @@
   .header .header__inline-menu {
     display: flex;
     align-items: center;
-    {% if section.settings.menu_alignment == 'center' %}
+    {% if menu_alignment == 'center' %}
       justify-content: center;
-    {% elsif section.settings.menu_alignment == 'right' %}
+    {% elsif menu_alignment == 'right' %}
       justify-content: flex-end;
     {% else %}
       justify-content: flex-start;
@@ -371,7 +419,7 @@
   
   /* Hover state with subtle elevation */
   .header .list-menu__item--link:hover {
-    color: {{ section.settings.menu_hover_color }};
+    color: {{ menu_hover_color }};
     transform: translateY(-2px);
     background-color: rgba(var(--color-foreground), 0.03);
   }
@@ -390,7 +438,7 @@
     height: 2px;
     bottom: 0.4rem;
     left: 10%;
-    background-color: {{ section.settings.menu_hover_color }};
+    background-color: {{ menu_hover_color }};
     transform-origin: bottom center;
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     opacity: 0.85;
@@ -419,16 +467,16 @@
 
   /* Menu item appearance */
   .list-menu__item--link {
-    color: {{ section.settings.menu_text_color }};
-    font-weight: {{ section.settings.menu_font_weight }};
-    font-size: {{ section.settings.menu_font_size }}px;
-    margin-right: {{ section.settings.menu_spacing }}px;
+    color: {{ menu_text_color }};
+    font-weight: {{ menu_font_weight }};
+    font-size: {{ menu_font_size }}px;
+    margin-right: {{ menu_spacing }}px;
     position: relative;
   }
   
   /* Menu item hover state */
   .list-menu__item--link:hover {
-    color: {{ section.settings.menu_hover_color }};
+    color: {{ menu_hover_color }};
     opacity: 0.9;
   }
   
@@ -495,13 +543,13 @@
      SEARCH COMPONENT STYLING
      ========================================================================= */
   
-  {% if section.settings.search_type == 'bar' %}
+  {% if search_type == 'bar' %}
     .header__search--bar {
       display: flex;
       align-items: center;
-      {% if section.settings.search_position == 'left' %}
+      {% if search_position == 'left' %}
         order: -1;
-      {% elsif section.settings.search_position == 'center' %}
+      {% elsif search_position == 'center' %}
         order: 0;
         justify-self: center;
       {% else %}
@@ -839,27 +887,27 @@
   endif
 
   assign header_tag = 'div'
-  if section.settings.sticky_header_type != 'none'
+  if sticky_header_type != 'none'
     assign header_tag = 'sticky-header'
   endif
 -%}
 
 <{{ header_tag }}
   {% if header_tag == 'sticky-header' %}
-    data-sticky-type="{{ section.settings.sticky_header_type }}"
+    data-sticky-type="{{ sticky_header_type }}"
   {% endif %}
-  class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
+  class="header-wrapper color-{{ color_scheme }} gradient{% if show_line_separator %} header-wrapper--border-bottom{% endif %}"
 >
-  {%- if section.settings.menu_position == 'top' and section.settings.menu != blank -%}
+  {%- if menu_position == 'top' and menu != blank -%}
     <div class="header__top-menu page-width">
-      {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+      {%- if menu_type_desktop == 'dropdown' -%}
         {% render 'header-dropdown-menu' %}
-      {%- elsif section.settings.menu_type_desktop == 'mega' -%}
+      {%- elsif menu_type_desktop == 'mega' -%}
         {% render 'header-mega-menu' %}
       {%- else -%}
         <nav class="header__inline-menu">
           <ul class="list-menu list-menu--inline" role="list">
-            {%- for link in section.settings.menu.links -%}
+            {%- for link in menu.links -%}
               <li class="list-menu__item">
                 <a
                   href="{{ link.url }}"
@@ -888,13 +936,13 @@
       assign localization_forms = true
     endif
   -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+  <header class="header header--{{ logo_position }} header--mobile-{{ mobile_logo_position }} page-width{% if menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
     {%- liquid
-      if section.settings.menu != blank
+      if menu != blank
         render 'header-drawer'
       endif
 
-      if section.settings.logo_position == 'top-center' or section.settings.menu == blank
+      if logo_position == 'top-center' or menu == blank
         render 'header-search', input_id: 'Search-In-Modal-1'
       endif
     -%}
@@ -949,7 +997,7 @@
           {% comment %}Mobile cart - positioned after logo for mobile view only{% endcomment %}
           <div class="mobile-only-cart">
             <div class="header__item header__item--cart">
-              <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon">
+              <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon" aria-label="{{ 'templates.cart.cart' | t }}">
                 {% if cart == empty %}
                   <span class="svg-wrapper">
                     {{ 'icon-cart-empty.svg' | inline_asset_content }}
@@ -985,7 +1033,7 @@
         {% elsif item_type == 'search' %}
           {% comment %}--- SEARCH ELEMENT ---{% endcomment %}
           <div class="header__item header__item--search">
-            {% if section.settings.search_type == 'bar' %}
+            {% if search_type == 'bar' %}
               <div class="header__search header__search--bar">
                 <form action="{{ routes.search_url }}" method="get" role="search" class="search">
                   <input
@@ -1010,10 +1058,10 @@
           <div class="header__item header__item--account">
             <a
               href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-              class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+              class="header__icon header__icon--account link focus-inset{% if menu != blank %} small-hide{% endif %}"
               rel="nofollow"
             >
-              {%- if section.settings.enable_customer_avatar -%}
+              {%- if enable_customer_avatar -%}
                 <account-icon>
                   {%- if customer and customer.has_avatar? -%}
                     {{ customer | avatar }}
@@ -1038,7 +1086,7 @@
         {% elsif item_type == 'cart' %}
           {% comment %}--- CART ELEMENT ---{% endcomment %}
           <div class="header__item header__item--cart">
-            <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+            <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
               {% if cart == empty %}
                 <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
               {% else %}
@@ -1069,9 +1117,9 @@
     </div>
 
     {%- comment -%} COUNTRY SELECTOR - Keep this separate from the sortable layout {%- endcomment -%}
-    <div class="header__localization{% if section.settings.enable_country_selector %} header__icons--localization header-localization{% endif %}">
+    <div class="header__localization{% if enable_country_selector %} header__icons--localization header-localization{% endif %}">
       <div class="desktop-localization-wrapper">
-        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+        {%- if enable_country_selector and localization.available_countries.size > 1 -%}
           <localization-form class="small-hide medium-hide" data-prevent-hide>
             {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
               <div>
@@ -1145,8 +1193,14 @@
     connectedCallback() {
       this.header = document.querySelector('.section-header');
       this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+        this.getAttribute('data-sticky-type') === 'always_sticky';
+      
+      const stickyType = this.getAttribute('data-sticky-type');
+      
+      // Add sticky header type class to document for CSS targeting
+      if (stickyType) {
+        document.documentElement.classList.add(`sticky-header-type--${stickyType}`);
+      }
       
       // Set initial header height
       this.setHeaderHeight();
@@ -1263,8 +1317,15 @@
      * Hide the header
      */
     hide() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
+      const stickyType = this.getAttribute('data-sticky-type');
+      
+      if (stickyType === 'always_sticky') return;
+      
+      if (stickyType === 'hide-on-scroll') {
+        this.header.parentNode.classList.add('shopify-section-header-hidden');
+      }
+      
+      this.header.classList.add('shopify-section-header-sticky');
       this.closeMenuDisclosure();
       this.closeSearchModal();
     }
@@ -1273,17 +1334,31 @@
      * Reveal the header
      */
     reveal() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-sticky', 'animate');
-      this.header.classList.remove('shopify-section-header-hidden');
+      const stickyType = this.getAttribute('data-sticky-type');
+      
+      if (stickyType === 'always_sticky') return;
+      
+      this.header.classList.add('shopify-section-header-sticky');
+      
+      if (stickyType === 'hide-on-scroll') {
+        this.header.parentNode.classList.add('animate');
+        this.header.parentNode.classList.remove('shopify-section-header-hidden');
+      }
     }
 
     /**
      * Reset header state
      */
     reset() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
+      const stickyType = this.getAttribute('data-sticky-type');
+      
+      if (stickyType === 'always_sticky' || stickyType === 'reduce-logo-size') return;
+      
+      this.header.parentNode.classList.remove('shopify-section-header-hidden', 'animate');
+      
+      if (stickyType === 'none') {
+        this.header.classList.remove('shopify-section-header-sticky');
+      }
     }
 
     /**
@@ -1990,6 +2065,34 @@
       "default": true,
       "label": "t:sections.header.settings.enable_customer_avatar.label",
       "info": "t:sections.header.settings.enable_customer_avatar.info"
+    },
+    {
+      "type": "header",
+      "content": "Sticky Header"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "Disabled"
+        },
+        {
+          "value": "always_sticky",
+          "label": "Always sticky"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "Reduce logo size when scrolling"
+        },
+        {
+          "value": "hide-on-scroll",
+          "label": "Hide when scrolling down, show when scrolling up"
+        }
+      ],
+      "default": "none",
+      "label": "Sticky header behavior"
     },
     {
       "type": "header",
