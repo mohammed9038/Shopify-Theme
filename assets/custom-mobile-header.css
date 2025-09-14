@@ -15,10 +15,48 @@
   display: none !important;
 }
 
-/* Explicit desktop rule to hide the mobile cart */
+/* Desktop header optimizations */
 @media screen and (min-width: 750px) {
+  /* Hide mobile cart on desktop - make sure it's completely hidden */
   .mobile-only-cart {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+  }
+  
+  /* Optimize desktop header layout */
+  .header.page-width {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 100%;
+  }
+  
+  /* Better space utilization for header items */
+  .header__sortable-layout {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  /* Logo positioning optimization */
+  .header__item--logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  
+  /* Fixed width for cart to prevent layout shift */
+  .header__item--cart {
+    width: auto;
+    margin-left: auto;
   }
 }
 
@@ -36,9 +74,15 @@
     justify-content: space-between;
     padding: 10px 15px;
     flex-wrap: nowrap;
-    height: 65px;
+    height: 55px; /* Reduced height to eliminate extra white space */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     background-color: var(--color-background);
+  }
+  
+  /* Ensure header is properly sized */
+  .header {
+    min-height: unset;
+    padding: 0;
   }
   
   /* Reset element ordering */
@@ -68,7 +112,8 @@
     max-height: 100%;
     overflow: visible;
     margin: 0;
-    padding-left: 10px;
+    padding-left: 0;
+    padding-right: 15px; /* Add spacing to the right of logo toward cart */
   }
   
   /* Standard cart positioning */
@@ -77,13 +122,13 @@
     display: flex;
     margin-right: 0;
     align-items: center;
-    padding-right: 5px;
+    padding-right: 0;
   }
   
   /* Specific spacing for mobile cart after logo */
   .mobile-only-cart {
-    margin-left: 15px;
-    padding-right: 10px;
+    margin-left: auto; /* Push cart to the right */
+    padding-right: 0;
   }
   
   /* Element visibility management */

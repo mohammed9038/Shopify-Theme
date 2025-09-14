@@ -37,6 +37,19 @@
     transform: none;
     opacity: 1;
   }
+  
+  /* Fix header sizing - eliminate unnecessary space */
+  .header {
+    min-height: unset;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  /* Hide desktop menu completely on mobile */
+  .header__inline-menu,
+  .header-wrapper .header__menu-item {
+    display: none !important;
+  }
 
   /* Maintain bottom navigation visibility */
   .mobile-bottom-nav.sticky {
