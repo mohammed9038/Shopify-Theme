@@ -23,16 +23,7 @@
   assign header_color_scheme = section.settings.header_color_scheme
 %}
 
-{% comment %} Critical CSS for header {% endcomment %}
-<style>
-  :root {
-    --header-height-mobile: {{ header_height_mobile }}px;
-    --header-height-desktop: {{ header_height_desktop }}px;
-    --logo-width-mobile: {{ logo_width_mobile }}px;
-    --logo-width-desktop: {{ logo_width_desktop }}px;
-    --header-padding-mobile: {{ section.settings.header_padding_mobile | default: 15 }}px;
-    --header-padding-desktop: {{ section.settings.header_padding_desktop | default: 20 }}px;
-  }
+{% comment %} Professional Header Markup {% endcomment %}
 
   /* Header Foundation */
   .section-header {
@@ -362,12 +353,7 @@
   }
 </style>
 
-{% comment %} Load non-critical CSS {% endcomment %}
-<link rel="preload" href="{{ 'section-header-advanced.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="{{ 'section-header-advanced.css' | asset_url }}"></noscript>
-
-{% comment %} Load JavaScript {% endcomment %}
-<script src="{{ 'header-professional.js' | asset_url }}" defer></script>
+{% comment %} Professional Header Markup {% endcomment %}
 
 <style>
   /* Logo styles */
