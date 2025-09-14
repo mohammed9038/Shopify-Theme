@@ -1,0 +1,45 @@
+/* Temporary overrides to stabilize header layout and visuals */
+
+/* Reduce heavy shadow on header wrapper */
+.header-wrapper {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.06) !important;
+}
+
+/* Normalize header height and vertical alignment */
+.header.page-width {
+  min-height: 72px !important;
+  align-items: center !important;
+}
+
+/* Keep desktop header content in a single line */
+@media (min-width: 990px) {
+  .header__desktop { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 20px !important; 
+  }
+  .header__desktop-left,
+  .header__desktop-center,
+  .header__desktop-right { 
+    align-items: center !important; 
+  }
+}
+
+/* Constrain search bar width on desktop to avoid overflow */
+@media (min-width: 990px) {
+  .header__desktop .search,
+  .header__search--bar .search { 
+    max-width: 560px !important; 
+    width: 100% !important; 
+  }
+}
+
+/* Icon buttons hover refinement */
+.header__icon:hover, .header__action:hover {
+  background-color: rgba(var(--color-foreground), 0.06) !important;
+  box-shadow: none !important;
+}
+
+/* Prevent double padding around search container chips */
+.header__search--bar { padding: 0 !important; }
