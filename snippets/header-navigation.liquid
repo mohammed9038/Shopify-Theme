@@ -1,0 +1,209 @@
+{% comment %}
+  Header Navigation Snippet
+  Accessible desktop navigation with dropdown support
+{% endcomment %}
+
+<nav class="header__navigation" role="navigation" aria-label="{{ 'general.accessibility.nav_main' | t }}">
+  <ul class="header__nav-list" role="menubar">
+    {% for link in menu.links %}
+      <li class="header__nav-item" role="none">
+        {% if link.links != blank %}
+          {% comment %} Dropdown menu {% endcomment %}
+          <details class="header__nav-dropdown" role="none">
+            <summary class="header__nav-link header__nav-link--dropdown" 
+                     role="menuitem" 
+                     aria-haspopup="true"
+                     aria-expanded="false">
+              {{ link.title }}
+              {% render 'icon-caret' %}
+            </summary>
+            <ul class="header__nav-submenu" role="menu" aria-label="{{ link.title }}">
+              {% for child_link in link.links %}
+                <li class="header__nav-subitem" role="none">
+                  <a href="{{ child_link.url }}" 
+                     class="header__nav-sublink"
+                     role="menuitem"
+                     {% if child_link.current %}aria-current="page"{% endif %}>
+                    {{ child_link.title }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% else %}
+          {% comment %} Simple link {% endcomment %}
+          <a href="{{ link.url }}" 
+             class="header__nav-link"
+             role="menuitem"
+             {% if link.current %}aria-current="page"{% endif %}>
+            {{ link.title }}
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<style>
+  /* Header Navigation Styles */
+  .header__navigation {
+    position: relative;
+  }
+  
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header__nav-item {
+    position: relative;
+  }
+  
+  .header__nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.2rem 0;
+    text-decoration: none;
+    color: rgb(var(--color-foreground));
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  
+  .header__nav-link:hover,
+  .header__nav-link:focus-visible {
+    color: rgb(var(--color-button));
+  }
+  
+  .header__nav-link[aria-current="page"] {
+    color: rgb(var(--color-button));
+  }
+  
+  .header__nav-link[aria-current="page"]::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0.2rem;
+    background: rgb(var(--color-button));
+  }
+  
+  /* Dropdown Styles */
+  .header__nav-dropdown {
+    position: relative;
+  }
+  
+  .header__nav-dropdown[open] .header__nav-link--dropdown {
+    color: rgb(var(--color-button));
+  }
+  
+  .header__nav-submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 20rem;
+    background: rgb(var(--color-background));
+    border: 0.1rem solid rgba(var(--color-foreground), 0.08);
+    border-radius: 0.8rem;
+    box-shadow: 0 0.8rem 3rem rgba(var(--color-foreground), 0.1);
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+    list-style: none;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-1rem);
+    animation: dropdown-enter 0.2s ease forwards;
+  }
+  
+  @keyframes dropdown-enter {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .header__nav-subitem {
+    margin: 0;
+  }
+  
+  .header__nav-sublink {
+    display: block;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    color: rgb(var(--color-foreground));
+    font-size: 1.4rem;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+  }
+  
+  .header__nav-sublink:hover,
+  .header__nav-sublink:focus-visible {
+    background: rgba(var(--color-button), 0.05);
+    color: rgb(var(--color-button));
+  }
+  
+  .header__nav-sublink[aria-current="page"] {
+    background: rgba(var(--color-button), 0.1);
+    color: rgb(var(--color-button));
+    font-weight: 600;
+  }
+  
+  /* Icon Styles */
+  .icon-caret {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .header__nav-dropdown[open] .icon-caret {
+    transform: rotate(180deg);
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 1199px) {
+    .header__nav-list {
+      gap: 2rem;
+    }
+    
+    .header__nav-link {
+      font-size: 1.4rem;
+    }
+  }
+  
+  @media screen and (max-width: 989px) {
+    .header__navigation {
+      display: none;
+    }
+  }
+  
+  /* High contrast support */
+  @media (prefers-contrast: high) {
+    .header__nav-submenu {
+      border-width: 0.2rem;
+      box-shadow: 0 0.4rem 1.2rem rgba(var(--color-foreground), 0.2);
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .header__nav-link,
+    .header__nav-sublink,
+    .icon-caret {
+      transition: none;
+    }
+    
+    .header__nav-submenu {
+      animation: none;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

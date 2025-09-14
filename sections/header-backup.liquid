@@ -1,360 +1,54 @@
 {% comment %}
   ===============================================================================
-  DAWN THEME - ENHANCED HEADER SECTION
+  SHOPIFY DAWN THEME - PROFESSIONAL HEADER SECTION
   ===============================================================================
   
-  Professional header implementation with:
-  - Clean mobile/desktop responsive design
-  - Sticky header functionality
-  - Optimized performance
-  - Shopify best practices
-  - Accessible navigation
+  This header section provides comprehensive customization options for:
+  - Navigation menus (dropdown, mega menu, drawer)
+  - Logo positioning and styling
+  - Search functionality (icon or bar)
+  - Responsive design
+  - Professional typography and spacing
+  - Language selection (GTranslate)
   
   Features:
-  - Mobile-first approach
-  - Minimal DOM structure
-  - Performance optimized CSS loading
-  - Touch-friendly mobile navigation
-  - Keyboard accessible desktop navigation
+  - Clean, organized code structure
+  - Sortable header elements
+  - Comprehensive customization options
+  - Mobile-first responsive design
+  - Performance optimized
+  - Professional animations and transitions
+  - SEO friendly
   
   ===============================================================================
 {% endcomment %}
 
-{% comment %} Load critical CSS inline for above-the-fold content {% endcomment %}
-<style>
-  .header-wrapper {
-    position: relative;
-    z-index: 3;
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 0;
-    position: relative;
-    background: rgb(var(--color-background));
-    border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
-  }
-  
-  /* Sticky header styles */
-  .header--sticky {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: rgba(var(--color-background), 0.95);
-    backdrop-filter: blur(10px);
-    transform: translateY(0);
-    transition: transform 0.3s ease;
-    border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.12);
-  }
-  
-  .header--sticky.header--hidden {
-    transform: translateY(-100%);
-  }
-  
-  .header--sticky + .main-content {
-    padding-top: var(--header-height, 70px);
-  }
-  
-  /* Mobile header layout */
-  .header__mobile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 1rem;
-  }
-  
-  .header__mobile-left,
-  .header__mobile-right {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-  }
-  
-  .header__mobile-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  
-  /* Desktop header layout */
-  .header__desktop {
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 2rem;
-  }
-  
-  @media screen and (min-width: 990px) {
-    .header__mobile {
-      display: none;
-    }
-    
-    .header__desktop {
-      display: flex;
-    }
-  }
-  
-  /* Logo styles */
-  .header__logo {
-    display: block;
-    text-decoration: none;
-    color: rgb(var(--color-foreground));
-  }
-  
-  .header__logo img {
-    height: auto;
-    max-width: 100%;
-    vertical-align: middle;
-  }
-  
-  /* Mobile menu button */
-  .header__menu-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    margin-left: -0.5rem;
-    color: rgb(var(--color-foreground));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .header__menu-icon {
-    width: 2.4rem;
-    height: 2.4rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .header__menu-icon span {
-    display: block;
-    width: 2rem;
-    height: 0.2rem;
-    background: rgb(var(--color-foreground));
-    margin: 0.2rem 0;
-    transition: 0.3s;
-  }
-  
-  /* Cart icon */
-  .header__cart {
-    text-decoration: none;
-    color: rgb(var(--color-foreground));
-    position: relative;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .header__cart-count {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: rgb(var(--color-button));
-    color: rgb(var(--color-button-text));
-    border-radius: 50%;
-    width: 1.8rem;
-    height: 1.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: 500;
-    transform: translate(50%, -50%);
-  }
-</style>
+{% comment %}
+  ===================================================================
+  STYLESHEET DEPENDENCIES
+  Load only the required CSS components for better performance
+  ===================================================================
+{% endcomment %}
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-language-selector.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search-modal-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-gtranslate.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
+<link rel="stylesheet" href="{{ 'mobile-header-override.css' | asset_url }}" media="all">
+<link rel="stylesheet" href="{{ 'enhanced-header-cart.css' | asset_url }}" media="all">
+<link rel="stylesheet" href="{{ 'custom-mobile-header.css' | asset_url }}" media="all">
 
-{% comment %} Non-critical CSS loaded asynchronously {% endcomment %}
-<link rel="preload" href="{{ 'section-header.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}"></noscript>
+{%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
 
-{% comment %} Load required JavaScript {% endcomment %}
-<script src="{{ 'sticky-header.js' | asset_url }}" defer></script>
-
-{% comment %} Header markup {% endcomment %}
-<div class="header-wrapper">
-  <header class="header page-width" id="header" data-sticky="{{ section.settings.sticky_header_type }}">
-    
-    {% comment %} Mobile Header Layout {% endcomment %}
-    <div class="header__mobile">
-      {% comment %} Mobile Left: Menu Button {% endcomment %}
-      <div class="header__mobile-left">
-        <button class="header__menu-button" 
-                aria-controls="mobile-menu-drawer" 
-                aria-expanded="false"
-                aria-label="{{ 'general.accessibility.menu' | t }}">
-          <div class="header__menu-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </button>
-      </div>
-      
-      {% comment %} Mobile Center: Logo {% endcomment %}
-      <div class="header__mobile-center">
-        {% if section.settings.logo %}
-          <a href="{{ routes.root_url }}" class="header__logo">
-            <img src="{{ section.settings.logo | image_url: width: 200 }}"
-                 alt="{{ shop.name | escape }}"
-                 width="{{ section.settings.logo.width }}"
-                 height="{{ section.settings.logo.height }}"
-                 loading="eager">
-          </a>
-        {% else %}
-          <a href="{{ routes.root_url }}" class="header__logo">
-            <span class="h2">{{ shop.name }}</span>
-          </a>
-        {% endif %}
-      </div>
-      
-      {% comment %} Mobile Right: Cart {% endcomment %}
-      <div class="header__mobile-right">
-        <a href="{{ routes.cart_url }}" class="header__cart" aria-label="{{ 'templates.cart.cart' | t }}">
-          {% render 'icon-cart' %}
-          {% if cart.item_count > 0 %}
-            <span class="header__cart-count">{{ cart.item_count }}</span>
-          {% endif %}
-        </a>
-      </div>
-    </div>
-    
-    {% comment %} Desktop Header Layout {% endcomment %}
-    <div class="header__desktop">
-      {% comment %} Desktop Left: Logo {% endcomment %}
-      <div class="header__desktop-left">
-        {% if section.settings.logo %}
-          <a href="{{ routes.root_url }}" class="header__logo">
-            <img src="{{ section.settings.logo | image_url: width: 300 }}"
-                 alt="{{ shop.name | escape }}"
-                 width="{{ section.settings.logo.width }}"
-                 height="{{ section.settings.logo.height }}"
-                 loading="eager">
-          </a>
-        {% else %}
-          <a href="{{ routes.root_url }}" class="header__logo">
-            <span class="h2">{{ shop.name }}</span>
-          </a>
-        {% endif %}
-      </div>
-      
-      {% comment %} Desktop Center: Navigation {% endcomment %}
-      <div class="header__desktop-center">
-        {% render 'header-navigation', menu: section.settings.menu %}
-      </div>
-      
-      {% comment %} Desktop Right: Search, Account, Cart {% endcomment %}
-      <div class="header__desktop-right">
-        {% if section.settings.enable_search %}
-          <button class="header__search-button" aria-label="{{ 'general.search.search' | t }}">
-            {% render 'icon-search' %}
-          </button>
-        {% endif %}
-        
-        <a href="{{ routes.account_url }}" class="header__account" aria-label="{{ 'customer.account.title' | t }}">
-          {% render 'icon-account' %}
-        </a>
-        
-        <a href="{{ routes.cart_url }}" class="header__cart" aria-label="{{ 'templates.cart.cart' | t }}">
-          {% render 'icon-cart' %}
-          {% if cart.item_count > 0 %}
-            <span class="header__cart-count">{{ cart.item_count }}</span>
-          {% endif %}
-        </a>
-      </div>
-    </div>
-    
-  </header>
-</div>
-
-{% comment %} Mobile Menu Drawer {% endcomment %}
-{% render 'mobile-menu-drawer', menu: section.settings.menu %}
-
-{% comment %} Search Modal {% endcomment %}
-{% if section.settings.enable_search %}
-  {% render 'search-modal' %}
-{% endif %}
-
-{% comment %} Schema for theme customizer {% endcomment %}
-{% schema %}
-{
-  "name": "Header",
-  "class": "section-header",
-  "max_blocks": 3,
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo image"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "min": 50,
-      "max": 300,
-      "step": 10,
-      "default": 150,
-      "unit": "px",
-      "label": "Logo width"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "Menu"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "always",
-          "label": "Always show"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "Show on scroll up"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "Sticky header"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_search",
-      "default": true,
-      "label": "Enable search"
-    },
-    {
-      "type": "header",
-      "content": "Mobile settings"
-    },
-    {
-      "type": "checkbox",
-      "id": "mobile_logo_position",
-      "default": true,
-      "label": "Center logo on mobile"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ]
-}
-{% endschema %}
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
 
 {% comment %}
   ===================================================================
