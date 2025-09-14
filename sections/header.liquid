@@ -946,121 +946,82 @@
         render 'header-search', input_id: 'Search-In-Modal-1'
       endif
     -%}
-    
-    {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
-    <div class="header__sortable-layout">
-      {% comment %}--- We removed the mobile cart from here to ensure it appears after logo ---{% endcomment %}
-      
-      {% comment %}--- Header item sorting system ---{% endcomment %}
-      {% for i in (1..6) %}
-        {% assign item_setting = 'header_item' | append: i %}
-        {% assign item_type = section.settings[item_setting] %}
-        {% if i == 6 and section.settings.enable_language_selector and section.settings.header_item6 == blank %}
-          {% assign item_type = 'language' %}
+
+    {%- comment -%}
+      Rebuilt header layout: three regions (left / center / right).
+      - Left: menu (desktop), optional search icon
+      - Center: logo (with h1 on index)
+      - Right: search/modal, account, cart, language
+      Mobile: drawer shows via header-drawer; center logo; right icons remain.
+    {%- endcomment -%}
+
+    <div class="header__bar">
+      <div class="header__region header__region--left">
+        {% if menu != blank and section.settings.menu_position != 'top' and section.settings.menu_type_desktop != 'drawer' %}
+          <nav class="header__inline-menu">
+            {% if section.settings.menu_type_desktop == 'dropdown' %}
+              {% render 'header-dropdown-menu' %}
+            {% else %}
+              {% render 'header-mega-menu' %}
+            {% endif %}
+          </nav>
         {% endif %}
-        
-        {% if item_type == 'logo' %}
-          {% comment %}--- LOGO ELEMENT ---{% endcomment %}
-          <div class="header__item header__item--logo">
-            {%- if request.page_type == 'index' -%}
-              <h1 class="header__heading">
-            {%- endif -%}
-            <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-              {%- if settings.logo != blank -%}
-                <div class="header__heading-logo-wrapper">
-                  {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-                  {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-                  {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-                  {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-                  {{
-                    settings.logo
-                    | image_url: width: 600
-                    | image_tag:
-                      class: 'header__heading-logo motion-reduce',
-                      widths: widths,
-                      height: logo_height,
-                      width: settings.logo_width,
-                      alt: logo_alt,
-                      sizes: sizes,
-                      preload: true
-                  }}
-                </div>
-              {%- else -%}
-                <span class="h2">{{ shop.name }}</span>
-              {%- endif -%}
-            </a>
-            {%- if request.page_type == 'index' -%}
-              </h1>
-            {%- endif -%}
-          </div>
-          
-          {% comment %}Mobile cart - positioned after logo for mobile view only{% endcomment %}
-          <div class="mobile-only-cart">
-            <div class="header__item header__item--cart">
-              <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="mobile-cart-icon" aria-label="{{ 'templates.cart.cart' | t }}">
-                {% if cart == empty %}
-                  <span class="svg-wrapper">
-                    {{ 'icon-cart-empty.svg' | inline_asset_content }}
-                  </span>
-                {% else %}
-                  <span class="svg-wrapper">
-                    {{ 'icon-cart.svg' | inline_asset_content }}
-                  </span>
-                {% endif %}
-                <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-                {%- if cart != empty -%}
-                  <div class="cart-count-bubble">
-                    {%- if cart.item_count < 100 -%}
-                      <span aria-hidden="true">{{ cart.item_count }}</span>
-                    {%- endif -%}
-                    <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-                  </div>
-                {%- endif -%}
-              </a>
+      </div>
+
+      <div class="header__region header__region--center">
+        {%- if request.page_type == 'index' -%}
+          <h1 class="header__heading">
+        {%- endif -%}
+        <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset" aria-label="{{ shop.name | escape }}">
+          {%- if settings.logo != blank -%}
+            <div class="header__heading-logo-wrapper">
+              {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+              {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+              {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+              {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+              {{
+                settings.logo
+                | image_url: width: 600
+                | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+              }}
+            </div>
+          {%- else -%}
+            <span class="h2">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+        {%- if request.page_type == 'index' -%}
+          </h1>
+        {%- endif -%}
+      </div>
+
+      <div class="header__region header__region--right">
+        {% if search_type == 'bar' %}
+          <div class="header__item header__item--search">
+            <div class="header__search header__search--bar">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+                <input class="search__input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.search' | t }}" aria-label="{{ 'general.search.search' | t }}">
+                <button type="submit" class="search__button" aria-label="{{ 'general.search.search' | t }}">
+                  <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+                </button>
+              </form>
             </div>
           </div>
-        {% elsif item_type == 'menu' and section.settings.menu != blank and section.settings.menu_position != 'top' %}
-          {% comment %}--- NAVIGATION MENU ELEMENT ---{% endcomment %}
-          <div class="header__item header__item--menu">
-            {%- if section.settings.menu_type_desktop == 'dropdown' -%}
-              {% render 'header-dropdown-menu' %}
-            {%- elsif section.settings.menu_type_desktop == 'mega' -%}
-              {% render 'header-mega-menu' %}
-            {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
-              {% render 'header-mega-menu' %}
-            {%- endif -%}
-          </div>
-        {% elsif item_type == 'search' %}
-          {% comment %}--- SEARCH ELEMENT ---{% endcomment %}
+        {% else %}
           <div class="header__item header__item--search">
-            {% if search_type == 'bar' %}
-              <div class="header__search header__search--bar">
-                <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-                  <input
-                    class="search__input"
-                    type="search"
-                    name="q"
-                    value="{{ search.terms | escape }}"
-                    placeholder="{{ 'general.search.search' | t }}"
-                    aria-label="{{ 'general.search.search' | t }}"
-                  >
-                  <button type="submit" class="search__button" aria-label="{{ 'general.search.search' | t }}">
-                    <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
-                  </button>
-                </form>
-              </div>
-            {% else %}
-              {% render 'header-search', input_id: 'Search-In-Modal' %}
-            {% endif %}
+            {% render 'header-search', input_id: 'Search-In-Modal' %}
           </div>
-        {% elsif item_type == 'account' and shop.customer_accounts_enabled %}
-          {% comment %}--- ACCOUNT ELEMENT ---{% endcomment %}
+        {% endif %}
+
+        {% if shop.customer_accounts_enabled %}
           <div class="header__item header__item--account">
-            <a
-              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-              class="header__icon header__icon--account link focus-inset{% if menu != blank %} small-hide{% endif %}"
-              rel="nofollow"
-            >
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset{% if menu != blank %} small-hide{% endif %}" rel="nofollow">
               {%- if enable_customer_avatar -%}
                 <account-icon>
                   {%- if customer and customer.has_avatar? -%}
@@ -1083,37 +1044,35 @@
               </span>
             </a>
           </div>
-        {% elsif item_type == 'cart' %}
-          {% comment %}--- CART ELEMENT ---{% endcomment %}
-          <div class="header__item header__item--cart">
-            <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
-              {% if cart == empty %}
-                <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-              {% else %}
-                <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-              {% endif %}
-              <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-              {%- if cart != empty -%}
-                <div class="cart-count-bubble">
-                  {%- if cart.item_count < 100 -%}
-                    <span aria-hidden="true">{{ cart.item_count }}</span>
-                  {%- endif -%}
-                  <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
-                </div>
-              {%- endif -%}
-            </a>
-          </div>
-        {% elsif item_type == 'language' and section.settings.enable_language_selector %}
-          {% comment %}--- LANGUAGE SELECTOR ELEMENT ---{% endcomment %}
+        {% endif %}
+
+        <div class="header__item header__item--cart">
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble" aria-label="{{ 'templates.cart.cart' | t }}">
+            {% if cart == empty %}
+              <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+            {% else %}
+              <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+
+        {% if section.settings.enable_language_selector %}
           <div class="header__item header__item--language">
             <div class="header__language-selector">
               <div class="gtranslate_wrapper"></div>
             </div>
           </div>
         {% endif %}
-      {% endfor %}
-      
-      {% comment %}--- No fallback language selector needed anymore ---{% endcomment %}
+      </div>
     </div>
 
     {%- comment -%} COUNTRY SELECTOR - Keep this separate from the sortable layout {%- endcomment -%}

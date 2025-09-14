@@ -522,6 +522,50 @@
   }
 }
 
+/* ===============================================================
+   NEW HEADER BAR LAYOUT (LEFT / CENTER / RIGHT)
+   Clean, consistent alignment across breakpoints
+   =============================================================== */
+.header__bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+.header__region {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.header__region--left { justify-content: flex-start; }
+.header__region--center { justify-content: center; }
+.header__region--right { justify-content: flex-end; gap: 0.25rem; }
+
+/* Keep icons compact but tappable */
+.header__icon { padding: 0.5rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+.header__item--cart { position: relative; }
+.header__item--cart .cart-count-bubble { position: absolute; top: -0.1rem; right: -0.35rem; }
+
+/* Logo wrapper sizing for consistent height */
+.header__heading-logo-wrapper { display: inline-flex; align-items: center; }
+.header__heading-link { display: inline-flex; align-items: center; }
+
+/* Desktop adjustments */
+@media screen and (min-width: 990px) {
+  .header__bar { grid-template-columns: 1.2fr auto 1fr; }
+  .header__region--right { gap: 0.5rem; }
+}
+
+/* Mobile layout: center logo, right actions; menu handled by drawer */
+@media screen and (max-width: 749px) {
+  .header__bar { grid-template-columns: 1fr auto 1fr; }
+  .header__region--left { justify-content: flex-start; }
+  .header__region--center { justify-content: center; }
+  .header__region--right { justify-content: flex-end; gap: 0.25rem; }
+  .header__inline-menu { display: none !important; }
+}
+
 /* Sticky header animation */
 .section-header.animate .header-wrapper {
   animation: slideDown 0.3s ease-out;
