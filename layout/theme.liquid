@@ -258,8 +258,7 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
-  {{ 'section-header-custom.css' | asset_url | stylesheet_tag }}
-  {{ 'header-layout-fixes.css' | asset_url | stylesheet_tag }}
+    {{ 'shopify-header.css' | asset_url | stylesheet_tag }}
 
     {%- if settings.cart_type == 'drawer' -%}
       {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
