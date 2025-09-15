@@ -21,7 +21,7 @@
       <div class="menu-drawer__inner-container">
         
         {%- liquid
-          assign drawer_order = section.settings.mobile_drawer_order | default: 'account-language-menu'
+          assign drawer_order = section.settings.mobile_drawer_order | default: 'account-language-menu-help'
           assign drawer_sections = drawer_order | split: '-'
         -%}
 
@@ -157,6 +157,23 @@
                     </li>
                   {%- endfor -%}
                 </ul>
+              </div>
+
+            {%- when 'help' -%}
+              <div class="shopify-drawer-section">
+                <h3 class="shopify-drawer-section-title">
+                  Help Center
+                </h3>
+                <a href="/pages/help" class="shopify-drawer-menu-link">
+                  <span class="svg-wrapper">
+                    <svg viewBox="0 0 20 20" class="icon">
+                      <path fill="currentColor" d="M10 1a9 9 0 1 0 9 9 9 9 0 0 0-9-9zm0 16.5A7.5 7.5 0 1 1 17.5 10 7.5 7.5 0 0 1 10 17.5z"/>
+                      <path fill="currentColor" d="M10 6.5a3.5 3.5 0 0 0-3.5 3.5.75.75 0 0 0 1.5 0 2 2 0 0 1 4 0c0 .75-.75 1.5-1.5 1.5a.75.75 0 0 0-.75.75V14a.75.75 0 0 0 1.5 0v-1.19A3.25 3.25 0 0 0 13.5 10a3.5 3.5 0 0 0-3.5-3.5z"/>
+                      <circle fill="currentColor" cx="10" cy="16" r="1"/>
+                    </svg>
+                  </span>
+                  Help Center
+                </a>
               </div>
           {%- endcase -%}
         {%- endfor -%}
