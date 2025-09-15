@@ -10,18 +10,204 @@
 
 <style>
   :root {
-    --logo-width: {{ section.settings.logo_width }};
+    /* Logo Settings */
+    --logo-width: {{ section.settings.logo_width | default: 150 }}px;
+    --mobile-logo-width: {{ section.settings.mobile_logo_width | default: 120 }}px;
+    --logo-margin-left: {{ section.settings.logo_margin_left | default: 0 }}px;
+    --logo-margin-right: {{ section.settings.logo_margin_right | default: 20 }}px;
+    
+    /* Header Colors */
+    --header-bg-color: {{ section.settings.header_background_color | default: '#ffffff' }};
+    --header-text-color: {{ section.settings.header_text_color | default: '#121212' }};
+    --header-link-color: {{ section.settings.header_link_color | default: '#121212' }};
+    --header-link-hover-color: {{ section.settings.header_link_hover_color | default: '#000000' }};
+    --header-border-color: {{ section.settings.header_border_color | default: '#e8e8e1' }};
+    
+    /* Header Background */
+    --header-bg-opacity: {{ section.settings.header_background_opacity | default: 100 }}%;
+    {% if section.settings.header_background_type == 'gradient' %}
+      --header-background: linear-gradient({{ section.settings.header_gradient_direction | default: 'to bottom' }}, {{ section.settings.header_gradient_start | default: '#ffffff' }}, {{ section.settings.header_gradient_end | default: '#f8f8f8' }});
+    {% elsif section.settings.header_background_type == 'transparent' %}
+      --header-background: transparent;
+    {% else %}
+      --header-background: {{ section.settings.header_background_color | default: '#ffffff' }};
+    {% endif %}
+    
+    /* Header Spacing */
+    --header-padding-top: {{ section.settings.header_padding_top | default: 16 }}px;
+    --header-padding-bottom: {{ section.settings.header_padding_bottom | default: 16 }}px;
+    --header-padding-left: {{ section.settings.header_padding_left | default: 20 }}px;
+    --header-padding-right: {{ section.settings.header_padding_right | default: 20 }}px;
+    --header-min-height: {{ section.settings.header_min_height | default: 70 }}px;
+    --header-max-width: {{ section.settings.header_max_width | default: 1400 }}px;
+    
+    /* Header Typography */
+    --header-font-family: {{ section.settings.header_font.family | default: 'Assistant' }};
+    --header-font-size: {{ section.settings.header_font_size | default: 14 }}px;
+    --header-font-weight: {{ section.settings.header_font_weight | default: '400' }};
+    --header-text-transform: {{ section.settings.header_text_transform | default: 'none' }};
+    --header-letter-spacing: {{ section.settings.header_letter_spacing | default: 0 }}px;
+    
+    /* Header Borders & Effects */
+    --header-border-width: {{ section.settings.header_border_width | default: 1 }}px;
+    --header-border-style: {{ section.settings.header_border_style | default: 'solid' }};
+    --header-border-radius: {{ section.settings.header_border_radius | default: 0 }}px;
+    
+    /* Header Shadow */
+    {% if section.settings.header_shadow %}
+      {% case section.settings.header_shadow_type %}
+        {% when 'light' %}
+          --header-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        {% when 'medium' %}
+          --header-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        {% when 'strong' %}
+          --header-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        {% when 'custom' %}
+          --header-shadow: {{ section.settings.header_custom_shadow | default: '0 2px 4px rgba(0,0,0,0.1)' }};
+        {% else %}
+          --header-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      {% endcase %}
+    {% else %}
+      --header-shadow: none;
+    {% endif %}
+    
+    /* Header Animations */
+    --header-transition-speed: {{ section.settings.header_transition_speed | default: 300 }}ms;
+    
+    /* Menu Settings */
+    --menu-item-spacing: {{ section.settings.menu_item_spacing | default: 30 }}px;
+    --menu-font-size: {{ section.settings.menu_font_size | default: 14 }}px;
+    --menu-font-weight: {{ section.settings.menu_font_weight | default: '500' }};
+    --menu-dropdown-bg: {{ section.settings.menu_dropdown_bg | default: '#ffffff' }};
+    --menu-dropdown-text: {{ section.settings.menu_dropdown_text | default: '#121212' }};
+    
+    /* Mobile Settings */
+    --mobile-header-height: {{ section.settings.mobile_header_height | default: 60 }}px;
+    --mobile-header-bg: {{ section.settings.mobile_header_bg | default: '#ffffff' }};
+    
+    /* Sticky Header */
+    --sticky-header-bg: {{ section.settings.sticky_header_bg | default: '#ffffff' }};
+    --sticky-header-opacity: {{ section.settings.sticky_header_opacity | default: 95 }}%;
   }
+
+  /* Apply custom font if selected */
+  {% if section.settings.header_font %}
+    .shopify-header {
+      font-family: {{ section.settings.header_font.family }}, {{ section.settings.header_font.fallback_families }};
+      font-weight: {{ section.settings.header_font.weight }};
+    }
+  {% endif %}
+
+  /* Header Base Styles */
+  .shopify-header {
+    background: var(--header-background);
+    color: var(--header-text-color);
+    padding: var(--header-padding-top) var(--header-padding-right) var(--header-padding-bottom) var(--header-padding-left);
+    min-height: var(--header-min-height);
+    max-width: {% if section.settings.header_full_width %}100%{% else %}var(--header-max-width){% endif %};
+    margin: 0 auto;
+    font-size: var(--header-font-size);
+    font-weight: var(--header-font-weight);
+    text-transform: var(--header-text-transform);
+    letter-spacing: var(--header-letter-spacing);
+    border-radius: var(--header-border-radius);
+    box-shadow: var(--header-shadow);
+    transition: all var(--header-transition-speed) ease;
+    {% if section.settings.header_fixed_position %}
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    {% endif %}
+    {% if section.settings.header_border_top %}
+      border-top: var(--header-border-width) var(--header-border-style) var(--header-border-color);
+    {% endif %}
+    {% if section.settings.header_border_bottom %}
+      border-bottom: var(--header-border-width) var(--header-border-style) var(--header-border-color);
+    {% endif %}
+    justify-content: {{ section.settings.header_alignment | default: 'space-between' }};
+  }
+
+  /* Header Links */
+  .shopify-header a {
+    color: var(--header-link-color);
+    text-decoration: none;
+    transition: all var(--header-transition-speed) ease;
+  }
+
+  .shopify-header a:hover {
+    color: var(--header-link-hover-color);
+    {% case section.settings.header_hover_effect %}
+      {% when 'underline' %}
+        text-decoration: underline;
+      {% when 'background' %}
+        background-color: rgba(0,0,0,0.05);
+        padding: 4px 8px;
+        border-radius: 4px;
+      {% when 'scale' %}
+        transform: scale(1.05);
+      {% when 'glow' %}
+        text-shadow: 0 0 8px currentColor;
+    {% endcase %}
+  }
+
+  /* Logo Styling */
+  .shopify-header .logo {
+    margin-left: var(--logo-margin-left);
+    margin-right: var(--logo-margin-right);
+    transition: transform var(--header-transition-speed) ease;
+  }
+
+  .shopify-header .logo img {
+    width: var(--logo-width);
+    height: auto;
+  }
+
+  {% if section.settings.logo_hover_effect %}
+    .shopify-header .logo:hover {
+      transform: scale(1.05);
+    }
+  {% endif %}
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .shopify-header {
+      min-height: var(--mobile-header-height);
+      background: var(--mobile-header-bg);
+    }
+    
+    .shopify-header .logo img {
+      width: var(--mobile-logo-width);
+    }
+  }
+
+  /* Sticky Header Styles */
+  {% if section.settings.sticky_header_type != 'none' %}
+    .shopify-header.is-sticky {
+      background: var(--sticky-header-bg);
+      opacity: var(--sticky-header-opacity);
+      {% if section.settings.sticky_header_shadow %}
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      {% endif %}
+    }
+  {% endif %}
+
+  /* Custom CSS */
+  {% if section.settings.custom_header_css %}
+    {{ section.settings.custom_header_css }}
+  {% endif %}
 </style>
 
 <{{ header_tag }}
   {% if header_tag == 'sticky-header' %}
     data-sticky-type="{{ section.settings.sticky_header_type }}"
   {% endif %}
-  class="shopify-header header-layout-{{ section.settings.desktop_layout }}"
+  class="shopify-header header-layout-{{ section.settings.desktop_layout }}{% if section.settings.header_css_class %} {{ section.settings.header_css_class }}{% endif %}"
   dir="{{ shop.locale.dir | default: 'ltr' }}"
 >
-  <header class="shopify-header-wrapper">
+  <header class="shopify-header-wrapper" style="justify-content: {{ section.settings.header_alignment | default: 'space-between' }}; align-items: center;"
+>
     
     {%- if section.settings.desktop_layout == 'two-row' and section.settings.show_top_bar -%}
       <!-- Top Navigation Bar -->
@@ -55,15 +241,15 @@
         <div class="shopify-header-left">
           {%- comment -%} Show logo on left for two-row layout, or when single-row with logo_position left {%- endcomment -%}
           {%- if section.settings.desktop_layout == 'two-row' or section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'left' -%}
-            <div class="shopify-logo">
+            <div class="shopify-logo logo">
               {%- if section.settings.logo != blank -%}
-                <a href="{{ routes.root_url }}">
-                  <img src="{{ section.settings.logo | image_url: width: section.settings.desktop_logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.desktop_logo_width }}" height="auto" class="logo-dark">
+                <a href="{{ routes.root_url }}" {% if section.settings.logo_hover_effect %}class="logo-hover"{% endif %}>
+                  <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto" class="logo-dark">
                   
                   {%- if section.settings.logo_light != blank -%}
-                    <img src="{{ section.settings.logo_light | image_url: width: section.settings.desktop_logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.desktop_logo_width }}" height="auto" class="logo-light">
+                    <img src="{{ section.settings.logo_light | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto" class="logo-light">
                   {%- else -%}
-                    <img src="{{ section.settings.logo | image_url: width: section.settings.desktop_logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.desktop_logo_width }}" height="auto" class="logo-light">
+                    <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto" class="logo-light">
                   {%- endif -%}
                 </a>
               {%- else -%}
@@ -159,8 +345,22 @@
             {%- endif -%}
 
             <a href="{{ routes.cart_url }}" class="shopify-icon shopify-icon-cart" id="shopify-cart-icon">
-              <svg viewBox="0 0 20 20" class="shopify-icon-svg">
-                <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
+              <svg viewBox="0 0 24 24" class="shopify-icon-svg modern-cart-icon">
+                <defs>
+                  <linearGradient id="cartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:currentColor;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:currentColor;stop-opacity:0.8" />
+                  </linearGradient>
+                </defs>
+                <!-- Cart body with rounded corners -->
+                <path fill="url(#cartGradient)" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" 
+                      d="M3 3h2l.4 2m0 0h13.2a1 1 0 0 1 .98 1.2l-1.2 6a1 1 0 0 1-.98.8H6.4m0-8l1.2 6m0 0L9 21m-1.4-10h11.4"/>
+                <!-- Cart wheels -->
+                <circle cx="9" cy="20" r="1" fill="currentColor"/>
+                <circle cx="20" cy="20" r="1" fill="currentColor"/>
+                <!-- Modern cart handle -->
+                <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" 
+                      d="M7 7h11l-1 5H8l-1-5z"/>
               </svg>
               <span class="shopify-icon-label">Cart</span>
               {%- if cart != empty -%}
@@ -268,8 +468,22 @@
 
         <div class="shopify-mobile-icons">
           <a href="{{ routes.cart_url }}" class="shopify-icon shopify-icon-cart">
-            <svg viewBox="0 0 20 20" class="shopify-icon-svg">
-              <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
+            <svg viewBox="0 0 24 24" class="shopify-icon-svg modern-cart-icon">
+              <defs>
+                <linearGradient id="cartGradientMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:currentColor;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:currentColor;stop-opacity:0.8" />
+                </linearGradient>
+              </defs>
+              <!-- Cart body with rounded corners -->
+              <path fill="url(#cartGradientMobile)" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" 
+                    d="M3 3h2l.4 2m0 0h13.2a1 1 0 0 1 .98 1.2l-1.2 6a1 1 0 0 1-.98.8H6.4m0-8l1.2 6m0 0L9 21m-1.4-10h11.4"/>
+              <!-- Cart wheels -->
+              <circle cx="9" cy="20" r="1" fill="currentColor"/>
+              <circle cx="20" cy="20" r="1" fill="currentColor"/>
+              <!-- Modern cart handle -->
+              <path stroke="currentColor" stroke-width="1.5" stroke-linecap="round" 
+                    d="M7 7h11l-1 5H8l-1-5z"/>
             </svg>
             {%- if cart != empty -%}
               <span class="shopify-cart-count">{{ cart.item_count }}</span>
@@ -288,6 +502,10 @@
   "class": "section-header",
   "settings": [
     {
+      "type": "header",
+      "content": "Header Layout & Structure"
+    },
+    {
       "type": "select",
       "id": "desktop_layout",
       "label": "Desktop layout",
@@ -299,6 +517,10 @@
         {
           "value": "two-row",
           "label": "Two row"
+        },
+        {
+          "value": "three-row",
+          "label": "Three row"
         }
       ],
       "default": "two-row"
@@ -308,6 +530,30 @@
       "id": "show_top_bar",
       "label": "Show top bar",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left aligned"
+        },
+        {
+          "value": "center",
+          "label": "Center aligned"
+        },
+        {
+          "value": "space-between",
+          "label": "Space between"
+        },
+        {
+          "value": "space-around",
+          "label": "Space around"
+        }
+      ],
+      "default": "space-between"
     },
     {
       "type": "select",
@@ -321,6 +567,10 @@
         {
           "value": "center",
           "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
         }
       ],
       "default": "left"
@@ -330,6 +580,10 @@
       "id": "search_position",
       "label": "Search position",
       "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
         {
           "value": "center",
           "label": "Center"
@@ -358,12 +612,6 @@
       "default": "center"
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "Menu"
-    },
-    {
       "type": "checkbox",
       "id": "enable_search",
       "default": true,
@@ -376,24 +624,405 @@
       "label": "Enable customer account"
     },
     {
+      "type": "header",
+      "content": "Header Colors & Background"
+    },
+    {
+      "type": "color",
+      "id": "header_background_color",
+      "label": "Header background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "header_link_color",
+      "label": "Header link color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "header_link_hover_color",
+      "label": "Header link hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "header_border_color",
+      "label": "Header border color",
+      "default": "#e8e8e1"
+    },
+    {
+      "type": "range",
+      "id": "header_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "%",
+      "label": "Header background opacity"
+    },
+    {
       "type": "select",
-      "id": "sticky_header_type",
+      "id": "header_background_type",
+      "label": "Header background type",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid color"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        },
+        {
+          "value": "transparent",
+          "label": "Transparent"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "color",
+      "id": "header_gradient_start",
+      "label": "Gradient start color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_gradient_end",
+      "label": "Gradient end color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "select",
+      "id": "header_gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        {
+          "value": "to right",
+          "label": "Left to right"
+        },
+        {
+          "value": "to left",
+          "label": "Right to left"
+        },
+        {
+          "value": "to bottom",
+          "label": "Top to bottom"
+        },
+        {
+          "value": "to top",
+          "label": "Bottom to top"
+        },
+        {
+          "value": "45deg",
+          "label": "Diagonal (45°)"
+        }
+      ],
+      "default": "to bottom"
+    },
+    {
+      "type": "header",
+      "content": "Header Spacing & Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "header_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 16,
+      "unit": "px",
+      "label": "Header top padding"
+    },
+    {
+      "type": "range",
+      "id": "header_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 16,
+      "unit": "px",
+      "label": "Header bottom padding"
+    },
+    {
+      "type": "range",
+      "id": "header_padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 20,
+      "unit": "px",
+      "label": "Header left padding"
+    },
+    {
+      "type": "range",
+      "id": "header_padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 20,
+      "unit": "px",
+      "label": "Header right padding"
+    },
+    {
+      "type": "range",
+      "id": "header_min_height",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "default": 70,
+      "unit": "px",
+      "label": "Minimum header height"
+    },
+    {
+      "type": "range",
+      "id": "header_max_width",
+      "min": 1000,
+      "max": 2000,
+      "step": 50,
+      "default": 1400,
+      "unit": "px",
+      "label": "Maximum header width"
+    },
+    {
+      "type": "header",
+      "content": "Header Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "header_font",
+      "label": "Header font family",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "header_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "unit": "px",
+      "label": "Header font size"
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "header_text_transform",
+      "label": "Header text transform",
       "options": [
         {
           "value": "none",
           "label": "None"
         },
         {
-          "value": "on-scroll-up",
-          "label": "On scroll up"
+          "value": "uppercase",
+          "label": "Uppercase"
         },
         {
-          "value": "always",
-          "label": "Always"
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
         }
       ],
-      "default": "on-scroll-up",
-      "label": "Sticky header"
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "min": -2,
+      "max": 5,
+      "step": 0.1,
+      "default": 0,
+      "unit": "px",
+      "label": "Header letter spacing"
+    },
+    {
+      "type": "header",
+      "content": "Header Borders & Effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_border_top",
+      "label": "Show top border",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "header_border_bottom",
+      "label": "Show bottom border",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "header_border_width",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1,
+      "unit": "px",
+      "label": "Border width"
+    },
+    {
+      "type": "select",
+      "id": "header_border_style",
+      "label": "Border style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "dashed",
+          "label": "Dashed"
+        },
+        {
+          "value": "dotted",
+          "label": "Dotted"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_shadow",
+      "label": "Enable header shadow",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "header_shadow_type",
+      "label": "Shadow type",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light shadow"
+        },
+        {
+          "value": "medium",
+          "label": "Medium shadow"
+        },
+        {
+          "value": "strong",
+          "label": "Strong shadow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom shadow"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "text",
+      "id": "header_custom_shadow",
+      "label": "Custom shadow CSS",
+      "default": "0 2px 4px rgba(0,0,0,0.1)",
+      "info": "Enter custom CSS box-shadow value"
+    },
+    {
+      "type": "range",
+      "id": "header_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0,
+      "unit": "px",
+      "label": "Header border radius"
+    },
+    {
+      "type": "header",
+      "content": "Header Animations & Interactions"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_smooth_scroll",
+      "label": "Enable smooth scrolling",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "header_fade_on_scroll",
+      "label": "Fade header on scroll",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "header_hover_effect",
+      "label": "Link hover effect",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        },
+        {
+          "value": "background",
+          "label": "Background color"
+        },
+        {
+          "value": "scale",
+          "label": "Scale effect"
+        },
+        {
+          "value": "glow",
+          "label": "Glow effect"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "range",
+      "id": "header_transition_speed",
+      "min": 100,
+      "max": 1000,
+      "step": 50,
+      "default": 300,
+      "unit": "ms",
+      "label": "Animation transition speed"
+    },
+    {
+      "type": "header",
+      "content": "Logo Styling"
     },
     {
       "type": "image_picker",
@@ -401,14 +1030,172 @@
       "label": "Logo image"
     },
     {
+      "type": "image_picker",
+      "id": "logo_light",
+      "label": "Logo image (light mode)",
+      "info": "Optional logo for light backgrounds"
+    },
+    {
       "type": "range",
       "id": "logo_width",
       "min": 50,
-      "max": 300,
+      "max": 400,
       "step": 10,
       "default": 150,
       "unit": "px",
-      "label": "Logo width"
+      "label": "Desktop logo width"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "min": 30,
+      "max": 200,
+      "step": 5,
+      "default": 120,
+      "unit": "px",
+      "label": "Mobile logo width"
+    },
+    {
+      "type": "range",
+      "id": "logo_margin_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "unit": "px",
+      "label": "Logo right margin"
+    },
+    {
+      "type": "range",
+      "id": "logo_margin_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px",
+      "label": "Logo left margin"
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_hover_effect",
+      "label": "Enable logo hover effect",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Navigation Menu Styling"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_alignment",
+      "label": "Menu alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mega_menu",
+      "label": "Enable mega menu",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "menu_item_spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "px",
+      "label": "Menu item spacing"
+    },
+    {
+      "type": "range",
+      "id": "menu_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px",
+      "label": "Menu font size"
+    },
+    {
+      "type": "select",
+      "id": "menu_font_weight",
+      "label": "Menu font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "menu_dropdown_bg",
+      "label": "Dropdown background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "menu_dropdown_text",
+      "label": "Dropdown text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Header Settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_header_height",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "default": 60,
+      "unit": "px",
+      "label": "Mobile header height"
+    },
+    {
+      "type": "color",
+      "id": "mobile_header_bg",
+      "label": "Mobile header background",
+      "default": "#ffffff"
     },
     {
       "type": "select",
@@ -429,6 +1216,98 @@
       ],
       "default": "account-language-menu-help",
       "label": "Mobile drawer content order"
+    },
+    {
+      "type": "header",
+      "content": "Advanced Header Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "default": true,
+      "label": "Enable search"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "On scroll up"
+        },
+        {
+          "value": "always",
+          "label": "Always"
+        },
+        {
+          "value": "fade-out",
+          "label": "Fade out on scroll"
+        },
+        {
+          "value": "slide-up",
+          "label": "Slide up on scroll"
+        }
+      ],
+      "default": "on-scroll-up",
+      "label": "Sticky header behavior"
+    },
+    {
+      "type": "color",
+      "id": "sticky_header_bg",
+      "label": "Sticky header background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "sticky_header_opacity",
+      "min": 70,
+      "max": 100,
+      "step": 5,
+      "default": 95,
+      "unit": "%",
+      "label": "Sticky header opacity"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header_shadow",
+      "label": "Add shadow to sticky header",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Custom CSS & Advanced"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_header_css",
+      "label": "Custom header CSS",
+      "placeholder": ".shopify-header { /* Your custom styles */ }",
+      "info": "Add custom CSS to override default header styles"
+    },
+    {
+      "type": "text",
+      "id": "header_css_class",
+      "label": "Additional CSS classes",
+      "placeholder": "my-custom-class another-class",
+      "info": "Add custom CSS classes to the header element"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_full_width",
+      "label": "Full width header",
+      "default": false,
+      "info": "Remove container constraints for full-width header"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_fixed_position",
+      "label": "Fixed position header",
+      "default": false,
+      "info": "Make header fixed at top of viewport"
     }
   ]
 }

@@ -6,6 +6,35 @@ class CartDrawer extends HTMLElement {
     this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
     this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
     this.setHeaderCartIconAccessibility();
+    this.initModernCartIcon();
+  }
+
+  initModernCartIcon() {
+    // Add modern cart icon interactions
+    const cartIcon = document.querySelector('#shopify-cart-icon');
+    const cartCount = cartIcon?.querySelector('.shopify-cart-count');
+    
+    if (cartIcon) {
+      // Add cart icon click animation
+      cartIcon.addEventListener('click', () => {
+        cartIcon.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          cartIcon.style.transform = '';
+        }, 150);
+      });
+
+      // Add pulse animation to cart count when items are added
+      if (cartCount) {
+        const observer = new MutationObserver(() => {
+          cartCount.classList.add('animate-pulse');
+          setTimeout(() => {
+            cartCount.classList.remove('animate-pulse');
+          }, 400);
+        });
+        
+        observer.observe(cartCount, { childList: true, characterData: true });
+      }
+    }
   }
 
   setHeaderCartIconAccessibility() {
