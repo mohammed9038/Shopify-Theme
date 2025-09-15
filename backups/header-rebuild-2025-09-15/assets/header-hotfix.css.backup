@@ -1,0 +1,107 @@
+/* Temporary overrides to stabilize header layout and visuals */
+
+/* Reduce heavy shadow on header wrapper */
+.header-wrapper {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.06) !important;
+}
+
+/* Normalize header height and vertical alignment */
+.header.page-width {
+  min-height: 72px !important;
+  align-items: center !important;
+}
+
+/* Keep desktop header content in a single line */
+@media (min-width: 990px) {
+  .header__desktop { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 20px !important; 
+  }
+  .header__desktop-left,
+  .header__desktop-center,
+  .header__desktop-right { 
+    align-items: center !important; 
+  }
+}
+
+/* Constrain search bar width on desktop to avoid overflow */
+@media (min-width: 990px) {
+  .header__desktop .search,
+  .header__search--bar .search { 
+    max-width: 560px !important; 
+    width: 100% !important; 
+  }
+}
+
+/* Icon buttons hover refinement */
+.header__icon:hover, .header__action:hover {
+  background-color: rgba(var(--color-foreground), 0.06) !important;
+  box-shadow: none !important;
+}
+
+/* Prevent double padding around search container chips */
+.header__search--bar { padding: 0 !important; }
+
+/* ===============================================================
+   Minimal Professional Header Overrides
+   - Clean single-row layout
+   - Compact controls and search
+   - Neutral colors, slim borders, no heavy shadows/gradients
+=============================================================== */
+
+/* Container + row sizing */
+.header-wrapper { background: #ffffff !important; border-bottom: 1px solid #e5e7eb !important; box-shadow: none !important; }
+.header.page-width { min-height: 64px !important; padding: 0 clamp(1.25rem, 3vw, 2rem) !important; }
+.header__sortable-layout { height: 64px !important; gap: clamp(1rem, 2vw, 2rem) !important; }
+
+/* Force single-row: hide optional top row, keep inline menu visible */
+.header__top-menu { display: none !important; }
+.header .header__inline-menu { display: flex !important; }
+
+/* Logo sizing */
+.header__heading-logo img { max-height: 40px !important; filter: none !important; }
+/* Fallback text logo sizing */
+.header__heading .h2, .header__heading-link .h2 { font-size: 1.8rem !important; line-height: 1.2 !important; margin: 0 !important; font-weight: 600 !important; color: #111827 !important; }
+
+/* Menu links: compact and neutral */
+.list-menu { gap: 0.25rem !important; }
+.list-menu__item--link { padding: 0.5rem 0.9rem !important; margin-right: 0 !important; border: none !important; background: transparent !important; box-shadow: none !important; border-radius: 4px !important; color: #111827 !important; letter-spacing: 0.01em !important; }
+.header__item--menu { flex: 1 1 auto !important; display: flex !important; justify-content: center !important; }
+.header__item--logo { flex: 0 0 auto !important; }
+.list-menu__item--link:hover { background: transparent !important; color: #0f172a !important; transform: none !important; opacity: 1 !important; }
+.header .list-menu__item--link::after { display: none !important; }
+
+/* Icons: compact, subtle hover */
+.header__icon { width: 40px !important; height: 40px !important; border-radius: 8px !important; background: transparent !important; box-shadow: none !important; transform: none !important; }
+.header__icon:hover { background: #f3f4f6 !important; color: #111827 !important; }
+.header__icon::after { display: none !important; }
+.header__icon svg { width: 20px !important; height: 20px !important; }
+
+/* Cart badge: simple, small */
+.header__cart-count, .cart-count-bubble { width: 18px !important; height: 18px !important; top: -6px !important; right: -6px !important; border: 2px solid #fff !important; background: #ef4444 !important; color: #fff !important; box-shadow: none !important; }
+
+/* Search: compact */
+.header__search { max-width: 320px !important; margin: 0 1rem !important; }
+.header__search--bar .search, .header__desktop .search, .search { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important; height: 40px !important; box-shadow: none !important; padding: 0 8px !important; }
+.header__search--bar .search:hover, .search:hover { box-shadow: none !important; transform: none !important; }
+.header__search--bar .search:focus-within, .search:focus-within { border-color: #d1d5db !important; box-shadow: 0 0 0 2px rgba(0,0,0,0.03) !important; }
+.search__input { padding: 0 8px !important; }
+.search__button { width: 36px !important; height: 36px !important; border-radius: 6px !important; background: transparent !important; box-shadow: none !important; color: #6b7280 !important; }
+.search__button:hover { background: #f3f4f6 !important; color: #374151 !important; }
+
+/* Tablet */
+@media (max-width: 990px) {
+  .header.page-width { min-height: 60px !important; }
+  .header__sortable-layout { height: 60px !important; gap: clamp(0.5rem, 2vw, 1rem) !important; }
+  .header__icon { width: 36px !important; height: 36px !important; }
+  .header__search { max-width: 240px !important; }
+}
+
+/* Mobile */
+@media (max-width: 749px) {
+  .header.page-width { min-height: 56px !important; }
+  .header__sortable-layout { height: 56px !important; gap: 0.5rem !important; }
+  .header__heading-logo img { max-height: 36px !important; }
+}

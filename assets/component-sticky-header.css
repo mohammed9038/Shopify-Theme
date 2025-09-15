@@ -1,0 +1,26 @@
+/* Sticky Header Component CSS */
+
+.shopify-section-header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.shopify-section-header-sticky .header-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(229, 229, 229, 0.8);
+  transition: all 0.3s ease;
+}
+
+.shopify-section-header-sticky.scrolled .header-wrapper {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 749px) {
+  .shopify-section-header-sticky .header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

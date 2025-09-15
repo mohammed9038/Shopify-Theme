@@ -1,54 +1,8 @@
 {% comment %}
-  ===============================================================================
-  SHOPIFY DAWN THEME - PROFESSIONAL HEADER SECTION
-  ===============================================================================
-  
-  This header section provides comprehensive customization options for:
-  - Navigation menus (dropdown, mega menu, drawer)
-  - Logo positioning and styling
-  - Search functionality (icon or bar)
-  - Responsive design
-  - Professional typography and spacing
-  - Language selection (GTranslate)
-  
-  Features:
-  - Clean, organized code structure
-  - Sortable header elements
-  - Comprehensive customization options
-  - Mobile-first responsive design
-  - Performance optimized
-  - Professional animations and transitions
-  - SEO friendly
-  
-  ===============================================================================
+  Professional header uses global CSS; remove inline CSS/JS and retain single header wrapper.
 {% endcomment %}
 
-{% comment %}
-  ===================================================================
-  STYLESHEET DEPENDENCIES
-  Load only the required CSS components for better performance
-  ===================================================================
-{% endcomment %}
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-language-selector.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search-modal-enhanced.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-gtranslate.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'fix-header-style.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'mobile-header-override.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'enhanced-header-cart.css' | asset_url }}" media="all">
-<link rel="stylesheet" href="{{ 'custom-mobile-header.css' | asset_url }}" media="all">
 
-{%- if settings.predictive_search_enabled -%}
-  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
-
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
 
 {% comment %}
   ===================================================================
@@ -814,9 +768,17 @@
       }
     {% endif %}
   }
+
+  /* Show mobile-only cart on small screens only */
+  .mobile-only-cart { display: none; }
+  @media screen and (max-width: 749px) {
+    .mobile-only-cart { display: block; }
+    /* Hide standard cart item in sortable layout to avoid duplication */
+    .header__sortable-layout .header__item--cart { display: none; }
+  }
 {%- endstyle -%}
 
-{% comment %}--- CART NOTIFICATION SCRIPT ---{% endcomment %}
+{% comment %} Cart notification script for cart notification behavior {% endcomment %}
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
 
 {% comment %}--- VARIABLE ASSIGNMENTS ---{% endcomment %}
@@ -888,7 +850,6 @@
       assign localization_forms = true
     endif
   -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
     {%- liquid
       if section.settings.menu != blank
         render 'header-drawer'
@@ -899,7 +860,7 @@
       endif
     -%}
     
-    {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
+  {% comment %}--- HEADER ITEMS SORTING SYSTEM ---{% endcomment %}
     <div class="header__sortable-layout">
       {% comment %}--- We removed the mobile cart from here to ensure it appears after logo ---{% endcomment %}
       
@@ -1093,7 +1054,6 @@
         {%- endcase -%}
       {%- endfor -%}
     </div>
-  </header>
 </{{ header_tag }}>
 
 {%- if settings.cart_type == 'notification' -%}
@@ -1103,211 +1063,7 @@
   -%}
 {%- endif -%}
 
-{%- comment -%}
-  Header JavaScript
-{%- endcomment -%}
-{% javascript %}
-  /**
-   * Header JavaScript - Dawn Theme
-   * 
-   * Contains:
-   * - Language selector (GTranslate) initialization
-   * - Sticky header behavior
-   * - Header interaction enhancements
-   */
-
-  /**
-   * GTranslate is now initialized directly by the dropdown.js script
-   * No additional JavaScript is needed for the language selector
-   */
-
-  /**
-   * StickyHeader Class
-   * Manages sticky header behavior, scroll effects, and interactions
-   */
-  class StickyHeader extends HTMLElement {
-    constructor() {
-      super();
-      this.header = null;
-      this.headerBounds = {};
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-      this.isScrolling = null;
-      this.headerIsAlwaysSticky = false;
-      this.predictiveSearch = null;
-      this.disclosures = null;
-      this.searchModal = null;
-    }
-
-    /**
-     * Connected callback - initialize the sticky header
-     */
-    connectedCallback() {
-      this.header = document.querySelector('.section-header');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      
-      // Set initial header height
-      this.setHeaderHeight();
-
-      // Update header height on window resize
-      const mediaQuery = window.matchMedia('(max-width: 990px)');
-      mediaQuery.addEventListener('change', this.setHeaderHeight.bind(this));
-
-      // Make header sticky if always-sticky mode is enabled
-      if (this.headerIsAlwaysSticky) {
-        this.header.classList.add('shopify-section-header-sticky');
-      }
-
-      // Initialize scroll tracking
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-      this.predictiveSearch = this.querySelector('predictive-search');
-
-      // Set up event handlers
-      this.onScrollHandler = this.throttledScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
-
-      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, { passive: true });
-
-      // Create intersection observer for header bounds
-      this.createObserver();
-    }
-
-    /**
-     * Set the header height CSS variable
-     */
-    setHeaderHeight() {
-      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
-    }
-
-    /**
-     * Clean up event listeners on disconnect
-     */
-    disconnectedCallback() {
-      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.removeEventListener('scroll', this.onScrollHandler);
-    }
-
-    /**
-     * Create intersection observer to track header position
-     */
-    createObserver() {
-      const observer = new IntersectionObserver((entries) => {
-        this.headerBounds = entries[0].intersectionRect;
-        observer.disconnect();
-      });
-
-      observer.observe(this.header);
-    }
-
-    /**
-     * Throttled scroll handler for better performance
-     */
-    throttledScroll() {
-      // Use requestAnimationFrame for performance
-      if (!this.scrollTimeout) {
-        this.scrollTimeout = window.requestAnimationFrame(() => {
-          this.onScroll();
-          this.scrollTimeout = null;
-        });
-      }
-    }
-
-    /**
-     * Main scroll handler
-     */
-    onScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      // Skip header hide/reveal if predictive search is open
-      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
-
-      // Scrolling down
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (!this.preventHide) {
-          this.hide();
-        }
-      } 
-      // Scrolling up
-      else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (!this.preventReveal) {
-          this.reveal();
-        } else {
-          // Clear the scrolling timeout
-          window.clearTimeout(this.isScrolling);
-
-          // Set a timeout to reset preventReveal flag
-          this.isScrolling = setTimeout(() => {
-            this.preventReveal = false;
-          }, 66);
-
-          this.hide();
-        }
-      } 
-      // At top of page
-      else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('scrolled-past-header');
-        this.reset();
-      }
-
-      // Update current scroll position
-      this.currentScrollTop = scrollTop;
-    }
-
-    /**
-     * Hide the header
-     */
-    hide() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
-      this.closeMenuDisclosure();
-      this.closeSearchModal();
-    }
-
-    /**
-     * Reveal the header
-     */
-    reveal() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-sticky', 'animate');
-      this.header.classList.remove('shopify-section-header-hidden');
-    }
-
-    /**
-     * Reset header state
-     */
-    reset() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
-    }
-
-    /**
-     * Close all menu disclosures
-     */
-    closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
-      this.disclosures.forEach((disclosure) => disclosure.close());
-    }
-
-    /**
-     * Close search modal
-     */
-    closeSearchModal() {
-      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
-      if (this.searchModal) {
-        this.searchModal.close(false);
-      }
-    }
-  }
-
-  // Register the custom element
-  customElements.define('sticky-header', StickyHeader);
-{% endjavascript %}
+{%- comment -%} Sticky header JS handled by assets/sticky-header.js {%- endcomment -%}
 
 <script type="application/ld+json">
   {
@@ -1833,201 +1589,6 @@
       "id": "search_bar_background",
       "label": "Search bar background",
       "default": "#f5f5f5"
-    },
-    {
-      "type": "color",
-      "id": "search_bar_border",
-      "label": "Search bar border color",
-      "default": "#cccccc"
-    },
-    {
-      "type": "range",
-      "id": "search_bar_border_radius",
-      "min": 0,
-      "max": 25,
-      "step": 1,
-      "unit": "px",
-      "label": "Search bar border radius",
-      "default": 5
-    },
-    {
-      "type": "header",
-      "content": "Header Behavior"
-    },
-    {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_line_separator",
-      "default": true,
-      "label": "t:sections.header.settings.show_line_separator.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "color_scheme",
-      "id": "menu_color_scheme",
-      "label": "t:sections.header.settings.menu_color_scheme.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__utilities.content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_country_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_language_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
-    },
-    {
-      "type": "header",
-      "content": "Language Selector Styling"
-    },
-    {
-      "type": "select",
-      "id": "language_selector_style",
-      "options": [
-        {
-          "value": "dropdown",
-          "label": "Dropdown"
-        },
-        {
-          "value": "flags",
-          "label": "Flags only"
-        },
-        {
-          "value": "flags_dropdown",
-          "label": "Flags with dropdown"
-        },
-        {
-          "value": "flags_name",
-          "label": "Flags with language name"
-        }
-      ],
-      "default": "flags_dropdown",
-      "label": "Display style"
-    },
-    {
-      "type": "select",
-      "id": "language_selector_flag_size",
-      "options": [
-        {
-          "value": "16",
-          "label": "Small"
-        },
-        {
-          "value": "24",
-          "label": "Medium"
-        },
-        {
-          "value": "32",
-          "label": "Large"
-        }
-      ],
-      "default": "24",
-      "label": "Flag size"
-    },
-    {
-      "type": "color",
-      "id": "language_selector_text_color",
-      "label": "Text color",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "language_selector_background",
-      "label": "Background color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "language_selector_border_color",
-      "label": "Border color",
-      "default": "#dddddd"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_customer_avatar",
-      "default": true,
-      "label": "t:sections.header.settings.enable_customer_avatar.label",
-      "info": "t:sections.header.settings.enable_customer_avatar.info"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.spacing"
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.margin_bottom.label",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 20
     }
   ],
   "blocks": [
@@ -2037,3 +1598,4 @@
   ]
 }
 {% endschema %}
+
