@@ -2340,6 +2340,8 @@ input[type='checkbox'] {
 }
 
 /* Main Header Layout */
+/* COMMENTED OUT: Conflicts with Enhanced Header System */
+/*
 .header-wrapper {
   display: block;
   position: relative;
@@ -2356,14 +2358,20 @@ input[type='checkbox'] {
   grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
 }
+*/
 
 @media screen and (max-width: 749px) {
+  /* COMMENTED OUT: Conflicts with Enhanced Header System */
+  /*
   .header--has-app {
     grid-template-columns: auto 1fr auto;
   }
+  */
 }
 
 @media screen and (min-width: 990px) {
+  /* COMMENTED OUT: Conflicts with Enhanced Header System */
+  /*
   .header {
     grid-template-columns: 1fr auto 1fr;
   }
@@ -2413,12 +2421,15 @@ input[type='checkbox'] {
   .header:not(.header--middle-left, .header--middle-center) .header__inline-menu {
     margin-top: 1.05rem;
   }
+  */
 }
 
 .header *[tabindex='-1']:focus {
   outline: none;
 }
 
+/* COMMENTED OUT: Conflicts with Enhanced Header System */
+/*
 .header__heading {
   margin: 0;
   line-height: 0;
@@ -2449,6 +2460,7 @@ input[type='checkbox'] {
   line-height: 1;
   color: rgba(var(--color-foreground), 0.75);
 }
+*/
 
 .header__heading-logo {
   height: auto;
@@ -2462,6 +2474,8 @@ input[type='checkbox'] {
 }
 
 @media screen and (max-width: 989px) {
+  /* COMMENTED OUT: Conflicts with Enhanced Header System */
+  /*
   .header__heading,
   .header__heading-link {
     text-align: center;
@@ -2476,9 +2490,12 @@ input[type='checkbox'] {
   .header--mobile-left {
     grid-template-columns: auto 2fr 1fr;
   }
+  */
 }
 
 @media screen and (min-width: 990px) {
+  /* COMMENTED OUT: Conflicts with Enhanced Header System */
+  /*
   .header--middle-left .header__heading-link,
   .header--top-left .header__heading-link {
     margin-left: -0.75rem;
@@ -2500,15 +2517,19 @@ input[type='checkbox'] {
     justify-self: center;
     text-align: center;
   }
+  */
 }
 
 /* Header icons */
+/* COMMENTED OUT: Conflicts with Enhanced Header System */
+/*
 .header__icons {
   display: flex;
   grid-area: icons;
   justify-self: end;
   padding-right: 0.8rem;
 }
+*/
 
 .header__icons .shopify-app-block {
   max-width: 4.4rem;
