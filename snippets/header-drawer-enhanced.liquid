@@ -1,0 +1,192 @@
+{% comment %}
+  Renders an enhanced header drawer menu for mobile and desktop.
+  Supports configurable content order based on section settings.
+
+  Usage:
+  {% render 'header-drawer' %}
+{% endcomment %}
+
+<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary
+      class="header__icon header__icon--menu header__icon--summary link focus-inset"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <span>
+        {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
+      <div class="menu-drawer__inner-container">
+        
+        {%- liquid
+          assign drawer_order = section.settings.mobile_drawer_order | default: 'account-language-menu'
+          assign drawer_sections = drawer_order | split: '-'
+        -%}
+
+        {%- for drawer_section in drawer_sections -%}
+          {%- case drawer_section -%}
+            {%- when 'account' -%}
+              {%- if shop.customer_accounts_enabled and section.settings.enable_customer_avatar -%}
+                <div class="mobile-drawer__section">
+                  <h3 class="mobile-drawer__section-title">
+                    {%- if customer -%}
+                      {{ 'customer.account_fallback' | t }}
+                    {%- else -%}
+                      {{ 'customer.log_in' | t }}
+                    {%- endif -%}
+                  </h3>
+                  <div class="mobile-drawer__account">
+                    <a
+                      href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                    >
+                      {%- if customer -%}
+                        <span class="svg-wrapper">{{- 'icon-account.svg' | inline_asset_content -}}</span>
+                        {{ customer.first_name | default: customer.email }}
+                      {%- else -%}
+                        <span class="svg-wrapper">{{- 'icon-account.svg' | inline_asset_content -}}</span>
+                        {{ 'customer.log_in' | t }} / {{ 'customer.register' | t }}
+                      {%- endif -%}
+                    </a>
+                    {%- if customer -%}
+                      <a href="{{ routes.account_logout_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                        {{ 'customer.log_out' | t }}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+            {%- when 'language' -%}
+              {%- assign localization_forms = false -%}
+              {%- if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                {%- assign localization_forms = true -%}
+              {%- endif -%}
+              
+              {%- if localization_forms -%}
+                <div class="mobile-drawer__section">
+                  <h3 class="mobile-drawer__section-title">{{ 'localization.language_label' | t }}</h3>
+                  <div class="mobile-drawer__localization">
+                    {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                      <localization-form>
+                        {%- form 'localization', id: 'HeaderLanguageFormDrawer', class: 'localization-form' -%}
+                          <div class="localization-form__select">
+                            <h2 class="visually-hidden" id="HeaderLanguageLabelDrawer">{{ 'localization.language_label' | t }}</h2>
+                            <select class="localization-selector link" name="locale_code" aria-labelledby="HeaderLanguageLabelDrawer">
+                              {%- for language in localization.available_languages -%}
+                                <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                                  {{ language.endonym_name | capitalize }}
+                                </option>
+                              {%- endfor -%}
+                            </select>
+                            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                          </div>
+                          <input type="hidden" name="return_to" value="{{ request.full_url }}">
+                        {%- endform -%}
+                      </localization-form>
+                    {%- endif -%}
+
+                    {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+                      <localization-form>
+                        {%- form 'localization', id: 'HeaderCountryFormDrawer', class: 'localization-form' -%}
+                          <div class="localization-form__select">
+                            <h2 class="visually-hidden" id="HeaderCountryLabelDrawer">{{ 'localization.country_label' | t }}</h2>
+                            <select class="localization-selector link" name="country_code" aria-labelledby="HeaderCountryLabelDrawer">
+                              {%- for country in localization.available_countries -%}
+                                <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                                  {{ country.name }} ({{ country.currency.symbol }} {{ country.currency.iso_code }})
+                                </option>
+                              {%- endfor -%}
+                            </select>
+                            <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                          </div>
+                          <input type="hidden" name="return_to" value="{{ request.full_url }}">
+                        {%- endform -%}
+                      </localization-form>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+
+            {%- when 'menu' -%}
+              {%- if section.settings.menu != blank -%}
+                <div class="mobile-drawer__section">
+                  <h3 class="mobile-drawer__section-title">{{ 'sections.header.menu' | t }}</h3>
+                  <div class="menu-drawer__navigation-container">
+                    <nav class="menu-drawer__navigation">
+                      <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+                        {%- for link in section.settings.menu.links -%}
+                          <li>
+                            {%- if link.links != blank -%}
+                              <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
+                                <summary
+                                  id="HeaderDrawer-{{ link.handle }}"
+                                  class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
+                                >
+                                  {{ link.title | escape }}
+                                  <span class="svg-wrapper">
+                                    {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                  </span>
+                                  <span class="svg-wrapper">
+                                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                                  </span>
+                                </summary>
+                                <div
+                                  id="link-{{ link.handle | escape }}"
+                                  class="menu-drawer__submenu has-submenu gradient motion-reduce"
+                                  tabindex="-1"
+                                >
+                                  <div class="menu-drawer__inner-submenu">
+                                    <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                      <span class="svg-wrapper">
+                                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                      </span>
+                                      {{ link.title | escape }}
+                                    </button>
+                                    <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                      {%- for childlink in link.links -%}
+                                        <li>
+                                          <a
+                                            id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                                            href="{{ childlink.url }}"
+                                            class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                            {% if childlink.current %}
+                                              aria-current="page"
+                                            {% endif %}
+                                          >
+                                            {{ childlink.title | escape }}
+                                          </a>
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </details>
+                            {%- else -%}
+                              <a
+                                id="HeaderDrawer-{{ link.handle }}"
+                                href="{{ link.url }}"
+                                class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"
+                                {% if link.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ link.title | escape }}
+                              </a>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+
+      </div>
+    </div>
+  </details>
+</header-drawer>
