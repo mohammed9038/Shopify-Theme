@@ -20,7 +20,7 @@
         "search_position": "center",
         "mobile_logo_position": "center",
         "mobile_drawer_order": "account-language-menu",
-        "menu": "menu",
+        "menu": "main-menu",
         "menu_type_desktop": "dropdown",
         "enable_search": true,
         "enable_country_selector": true,
