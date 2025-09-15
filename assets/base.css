@@ -2580,10 +2580,13 @@ input[type='checkbox'] {
   padding: 0;
 }
 
+/* COMMENTED OUT: Conflicts with Enhanced Header System - negative margin hides cart icon */
+/*
 .header__icon--cart {
   position: relative;
   margin-right: -1.2rem;
 }
+*/
 
 .header__icon--menu[aria-expanded='true']::before {
   content: '';
@@ -2779,6 +2782,8 @@ details[open] > .header__submenu {
 }
 
 /* Header menu */
+/* COMMENTED OUT: Conflicts with Enhanced Header System */
+/*
 .header__inline-menu {
   margin-left: -1.2rem;
   grid-area: navigation;
@@ -2807,7 +2812,10 @@ details[open] > .header__submenu {
     margin-left: 0;
   }
 }
+*/
 
+/* COMMENTED OUT: Conflicts with Enhanced Header System */
+/*
 .header__menu {
   padding: 0 1rem;
 }
@@ -2842,6 +2850,7 @@ details[open]:hover > .header__menu-item {
 details[open] > .header__menu-item .icon-caret {
   transform: rotate(180deg);
 }
+*/
 
 .header__active-menu-item {
   transition: text-decoration-thickness var(--duration-short) ease;
