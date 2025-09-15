@@ -155,6 +155,51 @@
               {%- endif -%}
             </a>
           </div>
+
+          {%- comment -%}
+            Desktop localization selectors (language and/or country) – show when multiple options are available
+          {%- endcomment -%}
+          {%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
+            <div class="enhanced-localization enhanced-localization--desktop">
+              {%- if localization.available_languages.size > 1 -%}
+                <localization-form>
+                  {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+                    <div class="localization-form__select">
+                      <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                      <select class="localization-selector link" name="locale_code" aria-labelledby="HeaderLanguageLabel">
+                        {%- for language in localization.available_languages -%}
+                          <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                            {{ language.endonym_name | capitalize }}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                    </div>
+                    <input type="hidden" name="return_to" value="{{ request.full_url }}">
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
+
+              {%- if localization.available_countries.size > 1 -%}
+                <localization-form>
+                  {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+                    <div class="localization-form__select">
+                      <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                      <select class="localization-selector link" name="country_code" aria-labelledby="HeaderCountryLabel">
+                        {%- for country in localization.available_countries -%}
+                          <option value="{{ country.iso_code }}"{%- if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                            {{ country.name }} ({{ country.currency.symbol }} {{ country.currency.iso_code }})
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                    </div>
+                    <input type="hidden" name="return_to" value="{{ request.full_url }}">
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
         </div>
       </div>
     </div>
@@ -162,14 +207,7 @@
     <!-- Mobile Header -->
     <div class="enhanced-mobile-header">
       <div class="enhanced-container">
-        <button class="enhanced-mobile-menu-toggle" type="button">
-          <span class="enhanced-hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-          <span class="enhanced-visually-hidden">Menu</span>
-        </button>
+        {% render 'header-drawer-enhanced' %}
 
         <div class="enhanced-mobile-logo">
           {%- if section.settings.logo != blank -%}
