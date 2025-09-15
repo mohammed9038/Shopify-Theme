@@ -100,58 +100,58 @@
 }
 
 /* Logo Positioning */
-.main-header--logo-left .main-header__left .header__heading-link {
+.enhanced-header .main-header--logo-left .main-header__left .header__heading-link {
   display: flex;
 }
 
-.main-header--logo-center .main-header__center .header__heading-link {
+.enhanced-header .main-header--logo-center .main-header__center .header__heading-link {
   display: flex;
 }
 
-.main-header--logo-left .main-header__center .header__heading-link,
-.main-header--logo-left .main-header__right .header__heading-link {
+.enhanced-header .main-header--logo-left .main-header__center .header__heading-link,
+.enhanced-header .main-header--logo-left .main-header__right .header__heading-link {
   display: none;
 }
 
-.main-header--logo-center .main-header__left .header__heading-link,
-.main-header--logo-center .main-header__right .header__heading-link {
+.enhanced-header .main-header--logo-center .main-header__left .header__heading-link,
+.enhanced-header .main-header--logo-center .main-header__right .header__heading-link {
   display: none;
 }
 
 /* Search Positioning */
-.main-header--search-center .header__search {
+.enhanced-header .main-header--search-center .header__search {
   grid-column: 2;
   width: 100%;
   max-width: 400px;
 }
 
-.main-header--search-right .header__search {
+.enhanced-header .main-header--search-right .header__search {
   width: 100%;
   max-width: 300px;
 }
 
-.main-header--search-center .main-header__center .header__search {
+.enhanced-header .main-header--search-center .main-header__center .header__search {
   display: block;
 }
 
-.main-header--search-right .main-header__right .header__search {
+.enhanced-header .main-header--search-right .main-header__right .header__search {
   display: block;
 }
 
-.main-header--search-center .main-header__right .header__search,
-.main-header--search-right .main-header__center .header__search {
+.enhanced-header .main-header--search-center .main-header__right .header__search,
+.enhanced-header .main-header--search-right .main-header__center .header__search {
   display: none;
 }
 
 /* Header Search Enhancements */
-.header__search .search__input {
+.enhanced-header .header__search .search__input {
   background-color: rgba(var(--color-foreground), 0.04);
   border: 1px solid rgba(var(--color-foreground), 0.1);
   border-radius: var(--inputs-radius);
   padding: 1rem 1.5rem;
 }
 
-.header__search .search__input:focus {
+.enhanced-header .header__search .search__input:focus {
   outline: 2px solid rgba(var(--color-foreground), 0.5);
   outline-offset: -2px;
 }
@@ -247,7 +247,7 @@
 }
 
 /* Header Icons Enhancement */
-.header__icon {
+.enhanced-header .header__icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -261,18 +261,18 @@
   transition: background-color var(--duration-short) ease;
 }
 
-.header__icon:hover {
+.enhanced-header .header__icon:hover {
   background-color: rgba(var(--color-foreground), 0.04);
 }
 
-.header__icon .icon,
-.header__icon .svg-wrapper {
+.enhanced-header .header__icon .icon,
+.enhanced-header .header__icon .svg-wrapper {
   width: 20px;
   height: 20px;
 }
 
 /* Cart Count Bubble */
-.cart-count-bubble {
+.enhanced-header .cart-count-bubble {
   position: absolute;
   background-color: rgb(var(--color-foreground));
   color: rgb(var(--color-background));
@@ -333,20 +333,20 @@
 }
 
 /* Color Scheme Support */
-.color-scheme-1 {
+.enhanced-header .color-scheme-1 {
   background-color: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
 }
 
 /* Enhanced Menu Drawer Order Support */
-.menu-drawer__inner-container {
+.enhanced-header .menu-drawer__inner-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 /* Announcement Bar */
-.announcement-promo-bar {
+.enhanced-header .announcement-promo-bar {
   padding: 0.8rem 0;
   text-align: center;
   font-size: 1.2rem;
@@ -354,9 +354,9 @@
 }
 
 /* Focus States */
-.header__icon:focus-visible,
-.mobile-drawer__section a:focus-visible,
-.localization-selector:focus-visible {
+.enhanced-header .header__icon:focus-visible,
+.enhanced-header .mobile-drawer__section a:focus-visible,
+.enhanced-header .localization-selector:focus-visible {
   outline: 2px solid rgba(var(--color-foreground), 0.5);
   outline-offset: 2px;
 }
