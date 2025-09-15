@@ -1439,6 +1439,27 @@
         "content": "t:settings_schema.cart.settings.cart_drawer.header"
       },
       {
+        "type": "select",
+        "id": "cart_style",
+        "label": "Cart Style",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Mini-Cart Drawer"
+          },
+          {
+            "value": "popup",
+            "label": "Popup Cart"
+          },
+          {
+            "value": "redirect",
+            "label": "Direct to Cart Page"
+          }
+        ],
+        "default": "drawer",
+        "info": "Choose how the cart should appear when items are added"
+      },
+      {
         "type": "collection",
         "id": "cart_drawer_collection",
         "label": "t:settings_schema.cart.settings.cart_drawer.collection.label",
