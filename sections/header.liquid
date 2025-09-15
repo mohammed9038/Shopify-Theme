@@ -42,11 +42,12 @@
         
         <!-- Left Section -->
         <div class="enhanced-header-left">
-          {%- if section.settings.logo_position == 'left' -%}
+          {%- comment -%} Always show logo on left for two-row layout, or when logo_position is left {%- endcomment -%}
+          {%- if section.settings.desktop_layout == 'two-row' or section.settings.logo_position == 'left' -%}
             <div class="enhanced-logo">
               {%- if section.settings.logo != blank -%}
                 <a href="{{ routes.root_url }}">
-                  <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="150" height="auto">
+                  <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto">
                 </a>
               {%- else -%}
                 <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
@@ -54,6 +55,7 @@
             </div>
           {%- endif -%}
           
+          {%- comment -%} Only show navigation in left section for single-row layout {%- endcomment -%}
           {%- if section.settings.desktop_layout == 'single-row' and section.settings.menu != blank -%}
             <nav class="enhanced-nav enhanced-nav--single-row">
               <ul class="enhanced-menu">
@@ -71,11 +73,12 @@
 
         <!-- Center Section -->
         <div class="enhanced-header-center">
-          {%- if section.settings.logo_position == 'center' -%}
+          {%- comment -%} Only show logo in center for single-row layout when logo_position is center {%- endcomment -%}
+          {%- if section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'center' -%}
             <div class="enhanced-logo">
               {%- if section.settings.logo != blank -%}
                 <a href="{{ routes.root_url }}">
-                  <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="150" height="auto">
+                  <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto">
                 </a>
               {%- else -%}
                 <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
@@ -83,7 +86,17 @@
             </div>
           {%- endif -%}
           
-          {%- if section.settings.search_position == 'center' and section.settings.enable_search -%}
+          {%- comment -%} Show search in center for two-row layout, or when search_position is center {%- endcomment -%}
+          {%- assign show_center_search = false -%}
+          {%- if section.settings.enable_search -%}
+            {%- if section.settings.desktop_layout == 'two-row' -%}
+              {%- assign show_center_search = true -%}
+            {%- elsif section.settings.search_position == 'center' -%}
+              {%- assign show_center_search = true -%}
+            {%- endif -%}
+          {%- endif -%}
+          
+          {%- if show_center_search -%}
             <div class="enhanced-search">
               <form action="{{ routes.search_url }}" method="get" role="search" class="enhanced-search-form">
                 <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="enhanced-search-input">
