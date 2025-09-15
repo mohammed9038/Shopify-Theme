@@ -1,0 +1,844 @@
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{{ 'component-header-enhanced.css' | asset_url | stylesheet_tag }}
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+
+{%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+<style>
+  /* Dynamic CSS based on theme settings */
+  :root {
+    --mobile-logo-position: {{ section.settings.mobile_logo_position }};
+    --top-bar-height: {{ section.settings.top_bar_height }}px;
+    --main-header-height: {{ section.settings.main_header_height }}px;
+    --header-padding-horizontal: {{ section.settings.padding_horizontal }}px;
+  }
+
+  .top-bar {
+    height: var(--top-bar-height);
+  }
+
+  .main-header {
+    height: var(--main-header-height);
+  }
+
+  .top-bar__content,
+  .main-header__content {
+    padding: 0 var(--header-padding-horizontal);
+  }
+
+  .mobile-header__logo {
+    justify-self: {{ section.settings.mobile_logo_position }};
+  }
+
+  .section-header {
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+
+  /* Hide/show elements based on settings */
+  {% unless section.settings.enable_search %}
+    .header__search {
+      display: none !important;
+    }
+  {% endunless %}
+
+  {% unless section.settings.show_top_bar %}
+    .top-bar {
+      display: none !important;
+    }
+  {% endunless %}
+
+  {% if section.settings.sticky_header_type == 'reduce-logo-size' %}
+    .scrolled-past-header .header__heading-logo-wrapper {
+      width: 75%;
+      transition: width var(--duration-short) ease;
+    }
+  {% endif %}
+</style>
+
+{%- liquid
+  assign has_app_block = false
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_block = true
+    endif
+  endfor
+
+  assign social_links = false
+  assign localization_forms = false
+
+  if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+    assign social_links = true
+  endif
+
+  if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+    assign localization_forms = true
+  endif
+
+  assign header_tag = 'div'
+  if section.settings.sticky_header_type != 'none'
+    assign header_tag = 'sticky-header'
+  endif
+-%}
+
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.show_announcement_bar -%}
+  <!-- Optional Announcement/Promo Bar -->
+  <div class="announcement-promo-bar color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width">
+      <p style="margin: 0; font-size: 1.2rem;">Optional Announcement/Promo Bar</p>
+    </div>
+  </div>
+{%- endif -%}
+
+<{{ header_tag }}
+  {% if header_tag == 'sticky-header' %}
+    data-sticky-type="{{ section.settings.sticky_header_type }}"
+  {% endif %}
+  class="enhanced-header-wrapper enhanced-header-wrapper--{{ section.settings.desktop_layout }}"
+>
+  <header class="enhanced-header">
+    
+    {%- if section.settings.desktop_layout == 'two-row' and section.settings.show_top_bar -%}
+      <!-- Top Navigation Bar -->
+      <div class="enhanced-top-bar">
+        <div class="enhanced-container">
+          {%- if section.settings.menu != blank -%}
+            <nav class="enhanced-nav">
+              <ul class="enhanced-menu">
+                {%- for link in section.settings.menu.links -%}
+                  <li class="enhanced-menu-item">
+                    <a href="{{ link.url }}" class="enhanced-menu-link">
+                      {{ link.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Main Header -->
+    <div class="enhanced-main-header">
+      <div class="enhanced-container">
+        
+        <!-- Left Section -->
+        <div class="enhanced-header-left">
+          {%- if section.settings.logo_position == 'left' -%}
+            <div class="enhanced-logo">
+              {%- if section.settings.logo != blank -%}
+                <a href="{{ routes.root_url }}">
+                  <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="150" height="auto">
+                </a>
+              {%- else -%}
+                <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.desktop_layout == 'single-row' and section.settings.menu != blank -%}
+            <nav class="enhanced-nav enhanced-nav--single-row">
+              <ul class="enhanced-menu">
+                {%- for link in section.settings.menu.links -%}
+                  <li class="enhanced-menu-item">
+                    <a href="{{ link.url }}" class="enhanced-menu-link">
+                      {{ link.title | escape }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+
+        <!-- Center Section -->
+        <div class="enhanced-header-center">
+          {%- if section.settings.logo_position == 'center' -%}
+            <div class="enhanced-logo">
+              {%- if section.settings.logo != blank -%}
+                <a href="{{ routes.root_url }}">
+                  <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="150" height="auto">
+                </a>
+              {%- else -%}
+                <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          
+          {%- if section.settings.search_position == 'center' and section.settings.enable_search -%}
+            <div class="enhanced-search">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="enhanced-search-form">
+                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="enhanced-search-input">
+                <button type="submit" class="enhanced-search-button">
+                  <svg viewBox="0 0 20 20" class="enhanced-search-icon">
+                    <path fill="currentColor" d="m18.366 16.95l-5.708-5.708a8.026 8.026 0 1 0-1.414 1.414l5.708 5.708a1 1 0 0 0 1.414-1.414ZM8 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12Z"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Right Section -->
+        <div class="enhanced-header-right">
+          {%- if section.settings.search_position == 'right' and section.settings.enable_search -%}
+            <div class="enhanced-search">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="enhanced-search-form">
+                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="enhanced-search-input">
+                <button type="submit" class="enhanced-search-button">
+                  <svg viewBox="0 0 20 20" class="enhanced-search-icon">
+                    <path fill="currentColor" d="m18.366 16.95l-5.708-5.708a8.026 8.026 0 1 0-1.414 1.414l5.708 5.708a1 1 0 0 0 1.414-1.414ZM8 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12Z"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          {%- endif -%}
+
+          <div class="enhanced-icons">
+            {%- if shop.customer_accounts_enabled and section.settings.enable_customer_avatar -%}
+              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="enhanced-icon enhanced-icon--account">
+                <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+                  <path fill="currentColor" d="M17.1 16.9v-1a2 2 0 0 0-2-2H4.9a2 2 0 0 0-2 2v1a.5.5 0 0 0 1 0v-1a1 1 0 0 1 1-1h10.2a1 1 0 0 1 1 1v1a.5.5 0 0 0 1 0ZM10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM7 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"/>
+                </svg>
+                <span class="enhanced-visually-hidden">Account</span>
+              </a>
+            {%- endif -%}
+
+            <a href="{{ routes.cart_url }}" class="enhanced-icon enhanced-icon--cart" id="enhanced-cart-icon">
+              <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+                <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
+              </svg>
+              <span class="enhanced-visually-hidden">Cart</span>
+              {%- if cart != empty -%}
+                <span class="enhanced-cart-count">{{ cart.item_count }}</span>
+              {%- endif -%}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="enhanced-mobile-header">
+      <div class="enhanced-container">
+        <button class="enhanced-mobile-menu-toggle" type="button">
+          <span class="enhanced-hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="enhanced-visually-hidden">Menu</span>
+        </button>
+
+        <div class="enhanced-mobile-logo">
+          {%- if section.settings.logo != blank -%}
+            <a href="{{ routes.root_url }}">
+              <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="{{ shop.name }}" width="120" height="auto">
+            </a>
+          {%- else -%}
+            <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+          {%- endif -%}
+        </div>
+
+        <div class="enhanced-mobile-icons">
+          <a href="{{ routes.cart_url }}" class="enhanced-icon enhanced-icon--cart">
+            <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+              <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
+            </svg>
+            {%- if cart != empty -%}
+              <span class="enhanced-cart-count">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </header>
+</{{ header_tag }}>
+              <ul class="list-menu list-menu--inline" role="list">
+                {%- for link in section.settings.menu.links -%}
+                  <li>
+                    {%- if link.links != blank -%}
+                      <details class="disclosure-has-popup" id="Details-HeaderMenu-{{ forloop.index }}">
+                        <summary class="header__menu-item list-menu__item link focus-inset" id="HeaderMenu-{{ link.handle }}">
+                          <span>{{ link.title | escape }}</span>
+                          <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                        </summary>
+                        <ul class="header__submenu list-menu" role="list">
+                          {%- for childlink in link.links -%}
+                            <li>
+                              <a href="{{ childlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset">
+                                {{ childlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </details>
+                    {%- else -%}
+                      <a href="{{ link.url }}" class="header__menu-item list-menu__item link link--text focus-inset">
+                        {{ link.title | escape }}
+                      </a>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Desktop Main Header -->
+    <div class="main-header main-header--logo-{{ section.settings.logo_position }} main-header--search-{{ section.settings.search_position }}">
+      <div class="main-header__content">
+        
+        <!-- Left Section -->
+        <div class="main-header__left">
+          {%- if section.settings.logo_position == 'left' -%}
+            {% render 'header-logo' %}
+          {%- endif -%}
+          
+          {%- if section.settings.desktop_layout == 'single-row' and section.settings.menu != blank -%}
+            {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+              {% render 'header-dropdown-menu' %}
+            {%- elsif section.settings.menu_type_desktop == 'mega' -%}
+              {% render 'header-mega-menu' %}
+            {%- else -%}
+              {% render 'header-drawer-enhanced' %}
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+
+        <!-- Center Section -->
+        <div class="main-header__center">
+          {%- if section.settings.logo_position == 'center' -%}
+            {% render 'header-logo' %}
+          {%- endif -%}
+          
+          {%- if section.settings.search_position == 'center' and section.settings.enable_search -%}
+            {% render 'header-search', input_id: 'Search-In-Header' %}
+          {%- endif -%}
+        </div>
+
+        <!-- Right Section -->
+        <div class="main-header__right">
+          {%- if section.settings.search_position == 'right' and section.settings.enable_search -%}
+            {% render 'header-search', input_id: 'Search-In-Header-Right' %}
+          {%- endif -%}
+
+          {%- if localization_forms -%}
+            {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+              <div class="localization-form__select">
+                <localization-form>
+                  {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+                    <select class="localization-selector link" name="locale_code" aria-label="{{ 'localization.language_label' | t }}">
+                      {%- for language in localization.available_languages -%}
+                        <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                          {{ language.endonym_name | capitalize }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    <input type="hidden" name="return_to" value="{{ request.full_url }}">
+                  {%- endform -%}
+                </localization-form>
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if shop.customer_accounts_enabled and section.settings.enable_customer_avatar -%}
+            <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset">
+              <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+              <span class="visually-hidden">
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          {%- endif -%}
+
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+            {%- liquid
+              if cart == empty
+                echo '<span class="svg-wrapper">' | append: 'icon-cart-empty.svg' | inline_asset_content | append: '</span>'
+              else
+                echo '<span class="svg-wrapper">' | append: 'icon-cart.svg' | inline_asset_content | append: '</span>'
+              endif
+            -%}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+      <div class="mobile-header__content">
+        
+        <!-- Hamburger Menu -->
+        <div class="mobile-header__hamburger">
+          {% render 'header-drawer-enhanced' %}
+        </div>
+
+        <!-- Mobile Logo -->
+        <div class="mobile-header__logo mobile-header__logo--{{ section.settings.mobile_logo_position }}">
+          {% render 'header-logo' %}
+        </div>
+
+        <!-- Mobile Cart -->
+        <div class="mobile-header__cart">
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble-mobile">
+            {%- liquid
+              if cart == empty
+                echo '<span class="svg-wrapper">' | append: 'icon-cart-empty.svg' | inline_asset_content | append: '</span>'
+              else
+                echo '<span class="svg-wrapper">' | append: 'icon-cart.svg' | inline_asset_content | append: '</span>'
+              endif
+            -%}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+</{{ header_tag }}>
+
+{%- render 'cart-notification', color_scheme: section.settings.color_scheme -%}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "options": [
+        {
+          "value": "two-row",
+          "label": "Two Row Layout (Top Nav + Main Header)"
+        },
+        {
+          "value": "single-row",
+          "label": "Single Row Layout"
+        }
+      ],
+      "default": "two-row",
+      "label": "Desktop header layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_bar",
+      "default": true,
+      "label": "Show top navigation bar",
+      "info": "Only applies to two-row layout"
+    },
+    {
+      "type": "select",
+      "id": "logo_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left",
+      "label": "Desktop logo position"
+    },
+    {
+      "type": "select",
+      "id": "search_position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "hidden",
+          "label": "Hidden"
+        }
+      ],
+      "default": "center",
+      "label": "Desktop search position"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "mobile_logo_position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center",
+      "label": "Mobile logo position"
+    },
+    {
+      "type": "select",
+      "id": "mobile_drawer_order",
+      "options": [
+        {
+          "value": "account-language-menu",
+          "label": "Account → Language → Menu"
+        },
+        {
+          "value": "language-account-menu",
+          "label": "Language → Account → Menu"
+        },
+        {
+          "value": "menu-account-language",
+          "label": "Menu → Account → Language"
+        }
+      ],
+      "default": "account-language-menu",
+      "label": "Mobile drawer content order"
+    },
+    {
+      "type": "header",
+      "content": "Menu Settings"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Main navigation menu"
+    },
+    {
+      "type": "select",
+      "id": "menu_type_desktop",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        },
+        {
+          "value": "mega",
+          "label": "Mega menu"
+        },
+        {
+          "value": "drawer",
+          "label": "Drawer"
+        }
+      ],
+      "default": "dropdown",
+      "label": "Desktop menu type"
+    },
+    {
+      "type": "header",
+      "content": "Utility Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "default": true,
+      "label": "Enable search"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "Enable country selector",
+      "info": "Show country/region selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Enable language selector",
+      "info": "Show language selector"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_customer_avatar",
+      "default": true,
+      "label": "Enable customer avatar",
+      "info": "Show customer account link"
+    },
+    {
+      "type": "header",
+      "content": "Announcement/Promo Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement_bar",
+      "default": false,
+      "label": "Show optional announcement/promo bar",
+      "info": "Shows above the header (dashed line in design)"
+    },
+    {
+      "type": "header",
+      "content": "Sticky Header"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "No sticky header"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "Sticky on scroll up"
+        },
+        {
+          "value": "always",
+          "label": "Always sticky"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "Sticky with reduced logo"
+        }
+      ],
+      "default": "on-scroll-up",
+      "label": "Sticky header behavior"
+    },
+    {
+      "type": "header",
+      "content": "Visual Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line_separator",
+      "default": true,
+      "label": "Show header bottom border"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Header color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "top_bar_color_scheme",
+      "label": "Top bar color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "menu_color_scheme",
+      "label": "Menu color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "top_bar_height",
+      "min": 30,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Top bar height",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "main_header_height",
+      "min": 60,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Main header height",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Header bottom margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+  class StickyHeader extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.header = document.querySelector('.section-header');
+      this.headerIsAlwaysSticky =
+        this.getAttribute('data-sticky-type') === 'always' ||
+        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+      this.headerBounds = {};
+
+      this.setHeaderHeight();
+
+      window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
+
+      if (this.headerIsAlwaysSticky) {
+        this.header.classList.add('shopify-section-header-sticky');
+      }
+
+      this.currentScrollTop = 0;
+      this.preventReveal = false;
+      this.predictiveSearch = this.querySelector('predictive-search');
+
+      this.onScrollHandler = this.onScroll.bind(this);
+      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
+
+      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.addEventListener('scroll', this.onScrollHandler, false);
+
+      this.createObserver();
+    }
+
+    setHeaderHeight() {
+      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.removeEventListener('scroll', this.onScrollHandler);
+    }
+
+    createObserver() {
+      let observer = new IntersectionObserver((entries, observer) => {
+        this.headerBounds = entries[0].intersectionRect;
+        observer.disconnect();
+      });
+
+      observer.observe(this.header);
+    }
+
+    onScroll() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
+
+      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (this.preventHide) return;
+        requestAnimationFrame(this.hide.bind(this));
+      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (!this.preventReveal) {
+          requestAnimationFrame(this.reveal.bind(this));
+        } else {
+          window.clearTimeout(this.isScrolling);
+
+          this.isScrolling = setTimeout(() => {
+            this.preventReveal = false;
+          }, 66);
+
+          requestAnimationFrame(this.hide.bind(this));
+        }
+      } else if (scrollTop <= this.headerBounds.top) {
+        this.header.classList.remove('scrolled-past-header');
+        requestAnimationFrame(this.reset.bind(this));
+      }
+
+      this.currentScrollTop = scrollTop;
+    }
+
+    hide() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
+      this.closeMenuDisclosure();
+      this.closeSearchModal();
+    }
+
+    reveal() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-sticky', 'animate');
+      this.header.classList.remove('shopify-section-header-hidden');
+    }
+
+    reset() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
+    }
+
+    closeMenuDisclosure() {
+      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
+      this.disclosures.forEach((disclosure) => disclosure.close());
+    }
+
+    closeSearchModal() {
+      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
+      this.searchModal.close(false);
+    }
+  }
+
+  customElements.define('sticky-header', StickyHeader);
+{% endjavascript %}
