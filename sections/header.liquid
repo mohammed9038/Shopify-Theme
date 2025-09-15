@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ 'component-header-enhanced.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'header-unified.css' | asset_url }}">
 
 {%- liquid
   assign header_tag = 'header'
@@ -43,17 +43,7 @@
         <!-- Left Section -->
         <div class="enhanced-header-left">
           {%- comment -%} Show logo on left for two-row layout, or when single-row with logo_position left {%- endcomment -%}
-          {%- if section.settings.desktop_layout == 'two-row' -%}
-            <div class="enhanced-logo">
-              {%- if section.settings.logo != blank -%}
-                <a href="{{ routes.root_url }}">
-                  <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto">
-                </a>
-              {%- else -%}
-                <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
-              {%- endif -%}
-            </div>
-          {%- elsif section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'left' -%}
+          {%- if section.settings.desktop_layout == 'two-row' or section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'left' -%}
             <div class="enhanced-logo">
               {%- if section.settings.logo != blank -%}
                 <a href="{{ routes.root_url }}">
@@ -212,7 +202,7 @@
         <div class="enhanced-mobile-logo">
           {%- if section.settings.logo != blank -%}
             <a href="{{ routes.root_url }}">
-              <img src="{{ section.settings.logo | image_url: width: 150 }}" alt="{{ shop.name }}" width="120" height="auto">
+              <img src="{{ section.settings.logo | image_url: width: 120 }}" alt="{{ shop.name }}" width="120" height="auto" class="enhanced-mobile-logo-img">
             </a>
           {%- else -%}
             <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
