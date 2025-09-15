@@ -34,24 +34,12 @@
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'sticky-header.js' | asset_url }}" defer="defer"></script>
-    
-    <!-- Theme Enhancement JavaScript -->
-    <script src="{{ 'theme-enhancements.js' | asset_url }}" defer="defer"></script>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {{ content_for_header }}
-    
-    <!-- Modern Professional Header CSS -->
-    {{ 'modern-header.css' | asset_url | stylesheet_tag }}
-    
-    <!-- Theme UI Enhancements - Professional Theme-wide Improvements -->
-    {{ 'theme-ui-enhancements.css' | asset_url | stylesheet_tag }}
-    {{ 'mobile-ui-enhancements.css' | asset_url | stylesheet_tag }}
-    {{ 'theme-utilities.css' | asset_url | stylesheet_tag }}
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
@@ -66,9 +54,6 @@
       {{ body_font_bold_italic | font_face: font_display: 'swap' }}
       {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
-      {% liquid
-        assign scheme_classes = ''
-      %}
       {% for scheme in settings.color_schemes -%}
         {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
         {% if forloop.index == 1 -%}
@@ -109,7 +94,7 @@
       }
       {% endfor %}
 
-      body {
+      {{ scheme_classes | prepend: 'body' }} {
         color: rgba(var(--color-foreground), 0.75);
         background-color: rgb(var(--color-background));
       }
@@ -311,16 +296,6 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-    
-    <!-- GTranslate: Language Translator -->
-    <script>
-      window.gtranslateSettings = {
-        "default_language": "en",
-        "languages": ["en", "ar"],
-        "wrapper_selector": ".gtranslate_wrapper"
-      };
-    </script>
-    <script src="{{ 'gtranslate-dropdown.js' | asset_url }}" defer="defer"></script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -397,7 +372,5 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-    
-    {% section 'mobile-bottom-navigation' %}
   </body>
 </html>
