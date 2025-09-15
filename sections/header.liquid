@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ 'header-unified.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'shopify-header.css' | asset_url }}">
 
 {%- liquid
   assign header_tag = 'header'
@@ -11,20 +11,21 @@
   {% if header_tag == 'sticky-header' %}
     data-sticky-type="{{ section.settings.sticky_header_type }}"
   {% endif %}
-  class="enhanced-header-wrapper enhanced-header-wrapper--{{ section.settings.desktop_layout }}"
+  class="shopify-header header-layout-{{ section.settings.desktop_layout }}"
+  dir="{{ shop.locale.dir | default: 'ltr' }}"
 >
-  <header class="enhanced-header">
+  <header class="shopify-header-wrapper">
     
     {%- if section.settings.desktop_layout == 'two-row' and section.settings.show_top_bar -%}
       <!-- Top Navigation Bar -->
-      <div class="enhanced-top-bar">
-        <div class="enhanced-container">
+      <div class="shopify-topbar">
+        <div class="shopify-container">
           {%- if section.settings.menu != blank -%}
-            <nav class="enhanced-nav">
-              <ul class="enhanced-menu">
+            <nav class="shopify-nav">
+              <ul class="shopify-menu">
                 {%- for link in section.settings.menu.links -%}
-                  <li class="enhanced-menu-item">
-                    <a href="{{ link.url }}" class="enhanced-menu-link">
+                  <li class="shopify-menu-item">
+                    <a href="{{ link.url }}" class="shopify-menu-link">
                       {{ link.title | escape }}
                     </a>
                   </li>
@@ -37,31 +38,31 @@
     {%- endif -%}
 
     <!-- Main Header -->
-    <div class="enhanced-main-header">
-      <div class="enhanced-container">
+    <div class="shopify-main-header">
+      <div class="shopify-container">
         
         <!-- Left Section -->
-        <div class="enhanced-header-left">
+        <div class="shopify-header-left">
           {%- comment -%} Show logo on left for two-row layout, or when single-row with logo_position left {%- endcomment -%}
           {%- if section.settings.desktop_layout == 'two-row' or section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'left' -%}
-            <div class="enhanced-logo">
+            <div class="shopify-logo">
               {%- if section.settings.logo != blank -%}
                 <a href="{{ routes.root_url }}">
                   <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto">
                 </a>
               {%- else -%}
-                <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+                <a href="{{ routes.root_url }}" class="shopify-logo-text">{{ shop.name }}</a>
               {%- endif -%}
             </div>
           {%- endif -%}
           
           {%- comment -%} Only show navigation in left section for single-row layout {%- endcomment -%}
           {%- if section.settings.desktop_layout == 'single-row' and section.settings.menu != blank -%}
-            <nav class="enhanced-nav enhanced-nav--single-row">
-              <ul class="enhanced-menu">
+            <nav class="shopify-nav shopify-nav-single-row">
+              <ul class="shopify-menu">
                 {%- for link in section.settings.menu.links -%}
-                  <li class="enhanced-menu-item">
-                    <a href="{{ link.url }}" class="enhanced-menu-link">
+                  <li class="shopify-menu-item">
+                    <a href="{{ link.url }}" class="shopify-menu-link">
                       {{ link.title | escape }}
                     </a>
                   </li>
@@ -72,16 +73,16 @@
         </div>
 
         <!-- Center Section -->
-        <div class="enhanced-header-center">
+        <div class="shopify-header-center">
           {%- comment -%} Only show logo in center for single-row layout when logo_position is center {%- endcomment -%}
           {%- if section.settings.desktop_layout == 'single-row' and section.settings.logo_position == 'center' -%}
-            <div class="enhanced-logo">
+            <div class="shopify-logo">
               {%- if section.settings.logo != blank -%}
                 <a href="{{ routes.root_url }}">
                   <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" alt="{{ shop.name }}" width="{{ section.settings.logo_width }}" height="auto">
                 </a>
               {%- else -%}
-                <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+                <a href="{{ routes.root_url }}" class="shopify-logo-text">{{ shop.name }}</a>
               {%- endif -%}
             </div>
           {%- endif -%}
@@ -97,11 +98,11 @@
           {%- endif -%}
           
           {%- if show_center_search -%}
-            <div class="enhanced-search">
-              <form action="{{ routes.search_url }}" method="get" role="search" class="enhanced-search-form">
-                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="enhanced-search-input">
-                <button type="submit" class="enhanced-search-button">
-                  <svg viewBox="0 0 20 20" class="enhanced-search-icon">
+            <div class="shopify-search">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="shopify-search-form">
+                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="shopify-search-input">
+                <button type="submit" class="shopify-search-button">
+                  <svg viewBox="0 0 20 20" class="shopify-search-icon">
                     <path fill="currentColor" d="m18.366 16.95l-5.708-5.708a8.026 8.026 0 1 0-1.414 1.414l5.708 5.708a1 1 0 0 0 1.414-1.414ZM8 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12Z"/>
                   </svg>
                 </button>
@@ -111,13 +112,13 @@
         </div>
 
         <!-- Right Section -->
-        <div class="enhanced-header-right">
+        <div class="shopify-header-right">
           {%- if section.settings.search_position == 'right' and section.settings.enable_search -%}
-            <div class="enhanced-search">
-              <form action="{{ routes.search_url }}" method="get" role="search" class="enhanced-search-form">
-                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="enhanced-search-input">
-                <button type="submit" class="enhanced-search-button">
-                  <svg viewBox="0 0 20 20" class="enhanced-search-icon">
+            <div class="shopify-search">
+              <form action="{{ routes.search_url }}" method="get" role="search" class="shopify-search-form">
+                <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" class="shopify-search-input">
+                <button type="submit" class="shopify-search-button">
+                  <svg viewBox="0 0 20 20" class="shopify-search-icon">
                     <path fill="currentColor" d="m18.366 16.95l-5.708-5.708a8.026 8.026 0 1 0-1.414 1.414l5.708 5.708a1 1 0 0 0 1.414-1.414ZM8 14A6 6 0 1 1 8 2a6 6 0 0 1 0 12Z"/>
                   </svg>
                 </button>
@@ -125,23 +126,23 @@
             </div>
           {%- endif -%}
 
-          <div class="enhanced-icons">
+          <div class="shopify-icons">
             {%- if shop.customer_accounts_enabled and section.settings.enable_customer_avatar -%}
-              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="enhanced-icon enhanced-icon--account">
-                <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+              <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="shopify-icon shopify-icon-account">
+                <svg viewBox="0 0 20 20" class="shopify-icon-svg">
                   <path fill="currentColor" d="M17.1 16.9v-1a2 2 0 0 0-2-2H4.9a2 2 0 0 0-2 2v1a.5.5 0 0 0 1 0v-1a1 1 0 0 1 1-1h10.2a1 1 0 0 1 1 1v1a.5.5 0 0 0 1 0ZM10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM7 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"/>
                 </svg>
-                <span class="enhanced-visually-hidden">Account</span>
+                <span class="visually-hidden">Account</span>
               </a>
             {%- endif -%}
 
-            <a href="{{ routes.cart_url }}" class="enhanced-icon enhanced-icon--cart" id="enhanced-cart-icon">
-              <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+            <a href="{{ routes.cart_url }}" class="shopify-icon shopify-icon-cart" id="shopify-cart-icon">
+              <svg viewBox="0 0 20 20" class="shopify-icon-svg">
                 <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
               </svg>
-              <span class="enhanced-visually-hidden">Cart</span>
+              <span class="visually-hidden">Cart</span>
               {%- if cart != empty -%}
-                <span class="enhanced-cart-count">{{ cart.item_count }}</span>
+                <span class="shopify-cart-count">{{ cart.item_count }}</span>
               {%- endif -%}
             </a>
           </div>
@@ -150,7 +151,7 @@
             Desktop localization selectors (language and/or country) – show when multiple options are available
           {%- endcomment -%}
           {%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
-            <div class="enhanced-localization enhanced-localization--desktop">
+            <div class="shopify-localization shopify-localization-desktop">
               {%- if localization.available_languages.size > 1 -%}
                 <localization-form>
                   {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
@@ -195,27 +196,27 @@
     </div>
 
     <!-- Mobile Header -->
-    <div class="enhanced-mobile-header">
-      <div class="enhanced-container">
-        {% render 'header-drawer-enhanced' %}
+    <div class="shopify-mobile-header">
+      <div class="shopify-container">
+        {% render 'shopify-header-drawer' %}
 
-        <div class="enhanced-mobile-logo">
+        <div class="shopify-mobile-logo">
           {%- if section.settings.logo != blank -%}
             <a href="{{ routes.root_url }}">
-              <img src="{{ section.settings.logo | image_url: width: 120 }}" alt="{{ shop.name }}" width="120" height="auto" class="enhanced-mobile-logo-img">
+              <img src="{{ section.settings.logo | image_url: width: 120 }}" alt="{{ shop.name }}" width="120" height="auto" class="shopify-mobile-logo-img">
             </a>
           {%- else -%}
-            <a href="{{ routes.root_url }}" class="enhanced-logo-text">{{ shop.name }}</a>
+            <a href="{{ routes.root_url }}" class="shopify-logo-text">{{ shop.name }}</a>
           {%- endif -%}
         </div>
 
-        <div class="enhanced-mobile-icons">
-          <a href="{{ routes.cart_url }}" class="enhanced-icon enhanced-icon--cart">
-            <svg viewBox="0 0 20 20" class="enhanced-icon-svg">
+        <div class="shopify-mobile-icons">
+          <a href="{{ routes.cart_url }}" class="shopify-icon shopify-icon-cart">
+            <svg viewBox="0 0 20 20" class="shopify-icon-svg">
               <path fill="currentColor" d="M8.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1ZM10 3a3 3 0 0 1 3 3v1h-6V6a3 3 0 0 1 3-3ZM6 17V9h2v8H6Zm4 0V9h2v8h-2Zm4 0V9h2v8h-2Z"/>
             </svg>
             {%- if cart != empty -%}
-              <span class="enhanced-cart-count">{{ cart.item_count }}</span>
+              <span class="shopify-cart-count">{{ cart.item_count }}</span>
             {%- endif -%}
           </a>
         </div>
