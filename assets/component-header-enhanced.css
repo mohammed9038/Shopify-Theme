@@ -1,9 +1,22 @@
 /* Enhanced Header Styles */
 /* Overrides and extensions for the new header layout */
 
-/* Enhanced Header Base */
+/* Enhanced Header Base - Override Dawn defaults */
 .enhanced-header {
   position: relative;
+}
+
+/* Override Dawn's grid-based header layout completely */
+.enhanced-header .header {
+  display: block !important;
+  grid-template-columns: none !important;
+  grid-template-areas: none !important;
+  grid-template-rows: none !important;
+}
+
+/* Reset all grid areas for header children */
+.enhanced-header .header > * {
+  grid-area: none !important;
 }
 
 .enhanced-header--two-row .top-bar {
@@ -288,7 +301,7 @@
   right: -5px;
 }
 
-/* Responsive Behavior */
+/* Responsive Behavior - Aggressive overrides */
 @media screen and (max-width: 989px) {
   .enhanced-header .top-bar,
   .enhanced-header .main-header {
@@ -297,6 +310,12 @@
 
   .enhanced-header .mobile-header {
     display: flex !important;
+  }
+
+  .enhanced-header .header {
+    display: block !important;
+    grid-template-columns: none !important;
+    grid-template-areas: none !important;
   }
 
   .enhanced-header .mobile-header__logo {
@@ -311,6 +330,12 @@
 
   .enhanced-header .main-header {
     display: flex !important;
+  }
+
+  .enhanced-header .header {
+    display: block !important;
+    grid-template-columns: none !important;
+    grid-template-areas: none !important;
   }
 
   .enhanced-header--two-row .top-bar {
