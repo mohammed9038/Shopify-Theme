@@ -11,35 +11,35 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "header": {
-      "type": "header",
+    "custom-header": {
+      "type": "custom-header",
       "settings": {
-        "desktop_layout": "two-row",
-        "show_top_bar": true,
-        "logo_position": "left",
-        "search_position": "center",
-        "mobile_logo_position": "center",
-        "mobile_drawer_order": "account-language-menu",
-        "menu": "menu",
-        "menu_type_desktop": "dropdown",
-        "enable_search": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
-        "enable_customer_avatar": true,
-        "show_announcement_bar": false,
-        "sticky_header_type": "on-scroll-up",
-        "show_line_separator": true,
-        "color_scheme": "scheme-1",
-        "top_bar_color_scheme": "",
-        "menu_color_scheme": "",
-        "top_bar_height": 40,
-        "main_header_height": 80,
-        "margin_bottom": 0,
-        "padding_horizontal": 20
+        "layout_style": "standard",
+        "show_announcement": true,
+        "announcement_text": "Free shipping on all orders over $75",
+        "announcement_bg": "#121212",
+        "announcement_text_color": "#ffffff",
+        "logo_max_width": 150,
+        "menu": "main-menu",
+        "menu_alignment": "center",
+        "bg_color": "#ffffff",
+        "text_color": "#121212",
+        "accent_color": "#3a3a3a",
+        "sticky_header": true,
+        "show_search": true,
+        "show_account": true,
+        "show_cart": true,
+        "padding_vertical": 15,
+        "padding_horizontal": 20,
+        "use_border": true,
+        "border_style": "solid",
+        "border_thickness": 1,
+        "border_color": "#e8e8e8",
+        "use_shadow": false
       }
     }
   },
   "order": [
-    "header"
+    "custom-header"
   ]
 }

@@ -584,7 +584,7 @@
                                 <ul class="list-unstyled" role="list">
                                   {%- for product in recommendations.products
                                     limit: block.settings.products_per_page
-                                    offset: continue
+                                    offset: 0
                                   -%}
                                     <li>
                                       {%- if block.settings.enable_quick_add -%}
@@ -724,13 +724,10 @@
       <script src="{{ 'product-model.js' | asset_url }}" defer></script>
     {%- endif -%}
 
-    {%- liquid
-      if product.selected_or_first_available_variant.featured_media
-        assign seo_media = product.selected_or_first_available_variant.featured_media
-      else
-        assign seo_media = product.featured_media
-      endif
-    -%}
+    {%- comment -%}
+      SEO structured data will use product.featured_media by default
+      No need to explicitly assign seo_media variable anymore
+    {%- endcomment -%}
 
     <script type="application/ld+json">
       {{ product | structured_data }}
