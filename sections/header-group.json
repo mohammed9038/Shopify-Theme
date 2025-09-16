@@ -11,8 +11,8 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "custom-header": {
-      "type": "custom-header",
+    "header": {
+      "type": "header",
       "settings": {
         "layout_style": "standard",
         "show_announcement": true,
@@ -40,6 +40,6 @@
     }
   },
   "order": [
-    "custom-header"
+    "header"
   ]
 }

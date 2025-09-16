@@ -34,12 +34,12 @@
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'custom-header.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'header.js' | asset_url }}" defer="defer"></script>
     
-    <!-- Custom Header CSS -->
-    <link rel="stylesheet" href="{{ 'component-custom-header.css' | asset_url }}" media="print" onload="this.media='all'"
+    <!-- Header CSS -->
+    <link rel="stylesheet" href="{{ 'component-header.css' | asset_url }}" media="print" onload="this.media='all'"
     >
-    <noscript>{{ 'component-custom-header.css' | asset_url | stylesheet_tag }}</noscript>
+    <noscript>{{ 'component-header.css' | asset_url | stylesheet_tag }}</noscript>
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
