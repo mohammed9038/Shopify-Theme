@@ -1,0 +1,45 @@
+name: Shopify Theme CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run Shopify Theme Check
+      run: |
+        npm install -g @shopify/cli @shopify/theme
+        npm run theme:check
+
+  lighthouse:
+    needs: test
+    runs-on: ubuntu-latest
+
+    # This is a placeholder for a full Lighthouse test
+    # You would need to deploy to a preview URL first
+    steps:
+    - name: Audit with Lighthouse
+      run: echo "Run Lighthouse tests against preview environment"
+      # In a real workflow, you'd deploy to a preview URL then run Lighthouse

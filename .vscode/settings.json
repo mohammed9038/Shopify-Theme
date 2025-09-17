@@ -1,0 +1,59 @@
+{
+  "editor.formatOnSave": true,
+  "[liquid]": {
+    "editor.formatOnSave": false
+  },
+  "files.associations": {
+    "*.liquid": "liquid"
+  },
+  "emmet.includeLanguages": {
+    "liquid": "html"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "liquid.format.enable": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": [
+    "css",
+    "scss"
+  ],
+  "eslint.validate": [
+    "javascript"
+  ],
+  "liquid.completion.tags": true,
+  "liquid.completion.objects": true,
+  "liquid.completion.filters": true,
+  "liquid.hover.tags": true,
+  "liquid.hover.objects": true,
+  "liquid.hover.filters": true,
+  "editor.tabSize": 2,
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#7048e8",
+    "statusBar.foreground": "#ffffff"
+  },
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]"
+  ],
+  "todo-tree.highlights.defaultHighlight": {
+    "icon": "alert",
+    "type": "text",
+    "foreground": "white",
+    "background": "#e51400",
+  },
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.scriptAnalysis.settingsPath": "",
+  "powershell.scriptAnalysis.excludePaths": [
+    "**/*.liquid"
+  ],
+  "opacity": 50,
+  "liquid.checkOrphanedSnippets": false
+}
