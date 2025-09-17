@@ -1,0 +1,47 @@
+{
+  "name": "Custom Header Group",
+  "type": "header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement-bar-0": {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement-bar-0"
+      ],
+      "settings": {
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "color_scheme": "scheme-1",
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "custom-header": {
+      "type": "custom-header",
+      "settings": {
+        "top_menu": "main-menu",
+        "show_announcement_bar": true,
+        "announcement_text": "Free shipping on all orders over $100",
+        "enable_language_selector": true,
+        "show_border_bottom": true,
+        "top_bar_color_scheme": "scheme-1",
+        "main_bar_color_scheme": "scheme-1",
+        "announcement_bar_color_scheme": "scheme-2"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "custom-header"
+  ]
+}

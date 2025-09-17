@@ -1451,5 +1451,54 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "Custom Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Desktop Layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_header_enable",
+        "label": "Use custom header",
+        "default": false,
+        "info": "Enable to use the custom header instead of the default one"
+      },
+      {
+        "type": "header",
+        "content": "Announcement Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_header_show_announcement",
+        "label": "Show announcement bar",
+        "default": true,
+        "info": "Displays an announcement bar at the top of the page (desktop only)"
+      },
+      {
+        "type": "header",
+        "content": "Color Schemes"
+      },
+      {
+        "type": "color_scheme",
+        "id": "custom_header_top_bar_color",
+        "label": "Top navigation bar colors",
+        "default": "scheme-1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "custom_header_main_bar_color",
+        "label": "Main header bar colors",
+        "default": "scheme-1"
+      },
+      {
+        "type": "color_scheme",
+        "id": "custom_header_announcement_color",
+        "label": "Announcement bar colors",
+        "default": "scheme-2"
+      }
+    ]
   }
 ]

@@ -1,0 +1,639 @@
+{% comment %}
+  Renders a cart drawer for the custom header
+
+  Usage:
+  Direct include in custom-header.liquid
+{% endcomment %}
+
+{{ 'custom-cart-drawer.css' | asset_url | stylesheet_tag }}
+
+<cart-drawer class="cart-drawer cart-drawer--{{ section.settings.cart_drawer_position | default: 'right' }}">
+  <div class="cart-drawer__overlay"></div>
+  <div class="cart-drawer__content" role="dialog" aria-modal="true" aria-label="Your cart">
+    <div class="cart-drawer__header">
+      <h2 class="cart-drawer__heading">Your cart</h2>
+      <button class="cart-drawer__close" aria-label="{{ 'accessibility.close' | t }}">
+        <svg class="icon icon-close" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="cart-drawer__body">
+      <cart-drawer-items class="cart-drawer__items">
+        {%- if cart == empty -%}
+          <div class="cart-drawer__empty">
+            <h3 class="cart-drawer__empty-text">Your cart is empty</h3>
+            <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+              {{ 'general.continue_shopping' | t }}
+            </a>
+          </div>
+        {%- else -%}
+          <form action="{{ routes.cart_url }}" id="CartDrawer" class="cart__contents">
+            <div class="cart__items">
+              {%- for item in cart.items -%}
+                <div class="cart-item" id="CartDrawer-Item-{{ item.index | plus: 1 }}">
+                  <div class="cart-item__media">
+                    {% if item.image %}
+                      <img
+                        src="{{ item.image | image_url: width: 300 }}"
+                        alt="{{ item.image.alt | escape }}"
+                        loading="lazy"
+                        width="150"
+                        height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                      >
+                    {% endif %}
+                  </div>
+                  <div class="cart-item__details">
+                    <a href="{{ item.url }}" class="cart-item__name">{{ item.product.title | escape }}</a>
+                    {%- if item.product.has_only_default_variant == false or item.properties.size != 0 -%}
+                      <div class="cart-item__options">
+                        {%- if item.product.has_only_default_variant == false -%}
+                          {%- for option in item.options_with_values -%}
+                            <div class="cart-item__option">
+                              {{ option.name }}: {{ option.value }}
+                            </div>
+                          {%- endfor -%}
+                        {%- endif -%}
+
+                        {%- if item.properties.size != 0 -%}
+                          {%- for property in item.properties -%}
+                            {%- assign property_first_char = property.first | slice: 0 -%}
+                            {%- if property.last != blank and property_first_char != '_' -%}
+                              <div class="cart-item__option">
+                                {{ property.first }}: {{ property.last }}
+                              </div>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        {%- endif -%}
+                      </div>
+                    {%- endif -%}
+
+                    <div class="cart-item__quantity">
+                      <quantity-input class="quantity">
+                        <button class="quantity__button" name="minus" type="button">
+                          {% render 'icon-minus' %}
+                        </button>
+                        <input class="quantity__input"
+                          type="number"
+                          name="updates[]"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+                          id="Drawer-quantity-{{ item.index | plus: 1 }}"
+                          data-index="{{ item.index | plus: 1 }}"
+                        >
+                        <button class="quantity__button" name="plus" type="button">
+                          {% render 'inline-svg', name: 'icon-plus.svg' %}
+                        </button>
+                      </quantity-input>
+                    </div>
+
+                    <div class="cart-item__price-wrapper">
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <span class="price price--end price--sale">
+                          <span class="price-item price-item--sale">
+                            {{ item.final_line_price | money }}
+                          </span>
+                          <span class="price-item price-item--regular">
+                            {{ item.original_line_price | money }}
+                          </span>
+                        </span>
+                      {%- else -%}
+                        <span class="price price--end">
+                          <span class="price-item">
+                            {{ item.original_line_price | money }}
+                          </span>
+                        </span>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            <div class="cart__footer">
+              <div class="cart__blocks">
+                {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  <div class="cart-drawer__discounts">
+                    <h4 class="cart-drawer__discount-title">{{ 'customer.order.discount' | t }}</h4>
+                    <ul class="cart-drawer__discount-list">
+                      {%- for discount in cart.cart_level_discount_applications -%}
+                        <li class="cart-drawer__discount">
+                          <span class="cart-drawer__discount-title">{{ discount.title }}</span>
+                          <span class="cart-drawer__discount-amount">-{{ discount.total_allocated_amount | money }}</span>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+
+                <div class="totals">
+                  <h4 class="totals__subtotal">Subtotal</h4>
+                  <p class="totals__subtotal-value">{{ cart.total_price | money_with_currency }}</p>
+                </div>
+
+                <div class="cart__ctas">
+                  <button type="submit" name="checkout" class="cart__checkout-button button button--primary">
+                    Check out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        {%- endif -%}
+      </cart-drawer-items>
+    </div>
+  </div>
+</cart-drawer>
+
+<style>
+  .cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 101;
+    visibility: hidden;
+  }
+
+  .cart-drawer[open] {
+    visibility: visible;
+  }
+
+  .cart-drawer__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(var(--color-foreground), 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-default) ease;
+  }
+
+  .cart-drawer[open] .cart-drawer__overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cart-drawer__content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 450px;
+    background-color: rgb(var(--color-background));
+    transform: translateX(100%);
+    transition: transform var(--duration-default) ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-drawer[open] .cart-drawer__content {
+    transform: translateX(0);
+  }
+
+  .cart-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .cart-drawer__heading {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .cart-drawer__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .cart-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+  }
+
+  .cart-drawer__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .cart-drawer__empty-text {
+    margin: 0 0 1rem;
+  }
+
+  /* Cart item updating states */
+  .cart-item.updating {
+    opacity: 0.6;
+    position: relative;
+  }
+
+  .cart-item.updating::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid rgba(var(--color-foreground), 0.2);
+    border-top-color: rgba(var(--color-foreground), 0.8);
+    animation: spin 1s linear infinite;
+  }
+
+  .cart-item.removing {
+    animation: fadeOut 0.3s forwards;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      overflow: hidden;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Quantity button states */
+  .quantity__button[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cart-drawer__content {
+      max-width: 100%;
+    }
+
+    .cart-drawer__body {
+      padding: 1rem;
+    }
+  }
+</style>  .cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .cart-item__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cart-item__name {
+    color: rgb(var(--color-foreground));
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cart-item__options {
+    font-size: 0.9rem;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .cart-item__quantity {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .quantity {
+    display: flex;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .quantity__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .quantity__input {
+    width: 36px;
+    text-align: center;
+    border: none;
+    -moz-appearance: textfield;
+  }
+
+  .quantity__input::-webkit-outer-spin-button,
+  .quantity__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .cart-item__price-wrapper {
+    margin-top: 0.5rem;
+  }
+
+  .cart__footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .totals {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .totals__subtotal,
+  .totals__subtotal-value {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
+  .cart__ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cart__checkout-button {
+    width: 100%;
+  }
+
+  .cart-drawer__discounts {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .cart-drawer__discount-title {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-drawer__discount-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-drawer__discount {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .cart-drawer__content {
+      max-width: 470px;
+    }
+  }
+
+{% javascript %}
+  class CartDrawer extends HTMLElement {
+    constructor() {
+      super();
+      this.initialized = false;
+
+      // Defer initialization to ensure DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => this.initialize());
+      } else {
+        this.initialize();
+      }
+    }
+
+    initialize() {
+      if (this.initialized) return;
+
+      this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
+
+      const closeButton = this.querySelector('.cart-drawer__close');
+      if (closeButton) {
+        closeButton.addEventListener('click', this.close.bind(this));
+      }
+
+      const overlay = this.querySelector('.cart-drawer__overlay');
+      if (overlay) {
+        overlay.addEventListener('click', this.close.bind(this));
+      }
+
+      this.setupCartItemQuantityButtons();
+      this.initialized = true;
+    }
+
+    open() {
+      this.setAttribute('open', '');
+      document.body.classList.add('overflow-hidden');
+
+      // Trap focus within the drawer when the script is loaded
+      if (typeof trapFocus === 'function') {
+        trapFocus(this.querySelector('.cart-drawer__content'));
+      }
+    }
+
+    close() {
+      this.removeAttribute('open');
+      document.body.classList.remove('overflow-hidden');
+
+      // Release focus when the script is loaded
+      if (typeof removeTrapFocus === 'function') {
+        removeTrapFocus(document.getElementById('cart-icon-bubble'));
+      }
+    }
+
+    setupCartItemQuantityButtons() {
+      const quantityInputs = this.querySelectorAll('.quantity__input');
+      if (!quantityInputs || quantityInputs.length === 0) return;
+
+      quantityInputs.forEach(input => {
+        const decrementButton = input.previousElementSibling;
+        const incrementButton = input.nextElementSibling;
+
+        if (decrementButton && incrementButton) {
+          decrementButton.addEventListener('click', () => this.updateQuantity(input, -1));
+          incrementButton.addEventListener('click', () => this.updateQuantity(input, 1));
+
+          // Initialize button states
+          const currentValue = parseInt(input.value);
+          if (currentValue <= 1) {
+            decrementButton.setAttribute('aria-disabled', 'true');
+          } else {
+            decrementButton.removeAttribute('aria-disabled');
+          }
+        }
+      });
+    }
+
+    updateQuantity(input, change) {
+      const currentValue = parseInt(input.value);
+      const newValue = Math.max(0, currentValue + change);
+      const decrementButton = input.previousElementSibling;
+
+      if (currentValue !== newValue) {
+        input.value = newValue;
+
+        // Update minus button state
+        if (newValue <= 1 && decrementButton) {
+          decrementButton.setAttribute('aria-disabled', 'true');
+        } else if (decrementButton) {
+          decrementButton.removeAttribute('aria-disabled');
+        }
+
+        // Show loading state
+        const cartItem = input.closest('.cart-item');
+        if (cartItem) {
+          cartItem.classList.add('updating');
+        }
+
+        // Update the cart
+        this.updateCart(input);
+      }
+    }
+
+    updateCart(input) {
+      const item = input.closest('.cart-item');
+      const index = input.dataset.index;
+      const quantity = parseInt(input.value);
+
+      // Use fetch API to update cart via AJAX
+      const formData = new FormData();
+      formData.append('updates[]', quantity);
+      formData.append('id', index);
+
+      // Set loading state
+      if (quantity === 0) {
+        item.classList.add('removing');
+      }
+
+      // Create section rendering request
+      const sections = 'cart-drawer';
+
+      fetch(window.Shopify.routes.root + 'cart/update.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Update cart count
+        const cartCount = data.item_count;
+        const cartCountBubbles = document.querySelectorAll('.cart-count-bubble');
+
+        cartCountBubbles.forEach(bubble => {
+          const countSpan = bubble.querySelector('span[aria-hidden="true"]');
+          if (countSpan) {
+            countSpan.textContent = cartCount;
+          }
+
+          // Hide bubble if count is zero
+          if (cartCount === 0) {
+            bubble.classList.add('hide');
+          } else {
+            bubble.classList.remove('hide');
+          }
+        });
+
+        // If we used a section rendering approach, we would request the updated cart HTML here
+        // For now, we'll refresh the page or submit the form to update the cart drawer
+        if (quantity === 0) {
+          // For item removal, refresh the cart drawer
+          window.location.reload();
+        } else {
+          // Remove updating state
+          item.classList.remove('updating');
+        }
+      })
+      .catch(error => {
+        console.error('Error updating cart:', error);
+        item.classList.remove('updating');
+        // Revert to form submission as fallback
+        this.querySelector('form').submit();
+      });
+    }
+  }
+
+  customElements.define('cart-drawer', CartDrawer);
+
+  // Only define the custom element if it doesn't already exist
+  if (!customElements.get('quantity-input')) {
+    class QuantityInput extends HTMLElement {
+      constructor() {
+        super();
+        this.initialized = false;
+
+        // Defer initialization to ensure DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => this.initialize());
+        } else {
+          this.initialize();
+        }
+      }
+
+      initialize() {
+        if (this.initialized) return;
+
+        this.input = this.querySelector('.quantity__input');
+        this.minusButton = this.querySelector('button[name="minus"]');
+        this.plusButton = this.querySelector('button[name="plus"]');
+
+        if (this.input && this.minusButton && this.plusButton) {
+          this.minusButton.addEventListener('click', this.onMinusClick.bind(this));
+          this.plusButton.addEventListener('click', this.onPlusClick.bind(this));
+
+          // Ensure min value is respected
+          this.input.addEventListener('change', () => {
+            const value = parseInt(this.input.value);
+            if (value < 1) {
+              this.input.value = 1;
+            }
+          });
+
+          this.initialized = true;
+        }
+      }
+
+      onMinusClick() {
+        const value = parseInt(this.input.value);
+        this.input.value = Math.max(1, value - 1);
+        this.input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      onPlusClick() {
+        const value = parseInt(this.input.value);
+        this.input.value = value + 1;
+        this.input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    customElements.define('quantity-input', QuantityInput);
+  }
+{% endjavascript %}

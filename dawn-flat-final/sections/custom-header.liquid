@@ -1,0 +1,621 @@
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'custom-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'custom-header.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{% if settings.predictive_search_enabled %}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{% endif %}
+
+<style>
+  .header-wrapper {
+    border-bottom: {% if section.settings.show_border_bottom %}1px solid rgba(var(--color-foreground), 0.08){% else %}none{% endif %};
+    {% if section.settings.header_position == 'sticky' %}
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    {% endif %}
+    {% if section.settings.show_box_shadow %}
+    box-shadow: 0 2px 10px rgba(var(--color-foreground), 0.08);
+    {% endif %}
+  }
+
+  .custom-header__top-bar {
+    background-color: {{ section.settings.top_bar_color_scheme.background }};
+    color: {{ section.settings.top_bar_color_scheme.text }};
+  }
+
+  .custom-header__main-bar {
+    background-color: {{ section.settings.main_bar_color_scheme.background }};
+    color: {{ section.settings.main_bar_color_scheme.text }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .announcement-bar {
+    background-color: {{ section.settings.announcement_bar_color_scheme.background }};
+    color: {{ section.settings.announcement_bar_color_scheme.text }};
+  }
+
+  .header__heading-logo {
+    width: {{ section.settings.logo_width }}px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .custom-header__menu {
+      gap: {{ section.settings.menu_item_spacing }}px;
+    }
+  }
+</style>
+
+<div class="header-wrapper color-{{ section.settings.main_bar_color_scheme }} gradient{% if section.settings.show_border_bottom %} header-wrapper--border-bottom{% endif %}">
+  <div class="custom-header">
+    {% if section.settings.show_announcement_bar and section.blocks.size > 0 %}
+      <div class="announcement-bar color-{{ section.settings.announcement_bar_color_scheme }} header-desktop-only">
+        <div class="page-width">
+          <p>{{ section.settings.announcement_text | escape }}</p>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Desktop Top Navigation Bar -->
+    <div class="custom-header__top-bar color-{{ section.settings.top_bar_color_scheme }} gradient menu-style-{{ section.settings.menu_item_style }}">
+      <div class="page-width custom-header__top-bar-inner">
+        <nav role="navigation">
+          <ul class="custom-header__menu list-menu list-menu--inline" role="list">
+            {%- for link in section.settings.top_menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="custom-header__menu-item link focus-inset">
+                  <span>{{ link.title | escape }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Header Bar (Desktop & Mobile) -->
+    <div class="custom-header__main-bar color-{{ section.settings.main_bar_color_scheme }} gradient">
+      <div class="page-width custom-header__main-bar-inner">
+        <!-- Mobile Hamburger Menu -->
+        <div class="custom-header__hamburger header-mobile-only">
+          {% render 'custom-drawer-menu' %}
+        </div>
+
+        <!-- Logo (Both Mobile & Desktop) -->
+        <div class="custom-header__logo-wrapper">
+          {%- if request.page_type == 'index' -%}
+            <h1 class="header__heading">
+          {%- endif -%}
+            <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+              {%- if settings.logo != blank -%}
+                <div class="header__heading-logo-wrapper">
+                  {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                  {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                  {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+                  {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                  {{
+                    settings.logo
+                    | image_url: width: 600
+                    | image_tag:
+                      class: 'header__heading-logo',
+                      widths: widths,
+                      height: logo_height,
+                      width: settings.logo_width,
+                      alt: logo_alt,
+                      sizes: sizes,
+                      preload: true
+                  }}
+                </div>
+              {%- else -%}
+                <span class="h2">{{ shop.name }}</span>
+              {%- endif -%}
+            </a>
+          {%- if request.page_type == 'index' -%}
+            </h1>
+          {%- endif -%}
+        </div>
+
+        <!-- Search Bar (Desktop Only) -->
+        <div class="custom-header__search header-desktop-only">
+          <search-input class="search">
+            <form action="{{ routes.search_url }}" method="get" role="search" class="search__form">
+              <div class="field">
+                <input class="search__input field__input" id="Search-In-Header" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.search' | t }}" autocomplete="off" aria-controls="predictive-search-results">
+                <label class="field__label" for="Search-In-Header">{{ 'general.search.search' | t }}</label>
+                <button class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
+                  <span class="svg-wrapper">
+                    {% render 'icon-search' %}
+                  </span>
+                </button>
+              </div>
+            </form>
+          </search-input>
+        </div>
+
+        <!-- Account, Cart, Language (Desktop Only) -->
+        <div class="custom-header__actions header-desktop-only">
+          {%- if shop.customer_accounts_enabled -%}
+            <a
+              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+              class="header-icon header-icon--account link focus-inset"
+              rel="nofollow"
+            >
+              <span class="svg-wrapper">
+                {% render 'icon-account' %}
+              </span>
+              <span class="visually-hidden">
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          {%- endif -%}
+
+          <button class="header-icon header-icon--cart link focus-inset" id="cart-icon-bubble" aria-expanded="false" aria-controls="CartDrawer">
+            {% if cart == empty %}
+              <span class="svg-wrapper">
+                {% render 'icon-cart-empty' %}
+              </span>
+            {% else %}
+              <span class="svg-wrapper">
+                {% render 'icon-cart' %}
+              </span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </button>
+
+          {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+            <div class="language-selector header-desktop-only">
+              <localization-form>
+                {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+                  <div class="no-js-hidden">
+                    <div class="disclosure">
+                      <button type="button" class="disclosure__button" aria-expanded="false" aria-controls="HeaderLanguageList">
+                        {{ localization.language.iso_code | upcase }}
+                        {% render 'icon-caret' %}
+                      </button>
+                      <ul id="HeaderLanguageList" role="list" class="disclosure__list">
+                        {%- for language in localization.available_languages -%}
+                          <li class="disclosure__item" tabindex="-1">
+                            <a class="link link--text disclosure__link {% if language.iso_code == localization.language.iso_code %}disclosure__link--active{% endif %}" href="#" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}" data-value="{{ language.iso_code }}">
+                              {{ language.endonym_name | capitalize }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                    <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">
+                  </div>
+                {%- endform -%}
+              </localization-form>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Mobile Cart Icon -->
+        <div class="custom-header__cart header-mobile-only">
+          <button class="header-icon header-icon--cart link focus-inset" id="cart-icon-mobile" aria-expanded="false" aria-controls="CartDrawer">
+            {% if cart == empty %}
+              <span class="svg-wrapper">
+                {% render 'icon-cart-empty' %}
+              </span>
+            {% else %}
+              <span class="svg-wrapper">
+                {% render 'icon-cart' %}
+              </span>
+            {% endif %}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% render 'custom-cart-drawer' %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Cart drawer functionality
+    const cartButtons = document.querySelectorAll('#cart-icon-bubble, #cart-icon-mobile');
+    const cartDrawer = document.querySelector('.cart-drawer');
+    const cartClose = document.querySelector('.cart-drawer__close');
+    const cartOverlay = document.querySelector('.cart-drawer__overlay');
+    const body = document.body;
+    
+    if (cartButtons && cartDrawer && cartClose && cartOverlay) {
+      function openCartDrawer() {
+        cartDrawer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeCartDrawer() {
+        cartDrawer.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      
+      cartButtons.forEach(button => {
+        button.addEventListener('click', openCartDrawer);
+      });
+      
+      cartClose.addEventListener('click', closeCartDrawer);
+      cartOverlay.addEventListener('click', closeCartDrawer);
+      
+      // Handle quantity changes
+      const quantityInputs = document.querySelectorAll('.quantity__input');
+      const minusButtons = document.querySelectorAll('.quantity__button[name="minus"]');
+      const plusButtons = document.querySelectorAll('.quantity__button[name="plus"]');
+      
+      minusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const input = this.parentNode.querySelector('.quantity__input');
+          const value = Number(input.value);
+          if (value > 0) {
+            input.value = value - 1;
+            // Trigger change event to update cart
+            const event = new Event('change', { bubbles: true });
+            input.dispatchEvent(event);
+          }
+        });
+      });
+      
+      plusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const input = this.parentNode.querySelector('.quantity__input');
+          const value = Number(input.value);
+          input.value = value + 1;
+          // Trigger change event to update cart
+          const event = new Event('change', { bubbles: true });
+          input.dispatchEvent(event);
+        });
+      });
+      
+      // Update cart when quantity changes
+      quantityInputs.forEach(input => {
+        input.addEventListener('change', function() {
+          const itemIndex = this.dataset.index;
+          const quantity = Number(this.value);
+          const itemElement = document.getElementById(`CartDrawer-Item-${itemIndex}`);
+          
+          if (itemElement) {
+            itemElement.classList.add('updating');
+            
+            // Update cart using fetch API
+            const formData = new FormData();
+            formData.append('updates[]', quantity);
+            formData.append('id', itemIndex);
+            
+            fetch('/cart/change.js', {
+              method: 'POST',
+              body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+              // Update cart count
+              document.querySelectorAll('.cart-count-bubble').forEach(bubble => {
+                if (data.item_count === 0) {
+                  bubble.remove();
+                } else {
+                  bubble.querySelector('span').textContent = data.item_count;
+                }
+              });
+              
+              // Handle item removal
+              if (quantity === 0) {
+                itemElement.classList.add('removing');
+                setTimeout(() => {
+                  itemElement.remove();
+                }, 300);
+              }
+              
+              itemElement.classList.remove('updating');
+            })
+            .catch(error => {
+              console.error('Error updating cart:', error);
+              itemElement.classList.remove('updating');
+            });
+          }
+        });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop Layout"
+    },
+    {
+      "type": "link_list",
+      "id": "top_menu",
+      "default": "main-menu",
+      "label": "Top Navigation Menu"
+    },
+    {
+      "type": "header",
+      "content": "Announcement Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement_bar",
+      "default": true,
+      "label": "Show announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "default": "Announce something here",
+      "label": "Announcement text"
+    },
+    {
+      "type": "header",
+      "content": "Language and Currency"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "Show language selector"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border_bottom",
+      "default": true,
+      "label": "Show bottom border"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_box_shadow",
+      "default": true,
+      "label": "Show box shadow"
+    },
+    {
+      "type": "select",
+      "id": "header_position",
+      "options": [
+        {
+          "value": "relative",
+          "label": "Standard"
+        },
+        {
+          "value": "sticky",
+          "label": "Sticky (always visible)"
+        }
+      ],
+      "default": "relative",
+      "label": "Header position"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 15,
+      "unit": "px",
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 15,
+      "unit": "px",
+      "label": "Bottom padding"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Menu Settings"
+    },
+    {
+      "type": "range",
+      "id": "menu_item_spacing",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 20,
+      "unit": "px",
+      "label": "Menu item spacing"
+    },
+    {
+      "type": "select",
+      "id": "top_bar_color_scheme",
+      "options": [
+        {
+          "value": "scheme-1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "scheme-2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "scheme-1",
+      "label": "Top bar color scheme"
+    },
+    {
+      "type": "select",
+      "id": "main_bar_color_scheme",
+      "options": [
+        {
+          "value": "scheme-1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "scheme-2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-1",
+      "label": "Main bar color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Announcement Bar Settings"
+    },
+    {
+      "type": "select",
+      "id": "announcement_bar_color_scheme",
+      "options": [
+        {
+          "value": "scheme-1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "scheme-2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "accent-1",
+      "label": "Announcement bar color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Menu Item Styling"
+    },
+    {
+      "type": "select",
+      "id": "menu_item_style",
+      "options": [
+        {
+          "value": "simple",
+          "label": "Simple"
+        },
+        {
+          "value": "underline",
+          "label": "Underline on hover"
+        },
+        {
+          "value": "background",
+          "label": "Background highlight on hover"
+        },
+        {
+          "value": "border",
+          "label": "Border on hover"
+        }
+      ],
+      "default": "underline",
+      "label": "Menu item hover style"
+    },
+    {
+      "type": "header",
+      "content": "Cart Drawer Settings"
+    },
+    {
+      "type": "select",
+      "id": "cart_drawer_position",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right side"
+        },
+        {
+          "value": "left",
+          "label": "Left side"
+        }
+      ],
+      "default": "right",
+      "label": "Cart drawer position"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Header",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}
