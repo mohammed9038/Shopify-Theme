@@ -1,0 +1,43 @@
+# Shopify Theme Files
+*.myshopify.com/
+
+# Dependency directories
+node_modules/
+
+# Build directories
+dist/
+build/
+tmp/
+
+# Environment files
+.env
+.env.*
+
+# Editor directories and files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory used by tools like jest
+coverage/

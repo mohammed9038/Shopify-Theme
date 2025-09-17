@@ -1,0 +1,44 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-undef": "warn",
+    "no-unused-vars": "warn",
+    "no-console": "warn"
+  },
+  "globals": {
+    "Shopify": "readonly",
+    "debounce": "readonly",
+    "throttle": "readonly",
+    "trapFocus": "readonly",
+    "removeTrapFocus": "readonly",
+    "onKeyUpEscape": "readonly",
+    "fetchConfig": "readonly",
+    "PUB_SUB_EVENTS": "readonly",
+    "ON_CHANGE_DEBOUNCE_TIMER": "readonly",
+    "publish": "readonly",
+    "subscribe": "readonly",
+    "CartPerformance": "readonly",
+    "routes": "readonly",
+    "BulkAdd": "readonly",
+    "CartItems": "readonly",
+    "ModalDialog": "readonly",
+    "DeferredMedia": "readonly",
+    "DetailsDisclosure": "readonly",
+    "SearchForm": "readonly",
+    "HTMLUpdateUtility": "readonly",
+    "getFocusableElements": "readonly",
+    "SectionId": "readonly",
+    "overlay": "readonly",
+    "enableZoomOnHover": "readonly",
+    "initializeScrollAnimationTrigger": "readonly",
+    "variantItemErrorMobile": "readonly"
+  }
+}
