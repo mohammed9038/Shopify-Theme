@@ -1,0 +1,44 @@
+{% comment %}
+  MK Header Inline Menu Component
+  Renders horizontal navigation menu
+{% endcomment %}
+
+{%- if section.settings.menu != blank -%}
+  <ul class="mk-header__menu-list list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="mk-header__menu-item list-menu__item">
+        {%- if link.links != blank -%}
+          <details class="mk-header__menu-dropdown">
+            <summary class="mk-header__menu-link list-menu__item--link link link--text focus-inset">
+              {{ link.title | escape }}
+              <span class="mk-header__menu-icon">
+                {{ 'icon-caret.svg' | inline_asset_content }}
+              </span>
+            </summary>
+            <ul class="mk-header__submenu list-menu--disclosure list-menu" role="list">
+              {%- for childlink in link.links -%}
+                <li class="list-menu__item">
+                  <a
+                    href="{{ childlink.url }}"
+                    class="list-menu__item--link link link--text"
+                    {% if childlink.current %}aria-current="page"{% endif %}
+                  >
+                    {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </details>
+        {%- else -%}
+          <a
+            href="{{ link.url }}"
+            class="mk-header__menu-link list-menu__item--link link link--text focus-inset{% if link.current %} list-menu__item--active{% endif %}"
+            {% if link.current %}aria-current="page"{% endif %}
+          >
+            {{ link.title | escape }}
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

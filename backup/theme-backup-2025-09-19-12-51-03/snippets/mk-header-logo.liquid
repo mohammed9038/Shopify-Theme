@@ -1,0 +1,41 @@
+{% comment %}
+  MK Header Logo Component
+  Renders the logo with proper responsive settings
+{% endcomment %}
+
+<div class="mk-header__logo-wrapper">
+  {%- if request.page_type == 'index' -%}
+    <h1 class="mk-header__heading">
+  {%- endif -%}
+  
+  <a href="{{ routes.root_url }}" class="mk-header__logo-link link link--text focus-inset">
+    {%- if settings.logo != blank -%}
+      <div class="mk-header__logo">
+        {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+        {%- assign logo_height = section.settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+        
+        {% capture sizes %}(max-width: 989px) {{ section.settings.logo_width_mobile }}px, {{ section.settings.logo_width }}px{% endcapture %}
+        {% capture widths %}{{ section.settings.logo_width_mobile }}, {{ section.settings.logo_width }}, {{ section.settings.logo_width | times: 1.5 | round }}, {{ section.settings.logo_width | times: 2 }}{% endcapture %}
+        
+        {{
+          settings.logo
+          | image_url: width: 600
+          | image_tag:
+            class: 'mk-header__logo-image motion-reduce',
+            widths: widths,
+            height: logo_height,
+            width: section.settings.logo_width,
+            alt: logo_alt,
+            sizes: sizes,
+            loading: 'eager'
+        }}
+      </div>
+    {%- else -%}
+      <span class="mk-header__logo-text h2">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+  
+  {%- if request.page_type == 'index' -%}
+    </h1>
+  {%- endif -%}
+</div>
