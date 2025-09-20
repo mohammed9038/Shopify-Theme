@@ -86,7 +86,7 @@
 
               {%- comment -%} Demo: Simple Link (Home) {%- endcomment -%}
               <li>
-                <a href="/" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                <a href="{{ routes.root_url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">
                   Home
                 </a>
               </li>
@@ -119,22 +119,22 @@
                         role="list"
                         tabindex="-1">
                         <li>
-                          <a href="/collections/all" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ routes.all_products_collection_url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             All Products
                           </a>
                         </li>
                         <li>
-                          <a href="/collections/featured" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections.featured.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             Featured
                           </a>
                         </li>
                         <li>
-                          <a href="/collections/new" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections.new.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             New Arrivals
                           </a>
                         </li>
                         <li>
-                          <a href="/collections/sale" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections.sale.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             Sale Items
                           </a>
                         </li>
@@ -172,7 +172,7 @@
                         role="list"
                         tabindex="-1">
                         <li>
-                          <a href="/collections/electronics" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections.electronics.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             Electronics
                           </a>
                         </li>
@@ -199,22 +199,22 @@
                                 role="list"
                                 tabindex="-1">
                                 <li>
-                                  <a href="/collections/mens-clothing" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                  <a href="{{ collections['mens-clothing'].url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                                     Men's Clothing
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="/collections/womens-clothing" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                  <a href="{{ collections['womens-clothing'].url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                                     Women's Clothing
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="/collections/kids-clothing" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                  <a href="{{ collections['kids-clothing'].url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                                     Kids Clothing
                                   </a>
                                 </li>
                                 <li>
-                                  <a href="/collections/accessories" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                  <a href="{{ collections.accessories.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                                     Accessories
                                   </a>
                                 </li>
@@ -223,12 +223,12 @@
                           </details>
                         </li>
                         <li>
-                          <a href="/collections/home-garden" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections['home-garden'].url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             Home & Garden
                           </a>
                         </li>
                         <li>
-                          <a href="/collections/sports" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                          <a href="{{ collections.sports.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
                             Sports & Outdoors
                           </a>
                         </li>
