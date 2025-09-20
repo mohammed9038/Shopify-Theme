@@ -592,8 +592,8 @@
     margin: 0 auto;
     /* Dynamic button sizing based on search bar max-width setting */
     --search-bar-width: {{ section.settings.search_bar_max_width }}px;
-    --search-button-size: {% if section.settings.search_bar_max_width <= 260 %}26px{% elsif section.settings.search_bar_max_width <= 300 %}28px{% else %}32px{% endif %};
-    --search-button-right: {% if section.settings.search_bar_max_width <= 260 %}2px{% elsif section.settings.search_bar_max_width <= 300 %}3px{% else %}4px{% endif %};
+    --search-button-size: {% if section.settings.search_bar_max_width <= 240 %}24px{% elsif section.settings.search_bar_max_width <= 260 %}26px{% elsif section.settings.search_bar_max_width <= 300 %}28px{% else %}32px{% endif %};
+    --search-button-right: {% if section.settings.search_bar_max_width <= 240 %}2px{% elsif section.settings.search_bar_max_width <= 260 %}2px{% elsif section.settings.search_bar_max_width <= 300 %}3px{% else %}4px{% endif %};
     /* Additional CSS clamp for responsive sizing */
     --search-button-size-responsive: clamp(24px, calc({{ section.settings.search_bar_max_width }}px * 0.1), 32px);
     --search-button-right-responsive: clamp(2px, calc({{ section.settings.search_bar_max_width }}px * 0.015), 6px);
@@ -685,6 +685,14 @@
     #mk-header .mk-header .mk-header__search-bar .search__input {
       padding-right: calc({{ section.settings.search_padding_horizontal }}px + 28px + 4px) !important;
     }
+  }
+
+  /* Special padding for very narrow search bars (240px and below) */
+  .mk-header__search-bar[style*="max-width: 240px"] .field__input,
+  .mk-header__search-bar[style*="max-width: 240px"] .search__input,
+  .mk-header__search-bar[data-width="240"] .field__input,
+  .mk-header__search-bar[data-width="240"] .search__input {
+    padding-right: calc({{ section.settings.search_padding_horizontal }}px + 24px + 4px) !important;
   }
 
   /* Special padding for very narrow search bars (260px and below) */
@@ -799,7 +807,26 @@
     }
   }
 
-  /* Special handling for very narrow search bars */
+  /* Special handling for very narrow search bars - 240px */
+  .mk-header__search-bar[style*="max-width: 240px"] .search__button,
+  .mk-header__search-bar[style*="max-width: 240px"] .field__button,
+  .mk-header__search-bar[data-width="240"] .search__button,
+  .mk-header__search-bar[data-width="240"] .field__button {
+    width: 24px !important;
+    height: 24px !important;
+    right: 2px !important;
+    border-radius: 12px !important;
+  }
+
+  .mk-header__search-bar[style*="max-width: 240px"] .search__button .svg-wrapper,
+  .mk-header__search-bar[style*="max-width: 240px"] .field__button .svg-wrapper,
+  .mk-header__search-bar[data-width="240"] .search__button .svg-wrapper,
+  .mk-header__search-bar[data-width="240"] .field__button .svg-wrapper {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* Special handling for very narrow search bars - 260px */
   .mk-header__search-bar[style*="max-width: 260px"] .search__button,
   .mk-header__search-bar[style*="max-width: 260px"] .field__button,
   .mk-header__search-bar[data-width="260"] .search__button,
@@ -2101,14 +2128,21 @@
         let buttonSize = 32;
         let buttonRight = 4;
 
-        // Determine button size based on actual search bar width
-        if (width <= 260) {
+        // Enhanced sizing logic for better narrow width support
+        if (width <= 240) {
+          buttonSize = 24;
+          buttonRight = 2;
+        } else if (width <= 260) {
           buttonSize = 26;
           buttonRight = 2;
         } else if (width <= 300) {
           buttonSize = 28;
           buttonRight = 3;
         }
+
+        // Ensure button never exceeds container bounds (absolute safety)
+        const maxAllowedRight = Math.max(2, width - buttonSize - 4);
+        buttonRight = Math.min(buttonRight, maxAllowedRight);
 
         // Apply the sizing via CSS custom properties
         searchBar.style.setProperty('--search-button-size', `${buttonSize}px`);
