@@ -590,35 +590,13 @@
     position: relative;
     display: block !important;
     margin: 0 auto;
-    --search-button-size: 32px;
-    --search-button-right: 4px;
-    /* Enable container queries for dynamic sizing */
-    container-type: inline-size;
-  }
-
-  /* Dynamic search button sizing using container queries - responsive to actual width */
-  @container (max-width: 300px) {
-    #mk-header .mk-header .mk-header__search-bar {
-      --search-button-size: 28px;
-      --search-button-right: 3px;
-    }
-  }
-
-  @container (max-width: 260px) {
-    #mk-header .mk-header .mk-header__search-bar {
-      --search-button-size: 26px;
-      --search-button-right: 2px;
-    }
-  }
-
-  /* Fallback for browsers without container query support */
-  @supports not (container-type: inline-size) {
-    /* Use CSS calc to dynamically adjust based on search bar max-width */
-    #mk-header .mk-header .mk-header__search-bar {
-      --dynamic-width: {{ section.settings.search_bar_max_width }};
-      --search-button-size: calc(32px - (300px - min(300px, var(--dynamic-width))) * 0.2);
-      --search-button-right: calc(4px - (300px - min(300px, var(--dynamic-width))) * 0.06);
-    }
+    /* Dynamic button sizing based on search bar max-width setting */
+    --search-bar-width: {{ section.settings.search_bar_max_width }}px;
+    --search-button-size: {% if section.settings.search_bar_max_width <= 260 %}26px{% elsif section.settings.search_bar_max_width <= 300 %}28px{% else %}32px{% endif %};
+    --search-button-right: {% if section.settings.search_bar_max_width <= 260 %}2px{% elsif section.settings.search_bar_max_width <= 300 %}3px{% else %}4px{% endif %};
+    /* Additional CSS clamp for responsive sizing */
+    --search-button-size-responsive: clamp(24px, calc({{ section.settings.search_bar_max_width }}px * 0.1), 32px);
+    --search-button-right-responsive: clamp(2px, calc({{ section.settings.search_bar_max_width }}px * 0.015), 6px);
   }
 
   #mk-header .mk-header .mk-header__search-bar .search,
@@ -783,7 +761,6 @@
   #mk-header .mk-header .mk-header__search-bar .search__button,
   #mk-header .mk-header .mk-header__search-bar .field__button {
     position: absolute !important;
-    right: var(--search-button-right, 4px) !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
     background: linear-gradient(135deg, #007acc, #005c99) !important;
@@ -798,14 +775,12 @@
     transition: all 0.3s ease !important;
     box-shadow: none !important;
     z-index: 10 !important;
-    /* Ensure button stays within search bar bounds */
+    /* SINGLE robust positioning rule - button CANNOT exceed container bounds */
+    right: clamp(2px, var(--search-button-right, 4px), calc(100% - var(--search-button-size, 32px) - 4px)) !important;
+    /* Ensure button stays within bounds */
     max-width: calc(100% - 8px) !important;
-    flex-shrink: 0 !important;
-    /* Additional overflow protection */
     max-height: calc(100% - 4px) !important;
-    /* Ensure button can't be positioned outside container */
-    right: max(var(--search-button-right, 4px), 2px) !important;
-    right: min(var(--search-button-right, 4px), calc(100% - var(--search-button-size, 32px) - 2px)) !important;
+    flex-shrink: 0 !important;
   }
 
   /* Responsive button sizing for smaller search bars */
@@ -1601,6 +1576,39 @@
                   </search-form>
                 {%- endif -%}
               </div>
+              
+              <script>
+                // Immediate search button sizing fix
+                (function() {
+                  const searchBar = document.querySelector('.mk-header__search-bar');
+                  if (!searchBar) return;
+                  
+                  const maxWidth = {{ section.settings.search_bar_max_width }};
+                  let buttonSize = 32;
+                  let buttonRight = 4;
+                  
+                  // Determine correct sizing based on max-width setting
+                  if (maxWidth <= 260) {
+                    buttonSize = 26;
+                    buttonRight = 2;
+                  } else if (maxWidth <= 300) {
+                    buttonSize = 28;
+                    buttonRight = 3;
+                  }
+                  
+                  // Apply immediately via CSS custom properties
+                  searchBar.style.setProperty('--search-button-size', buttonSize + 'px');
+                  searchBar.style.setProperty('--search-button-right', buttonRight + 'px');
+                  
+                  // Also apply via inline styles as absolute fallback
+                  const button = searchBar.querySelector('.search__button, .field__button');
+                  if (button) {
+                    button.style.width = buttonSize + 'px';
+                    button.style.height = buttonSize + 'px';
+                    button.style.right = Math.min(buttonRight, maxWidth - buttonSize - 4) + 'px';
+                  }
+                })();
+              </script>
               
               {%- comment -%} Navigation Below Search {%- endcomment -%}
               {%- if section.settings.show_navigation_menu and section.settings.menu != blank and section.settings.menu_position_desktop == 'below_search' -%}
