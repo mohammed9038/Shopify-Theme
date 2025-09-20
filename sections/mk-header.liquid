@@ -616,6 +616,8 @@
     overflow: hidden !important;
     display: block !important;
     width: 100% !important;
+    /* CRITICAL: Form container must respect max-width setting for proper button positioning */
+    max-width: {{ section.settings.search_bar_max_width }}px !important;
     position: relative !important;
     height: 40px !important;
   }
@@ -1605,34 +1607,53 @@
               </div>
               
               <script>
-                // Immediate search button sizing fix
+                // Immediate search button sizing fix with theme editor support
                 (function() {
                   const searchBar = document.querySelector('.mk-header__search-bar');
                   if (!searchBar) return;
                   
-                  const maxWidth = {{ section.settings.search_bar_max_width }};
-                  let buttonSize = 32;
-                  let buttonRight = 4;
-                  
-                  // Determine correct sizing based on max-width setting
-                  if (maxWidth <= 260) {
-                    buttonSize = 26;
-                    buttonRight = 2;
-                  } else if (maxWidth <= 300) {
-                    buttonSize = 28;
-                    buttonRight = 3;
+                  function applySizing() {
+                    const maxWidth = {{ section.settings.search_bar_max_width }};
+                    let buttonSize = 32;
+                    let buttonRight = 4;
+                    
+                    // Enhanced sizing logic including 240px support
+                    if (maxWidth <= 240) {
+                      buttonSize = 24;
+                      buttonRight = 2;
+                    } else if (maxWidth <= 260) {
+                      buttonSize = 26;
+                      buttonRight = 2;
+                    } else if (maxWidth <= 300) {
+                      buttonSize = 28;
+                      buttonRight = 3;
+                    }
+                    
+                    // Apply immediately via CSS custom properties
+                    searchBar.style.setProperty('--search-button-size', buttonSize + 'px');
+                    searchBar.style.setProperty('--search-button-right', buttonRight + 'px');
+                    
+                    // Also apply via inline styles as absolute fallback
+                    const button = searchBar.querySelector('.search__button, .field__button');
+                    if (button) {
+                      const safeRight = Math.min(buttonRight, maxWidth - buttonSize - 4);
+                      button.style.width = buttonSize + 'px';
+                      button.style.height = buttonSize + 'px';
+                      button.style.right = Math.max(2, safeRight) + 'px';
+                    }
                   }
                   
-                  // Apply immediately via CSS custom properties
-                  searchBar.style.setProperty('--search-button-size', buttonSize + 'px');
-                  searchBar.style.setProperty('--search-button-right', buttonRight + 'px');
+                  // Apply sizing immediately
+                  applySizing();
                   
-                  // Also apply via inline styles as absolute fallback
-                  const button = searchBar.querySelector('.search__button, .field__button');
-                  if (button) {
-                    button.style.width = buttonSize + 'px';
-                    button.style.height = buttonSize + 'px';
-                    button.style.right = Math.min(buttonRight, maxWidth - buttonSize - 4) + 'px';
+                  // Theme editor support: reapply sizing when settings change
+                  if (window.Shopify && window.Shopify.designMode) {
+                    // Listen for theme editor events
+                    ['shopify:section:load', 'shopify:section:reorder', 'shopify:section:select'].forEach(event => {
+                      document.addEventListener(event, () => {
+                        setTimeout(applySizing, 50);
+                      });
+                    });
                   }
                 })();
               </script>
@@ -2116,8 +2137,34 @@
 
       // Update when theme editor changes (for live preview)
       if (window.Shopify && window.Shopify.designMode) {
+        // Listen for section loads and reloads
         document.addEventListener('shopify:section:load', () => {
           setTimeout(() => this.updateButtonSizing(), 100);
+        });
+        
+        // Listen for section reloads (when settings change)
+        document.addEventListener('shopify:section:reorder', () => {
+          setTimeout(() => this.updateButtonSizing(), 100);
+        });
+        
+        // Listen for section setting changes 
+        document.addEventListener('shopify:section:select', () => {
+          setTimeout(() => this.updateButtonSizing(), 100);
+        });
+        
+        // Use MutationObserver to detect style changes in theme editor
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && 
+                (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+              this.updateButtonSizing();
+            }
+          });
+        });
+        
+        // Observe changes to search bar elements
+        this.searchBars.forEach(searchBar => {
+          observer.observe(searchBar, { attributes: true, subtree: true });
         });
       }
     }
