@@ -592,27 +592,43 @@
     margin: 0 auto;
     --search-button-size: 32px;
     --search-button-right: 4px;
+    /* Enable container queries for dynamic sizing */
+    container-type: inline-size;
   }
 
-  /* Dynamic search button sizing based on search bar width */
-  {% if section.settings.search_bar_max_width <= 300 %}
+  /* Dynamic search button sizing using container queries - responsive to actual width */
+  @container (max-width: 300px) {
     #mk-header .mk-header .mk-header__search-bar {
       --search-button-size: 28px;
       --search-button-right: 3px;
     }
-  {% endif %}
+  }
 
-  {% if section.settings.search_bar_max_width <= 260 %}
+  @container (max-width: 260px) {
     #mk-header .mk-header .mk-header__search-bar {
       --search-button-size: 26px;
       --search-button-right: 2px;
     }
-  {% endif %}
+  }
+
+  /* Fallback for browsers without container query support */
+  @supports not (container-type: inline-size) {
+    /* Use CSS calc to dynamically adjust based on search bar max-width */
+    #mk-header .mk-header .mk-header__search-bar {
+      --dynamic-width: {{ section.settings.search_bar_max_width }};
+      --search-button-size: calc(32px - (300px - min(300px, var(--dynamic-width))) * 0.2);
+      --search-button-right: calc(4px - (300px - min(300px, var(--dynamic-width))) * 0.06);
+    }
+  }
 
   #mk-header .mk-header .mk-header__search-bar .search,
   #mk-header .mk-header .mk-header__search-bar .search-modal__form {
     border: none !important;
     border-radius: {{ section.settings.search_border_radius }}px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    /* Ensure search container clips any overflowing content */
+    contain: layout style !important;
     background: rgba(255, 255, 255, {{ section.settings.search_background_opacity | times: 0.01 }}) !important;
     backdrop-filter: blur(15px) !important;
     -webkit-backdrop-filter: blur(15px) !important;
@@ -785,6 +801,11 @@
     /* Ensure button stays within search bar bounds */
     max-width: calc(100% - 8px) !important;
     flex-shrink: 0 !important;
+    /* Additional overflow protection */
+    max-height: calc(100% - 4px) !important;
+    /* Ensure button can't be positioned outside container */
+    right: max(var(--search-button-right, 4px), 2px) !important;
+    right: min(var(--search-button-right, 4px), calc(100% - var(--search-button-size, 32px) - 2px)) !important;
   }
 
   /* Responsive button sizing for smaller search bars */
@@ -2039,6 +2060,75 @@
       });
     }
   });
+
+  // Dynamic Search Button Sizing Handler
+  class MKSearchButtonSizer {
+    constructor() {
+      this.searchBars = document.querySelectorAll('.mk-header__search-bar');
+      this.init();
+    }
+
+    init() {
+      if (this.searchBars.length === 0) return;
+
+      // Initial sizing
+      this.updateButtonSizing();
+
+      // Update on window resize
+      window.addEventListener('resize', this.debounce(() => {
+        this.updateButtonSizing();
+      }, 100));
+
+      // Update when theme editor changes (for live preview)
+      if (window.Shopify && window.Shopify.designMode) {
+        document.addEventListener('shopify:section:load', () => {
+          setTimeout(() => this.updateButtonSizing(), 100);
+        });
+      }
+    }
+
+    updateButtonSizing() {
+      this.searchBars.forEach(searchBar => {
+        const width = searchBar.offsetWidth;
+        let buttonSize = 32;
+        let buttonRight = 4;
+
+        // Determine button size based on actual search bar width
+        if (width <= 260) {
+          buttonSize = 26;
+          buttonRight = 2;
+        } else if (width <= 300) {
+          buttonSize = 28;
+          buttonRight = 3;
+        }
+
+        // Apply the sizing via CSS custom properties
+        searchBar.style.setProperty('--search-button-size', `${buttonSize}px`);
+        searchBar.style.setProperty('--search-button-right', `${buttonRight}px`);
+      });
+    }
+
+    debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+  }
+
+  // Initialize search button sizer when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new MKSearchButtonSizer();
+    });
+  } else {
+    new MKSearchButtonSizer();
+  }
 {% endjavascript %}
 
 {%- comment -%} GTranslate Configuration Script {%- endcomment -%}
